@@ -46,7 +46,7 @@ var cmanOM_OyaObj = [];
 function cmanOM_JS_init(){
 
 	// 対象のタグ（追加すれば移動対象となる）
-	var wTargetTag	= [ 'img', 'div' ];
+	var wTargetTag	= [ 'img', 'div', 'video' ];
 	var wTagList	= [];
 	var wObjAt;
 
@@ -233,7 +233,8 @@ function cmanOM_JS_mdown(e){
 		cmanOM_VAR['sLeft']	= parseInt(cmanOM_VAR['objNowImg'].style.left.replace("px", ""));	// 対象オブジェクトのLeft
 	}
 
-	cmanOM_VAR['objNowImg'].style.zIndex	= 2;
+	cmanOM_VAR['objNowImg'].style.zIndex	= 1;
+	document.getElementById('demo_SP_overlay').style.zIndex = '99';
 
 	return false;
 }
