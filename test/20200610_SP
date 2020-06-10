@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>demopage</title>
+  <meta name="viewport" content="width=375px">
+  <meta name="demo" content="demo">
+  <meta property="article:section" content="demo" />
+  <link rel="stylesheet" href="css/sp_style.css">
+
+
+</head>
+<body style="width:360px;">
+  <div class="wrapper">
+    <div class="box-a">
+      <div class="logo"></div>
+      <div class="billboard">
+        <!-- demo_SP_320x180 -->
+        
+      </div>
+      <div class="navi"></div>
+    </div>
+    <div class="box-b">
+      <div class="title"></div>
+      <div class="subtitle"></div>
+      <div class="article"></div>
+      <div class="article"></div>
+      <div class="article"></div>
+      <!-- demo_SP_inread -->
+     
+      <div class="article"></div>
+      <div class="article"></div>
+    </div>
+    <div class="rect">
+      <!-- demo_SP_1st_300x250 -->
+     
+    </div>
+    <div class="box-c">
+    </div>
+  </div>
+  <div id="demo_SP_overlay"></div>
+</body>
+</html>
