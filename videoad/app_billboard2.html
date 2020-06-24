@@ -65,8 +65,11 @@ p.tx-logo{
 <body style="height: 100vh;margin: 0px;">
         <div class="billboard-back" style="height: 0px;">
       </div>
-      <div class="billboard" style="height: 180px;position:relative;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;">
-        <div id="b-inner" style="height:100%;width: 50%;background: #000; display: none;";></div>
+      <div class="billboard" style="height: 180px;position:relative;top: 0;width: 100%;margin: auto;z-index: 999;background-color: #000;">
+        <div class="b-inner" style="height: 180px;width:320px;position:relative;margin:auto;z-index:9999;background-color: #000;">
+          <div id="video" style="height:180px;width: 320px;background:#124;float:left;";><video style="width: 100%;" src="20191204053048-017eb8768e5b5e.mp4"autoplay muted></video></div>          
+          <div id="b-inner2" style="height:100%;width: 50%;background-image: url('link.png');background-size: 160px;display: none; margin: 0px 0px 0px auto;";></div>
+        </div>
       </div>
 
 
@@ -95,27 +98,38 @@ p.tx-logo{
 window.onscroll = function(){
   var a = document.documentElement.scrollTop;
   var b = document.getElementsByClassName('billboard')[0];
-  var c = document.getElementById('b-inner');
+  var b2 = document.getElementsByClassName('b-inner')[0];
+  var c = document.getElementById('video');
+  var c2 = document.getElementById('b-inner2');
   var d = document.getElementsByClassName('billboard-back')[0];
   var e = document.getElementsByClassName('wrapper')[0]; 
       
 
   if(a > 90 && a < 1000){
     console.log(a);
+    b.setAttribute("style", "height: 90px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: #000;");
+    b2.setAttribute("style", "height: 90px;width:320px;margin:auto;position:relative;z-index: 9999;background-color: #000;");
+    c.setAttribute("style", "height: 90px;width:160px;margin:auto;position:relative;z-index: 99999;background-color: #124;float:left;");
+    c2.style.display = 'block';
 
-    b.setAttribute("style", "height: 90px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;");
-    c.style.display = "block";
     e.style.marginTop="180px";
+
 }else if(a < 91){
-  b.setAttribute("style", "height: 180px;position: relative;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;");
-   c.style.display = "none";
+  b.setAttribute("style", "height: 180px;position: relative;top: 0;width: 100%;margin: auto;z-index: 999;background-color:#000;");
+  b2.setAttribute("style", "height: 180px;width:320px;margin:auto;position:relative;margin: auto;z-index: 9999;background-color: #000;");
+  c.setAttribute("style", "height:180px;width: 320px;background:#124;float:left;");
+  //c2.setAttribute("style", "height:100%;width: 0%;background-size: 160px; display: none; margin: 0px 0px 0px auto;transition: all 0.3s ease");
+     c2.style.display = 'none';
+
    d.style.height="0px";
    e.style.marginTop="0px";
 }
 
   if(a > 1000){
-b.style.display="none";
-c.style.display="none";
+    b.setAttribute("style", "height: 0px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: #000;transition: all 0.3s ease;-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;");
+    b2.style.display = "none";
+    c.style.display = "none";
+    c2.style.display = "none";  
 }
   
 
