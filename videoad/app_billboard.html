@@ -63,11 +63,17 @@ p.tx-logo{
 
 </head>
 <body style="height: 100vh;margin: 0px;">
+        <div class="billboard-back" style="height: 180px;">
+      </div>
+      <div class="billboard" style="height: 180px;position:fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;">
+        <div id="b-inner" style="height:100%;width: 50%;background: #000; display: none;";></div>
+      </div>
+
+
   <div class="wrapper" style="height: 100vh;">
     <div class="box-a">
       <div class="logo"></div>
-      <div class="billboard" style="height: 180px;">
-      </div>
+
       <div class="navi"></div>
     </div>
     <div class="box-b" style="height: calc(100vh - 268px);">
@@ -81,12 +87,24 @@ p.tx-logo{
 
   </div>
 <script>
-var elem;
-elem = window.document.elementsByClassname(Billboard)[0];
-elem.onscroll = function() {
-var scrollTop = this.scrollTop;
-console.log("縦に移動した位置："+ scrollTop + "px" );
+
+
+window.onscroll = function(){
+  var a = document.documentElement.scrollTop;
+  var b = document.getElementsByClassName('billboard')[0];
+  var c = document.getElementById('b-inner');
+
+  if(a > 90){
+    console.log(a);
+
+    b.setAttribute("style", "height: 90px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;");
+    c.style.display = "block";
+}else{
+  b.setAttribute("style", "height: 180px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;");
+    c.style.display= "none";
 }
+};
+
  </script>
 
 
