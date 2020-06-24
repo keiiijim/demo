@@ -79,16 +79,20 @@ p.tx-logo{
 
       <div class="navi"></div>
     </div>
-    <div class="box-b" style="height: calc(100vh - 268px);">
+    <div class="box-b">
       <div class="title"></div>
       <div class="subtitle"></div>
-      <div class="article" style="height: 75%;"></div>
-      <div class="article" style="height: 50%;"></div>
-      <div class="article" style="height: 50%;"></div>
-      <div class="article" style="height: 50%;"></div>
-      <div class="article" style="height: 50%;"></div>
-      <div class="article" style="height: 50%;"></div>
-
+      <div class="article" style="height: 500px;"></div>
+    </div>
+    <div class="box-b">
+      <div class="title"></div>
+      <div class="subtitle"></div>
+      <div class="article" style="height: 500px;"></div>
+    </div>
+    <div class="box-b">
+      <div class="title"></div>
+      <div class="subtitle"></div>
+      <div class="article" style="height: 200px;"></div>
     </div>
 
   </div>
@@ -105,7 +109,7 @@ window.onscroll = function(){
   var e = document.getElementsByClassName('wrapper')[0]; 
       
 
-  if(a > 90 && a < 1000){
+  if(a > 90 && a < 800){
     console.log(a);
     b.setAttribute("style", "height: 90px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: #000;");
     b2.setAttribute("style", "height: 90px;width:320px;margin:auto;position:relative;z-index: 9999;background-color: #000;");
@@ -125,7 +129,7 @@ window.onscroll = function(){
    e.style.marginTop="0px";
 }
 
-  if(a > 1000){
+  if(a > 800){
     b.setAttribute("style", "height: 0px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: #000;transition: all 0.3s ease;-webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease;-o-transition: all 0.3s ease;");
     b2.style.display = "none";
     c.style.display = "none";
