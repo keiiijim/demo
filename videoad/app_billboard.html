@@ -83,6 +83,9 @@ p.tx-logo{
       <div class="article" style="height: 50%;"></div>
       <div class="article" style="height: 50%;"></div>
       <div class="article" style="height: 50%;"></div>
+      <div class="article" style="height: 50%;"></div>
+      <div class="article" style="height: 50%;"></div>
+
     </div>
 
   </div>
@@ -94,17 +97,23 @@ window.onscroll = function(){
   var b = document.getElementsByClassName('billboard')[0];
   var c = document.getElementById('b-inner');
 
-  if(a > 90){
+  if(a > 90 && a < 1000){
     console.log(a);
 
     b.setAttribute("style", "height: 90px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;");
     c.style.display = "block";
-}else{
+}else if(a < 91){
   b.setAttribute("style", "height: 180px;position: fixed;top: 0;width: 100%;margin: auto;z-index: 999;background-color: aquamarine;");
-    c.style.display= "none";
+   c.style.display = "none";
 }
-};
 
+  if(a > 1000){
+b.style.display="none";
+c.style.display="none";
+}
+  
+
+};
  </script>
 
 
