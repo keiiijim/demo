@@ -9,7 +9,9 @@
   <script>
     var kv = window.location.search;
     var adgSrc = '//i.socdm.com/sdk/js/adg-script-loader.js?id=117721&targetID=adg_117721&displayid=1&adType=RECT&async=true&tagver=2.0.0&label_dspname=' + kv;
-    document.getElementsByClassName('right-column')[0].appendChild(adgSrc);
+    var adgScript = document.createElement('script');
+    adgScript.src = adgSrc;
+    document.getElementsByClassName('right-column')[0].appendChild(adgScript);
   </script>
 
 </head>
