@@ -40,8 +40,9 @@
 <!--
 商用テスト媒体 KVPMP-Test_Native 127043
 -->
+<!--
 <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=117720&targetID=adg_117720&displayid=1&adType=INFEED&async=false&tagver=2.0.0&label_dspname=liftoff,logicad,appier,so,rtbhouse,freakout,zucks,dv360,ttd,aja,m1"></script>
-
+-->
 
 
 
@@ -54,4 +55,12 @@
     </div>
   </div>
 </body>
+  <script>
+    var kv = window.location.hash;
+    var kv2 = kv.slice(1) ;
+    var adgSrc = '//i.socdm.com/sdk/js/adg-script-loader.js?id=117720&targetID=adg_117720&displayid=1&adType=RECT&async=true&tagver=2.0.0&label_dspname=' + kv2;
+    var adgScript = document.createElement('script');
+    adgScript.src = adgSrc;
+    document.getElementsByClassName('right-column')[0].appendChild(adgScript);
+  </script>
 </html>
