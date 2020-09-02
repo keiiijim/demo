@@ -3,8 +3,8 @@
     <head>
         <link rel="icon" type="image/png" href="/favicon.png">
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
-        <script async src="prebid2.31.0.js"></script>
-       <!-- <script async src="prebid4.5.0.js"></script> -->
+        <!-- <script async src="prebid2.31.0.js"></script> -->
+        <script async src="prebid4.5.0.js"></script>
         <script>
             var div_1_sizes = [[320, 180]];
             var div_2_sizes = [[970, 250]];
@@ -43,8 +43,7 @@
                     }]
                 },
                 {
-                    //code: '/18339668/test_demo/prebid_300x250',
-                    code: '/18339668/test_prebid_rectangle',
+                    code: '/18339668/test_demo/prebid_300x250',
                     mediaTypes: {
                         banner: {
                             sizes: div_3_sizes
@@ -103,7 +102,7 @@
                 googletag.enableServices();
             });
             googletag.cmd.push(function() {
-                googletag.defineSlot('/18339668/test_prebid_rectangle', div_3_sizes, 'div-3').addService(googletag.pubads());
+                googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_3_sizes, 'div-3').addService(googletag.pubads());
                 googletag.pubads().enableSingleRequest();
                 googletag.enableServices();
             });
