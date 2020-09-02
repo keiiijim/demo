@@ -43,7 +43,8 @@
                     }]
                 },
                 {
-                    code: '/18339668/test_demo/prebid_300x250',
+                    //code: '/18339668/test_demo/prebid_300x250',
+                    code: '/18339668/test_prebid_rectangle',
                     mediaTypes: {
                         banner: {
                             sizes: div_3_sizes
@@ -102,7 +103,7 @@
                 googletag.enableServices();
             });
             googletag.cmd.push(function() {
-                googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_3_sizes, 'div-3').addService(googletag.pubads());
+                googletag.defineSlot('/18339668/test_prebid_rectangle', div_3_sizes, 'div-3').addService(googletag.pubads());
                 googletag.pubads().enableSingleRequest();
                 googletag.enableServices();
             });
