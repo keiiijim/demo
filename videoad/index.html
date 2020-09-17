@@ -7,7 +7,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="demo" content="demo">
   <meta property="article:section" content="demo" />
-  <script src="cmanObjMove_v091.js"></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- jQuery UI -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  
   <style type="text/css">
   body{
 }
@@ -90,22 +95,31 @@ p.tx-logo{
       </div> 
 
 
-     
-<script>
-  function adClick()
-  {window.open('https://supership.jp/business/adgeneration/', '_blank');}
-  function CloseClick()
-  {document.getElementById('demo_SP_overlay').style.display = 'none';};
-  function infoClick()
-  {window.open('https://supership.jp/optout/', '_blank');}
 
-</script>
                     
             </div>
       </div>
     </div>
 
   </div>
+  <script>
+
+jQuery( function() {
+    jQuery( '#jquery-ui-dialog' ) . dialog( {
+        autoOpen: true,
+        draggable: false,
+    } );
+} );
+
+</script>
+  
+  <div id="jquery-ui-dialog" title="ダイアログ">
+    
+</div>
+
+  
+  
+  
 <script>
  // var close = function(){document.getElementById('demo_SP_overlay').style.display = 'none';};setTimeout(close, 16000);
  </script>
