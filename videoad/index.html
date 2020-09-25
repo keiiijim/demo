@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="ja" style="height: 100vh;">
+<html lang="ja" style="height: 95%;">
 <head>
   <meta charset="utf-8">
   <title>demopage</title>
@@ -8,11 +7,12 @@
   <meta name="demo" content="demo">
   <meta property="article:section" content="demo" />
   
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- jQuery UI -->
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>  
-  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.css">
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://ruco.la/html/touch-punch-sample/jquery.ui.touch-punch.min.js"></script>
+
+
   
   <style type="text/css">
   body{
@@ -23,9 +23,7 @@ p.tx-logo{
 }
 
 .wrapper{
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #333333;
+
 }
 .box-a{
   margin-bottom: 6px;
@@ -69,31 +67,51 @@ p.tx-logo{
 .rect{
   text-align: center;
 }
+.mvfil{
+    background-color: #000;
+    opacity: 0.5;
+    width: 100%;
+    height: 108px;
+    position: relative;
+    top: 30px;
+    left: 54px;
+    margin: -54px;
+}
+
   </style>
 
+
+
+
+
+
 </head>
-<body style="height: 100vh;margin: 0px;">
-  <div class="wrapper" style="height: 100vh;">
+<body style="height: 100%;">
+  <div class="wrapper" style="height: 100%;">
     <div class="box-a">
       <div class="logo"></div>
       <div class="billboard">
       </div>
       <div class="navi"></div>
     </div>
-    <div class="box-b" style="height: calc(100vh - 268px);">
+    <div class="box-b" style="height: calc(100% - 268px);">
       <div class="title"></div>
       <div class="subtitle"></div>
-      <div class="article" style="height: 75%;"></div>
-            <div class="article" style="height: 25%;">
-              <div style="position: absolute;right: 20px;">
+      <div class="article" style="height: 100%;">
+        
 
-
-      <div id="demo_SP_overlay" style="width: 192px; height:108px;z-index: 102;">      
-
-          <svg onclick= infoClick() xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 15 15" style="position: relative;top: 15;width: 15px;top: -3px; background-color: #fff;opacity: 0.7;z-index: 3;"><path d="M7.5,1.5a6,6,0,1,0,0,12a6,6,0,1,0,0,-12m0,1a5,5,0,1,1,0,10a5,5,0,1,1,0,-10ZM6.625,11l1.75,0l0,-4.5l-1.75,0ZM7.5,3.75a1,1,0,1,0,0,2a1,1,0,1,0,0,-2Z"></path></svg>
-          <img id="closebt" src="close.png" style="width: 17px;position: relative;top: -20px;left: 154px; z-index: 3;" onclick= CloseClick()>
-          <video muted autoplay playsinline src="20191204053048-017eb8768e5b5e.mp4" width="192" height="108"style ="position: relative; z-index: -100; top: -24px;"></video>
-      </div> 
+動作に関して
+    
+・スワイプで、WipeADを移動できます。<br>
+・アウトビューで動画が一時停止します。<br>
+・画面外に動画を置くことはできません。<br>
+・タップで、LPへ遷移します。<br>
+・xボタンで、ADがクローズします。<br>
+・video再生終了後、「再度見る」・「詳細を見る」のボタンが表示されます。<br>
+    <br>
+※ 注意事項<br>
+本デモでは、ブラウザの環境により正常に動作しない場合があります。
+      </div>  
 
 
 
@@ -104,14 +122,235 @@ p.tx-logo{
 
   </div>
  
+<div id="draggable" class="ui-widget-content" style="position:absolute;z-index: 999;right: 10px;bottom: 34px;">
+  <div id="demo_SP_overlay" style="width: 192px; height:108px;z-index: 102;">      
+<div id="adber" style='width:192px;text-align:center;margin-bottom:1px;height: 22px;background-color: #353535e0;border-radius:30px;text-align: center;color: #fff;font-size: 12px;'>Advertisement</div>
+          <svg id="iicon" onclick= infoClick() xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 15 15" style="position: relative;top: 15;width: 15px;top: -3px; background-color: #fff;opacity: 0.7;z-index: 3;"><path d="M7.5,1.5a6,6,0,1,0,0,12a6,6,0,1,0,0,-12m0,1a5,5,0,1,1,0,10a5,5,0,1,1,0,-10ZM6.625,11l1.75,0l0,-4.5l-1.75,0ZM7.5,3.75a1,1,0,1,0,0,2a1,1,0,1,0,0,-2Z"></path></svg>
+          <img id="closebt" src="close.png" style="width: 17px;position: relative;top: -22px;left: 151px; z-index: 3;" onclick= CloseClick()>
+          <div id="mvov"><div id="mvfil" style="background-color: #000;opacity: 0;width: 100%;height: 108px;position: relative;top: 30px;left: 54px;margin: -54px; z-index:2;"></div>
+          <video id="mv" muted autoplay playsinline src="20180821080139-6c0279e2c5830b.mp4" width="192" height="108"style ="position: relative; z-index: -100; top: -24px;"></video></div>
+      </div> 
+</div>
 
-  
-  
-  
+
+
+
+
+
+
 <script>
-jQuery(".demo_SP_overlay").draggable();
- </script>
-01
+
+//xボタン
+function CloseClick(){
+　document.getElementById("draggable").style.display = "none";
+}
+
+//infoボタン
+function infoClick(){
+　 document.location = "https://supership.jp/optout/";
+}
+
+
+
+
+$(function () {
+  $('#draggable').draggable();
+});
+
+
+
+
+
+
+var g_width;
+var g_height;
+
+
+function maxheight(){
+g_height = $(window).height();
+  $('.cover').height(g_height); // アドレスバーを除いたサイズを付与
+
+   return g_height; 
+};
+
+function maxwidth(){
+  g_width = $(window).width();
+   return g_width; 
+};
+
+
+
+
+maxheight();
+maxwidth();
+
+console.log( g_height );
+console.log( g_width );
+
+var g_width2 = g_width - 193; //画面外
+var g_height2 = g_height -108; //画面外
+
+var g_width3 = g_width - 96; //50%
+var g_height3 = g_height - 54; //50%
+
+
+
+
+
+
+// 掴んでいるときに拡大
+
+window.addEventListener("touchstart", function(event) {
+
+  var obj = document.getElementById("mv");
+  var obj2 = document.getElementById("mvfil");
+  var obj3 = document.getElementById("iicon");
+  var obj4 = document.getElementById("adber");
+  var obj5 = document.getElementById("closebt");
+
+
+
+  obj.style.transform = 'scale(1.05,1.05)';
+  obj2.style.transform = 'scale(1.05,1.05)';
+  obj2.style.transition = '0.5s all';
+  obj.style.top = '-20px';
+  obj2.style.top = '33px';
+  obj3.style.transform = 'scale(1.05,1.05)';
+  obj3.style.left = '-5px';
+  obj4.style.transform = 'scale(1.05,1.05)';
+  obj5.style.transform = 'scale(1.05,1.05)';
+  obj5.style.left = '156px'; 
+});
+
+
+
+
+
+
+
+
+// タッチ 50%以上なら、動画を停止
+document.body.addEventListener('touchmove', function(e) {
+  for (let i = 0; i < e.changedTouches.length; ++i) {
+    const touch = e.changedTouches[i];
+    console.log('window... x='+ touch.pageX, 'y='+ touch.pageY);
+
+    var clientRect = document.getElementById( "demo_SP_overlay" ).getBoundingClientRect() ;
+var off_left = window.pageXOffset + clientRect.left ;
+var off_top = window.pageYOffset + clientRect.top ;
+
+
+console.log('x='+ off_left + 'y=' +off_top);
+
+  var obj = document.getElementById("mv");
+  var obj2 = document.getElementById("mvfil");
+
+//横
+
+ if (g_width3 < off_left){
+ console.log('wr over');
+  obj.pause();
+  obj2.style.opacity = '0.7';
+
+ }
+ else if(-96 > off_left){
+   console.log('wl over');
+   obj.pause();
+   obj2.style.opacity = '0.7';
+ }
+
+//縦
+
+
+else if (g_height3 < off_top){
+ console.log('hb over');
+   obj.pause();
+   obj2.style.opacity = '0.7';
+ }
+
+else if(-54 > off_top){
+   console.log('ht over');
+   obj.pause();
+   obj2.style.opacity = '0.7';
+}
+else {obj.play();
+   obj2.style.opacity = '0';
+}
+
+  }
+});
+
+
+
+// 指が離れたとき画面外なら戻す。
+
+window.addEventListener("touchend", function(event) {
+ console.log("touchend");
+
+
+var clientRect = document.getElementById( "demo_SP_overlay" ).getBoundingClientRect() ;
+var off_left = window.pageXOffset + clientRect.left ;
+var off_top = window.pageYOffset + clientRect.top ;
+
+
+
+  var obj = document.getElementById("mv");
+  var obj2 = document.getElementById("mvfil");
+  var obj3 = document.getElementById("iicon");
+  var obj4 = document.getElementById("adber");
+  var obj5 = document.getElementById("closebt");
+
+
+
+  obj.style.transform = 'scale(1,1)';
+  obj2.style.transform = 'scale(1,1)';
+  obj2.style.transition = '0.5s all';
+  obj.style.top = '-24px';
+  obj2.style.top = '30px';
+  obj3.style.transform = 'scale(1,1)';
+  obj3.style.left = '0px';
+  obj4.style.transform = 'scale(1,1)';
+  obj5.style.transform = 'scale(1,1)';
+  obj5.style.left = '151px'; 
+
+
+ if (g_width2 < off_left){
+ console.log('wr over2')
+var po_right = g_width2;
+ $("#draggable").css("left", po_right);
+  obj.play();
+  obj2.style.opacity = '0';
+ }
+
+ if(0 > off_left){
+ console.log('wl over2');
+ $("#draggable").css("left", '0px');
+   obj.play();
+   obj2.style.opacity = '0';
+ }
+
+//縦
+
+
+ if (g_height2 < off_top){
+ console.log('hb over2');
+ $("#draggable").css("top", g_height2);
+   obj.play();
+   obj2.style.opacity = '0';
+ }
+
+ if(0 > off_top){
+  console.log('ht over2');
+$("#draggable").css("top", '0px');
+  obj.play();
+  obj2.style.opacity = '0';
+ }
+
+
+});
+
+</script>
+
 
 </body>
 </html>
