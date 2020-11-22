@@ -7,7 +7,6 @@
         <script async src="prebid4.5.0.js"></script>
         <script>
             var div_sizes = [[300, 250],[1, 1]];
-            var div_sizes2 = [[970, 250],[1, 1]];
 
             
             var PREBID_TIMEOUT = 1000;
@@ -29,16 +28,16 @@
                     }]
                 },
                 {
-                    code: '/18339668/test_demo/prebid_970x250',
+                    code: '/18339668/test_demo/prebid_300x250_2',
                     mediaTypes: {
                         banner: {
-                            sizes: div_sizes2
+                            sizes: div_sizes
                         }
                     },
                     bids: [{
                         bidder: 'adg',
                         params: {
-                            id: '125545'
+                            id: '125546'
                         }
                     }]
                 }
@@ -79,7 +78,7 @@
 
             googletag.cmd.push(function() {
                 googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div').addService(googletag.pubads());
-                googletag.defineSlot('/18339668/test_demo/prebid_970x250', div_sizes2, 'div2').addService(googletag.pubads());
+                googletag.defineSlot('/18339668/test_demo/prebid_300x250_2', div_sizes, 'div2').addService(googletag.pubads());
                 googletag.pubads().enableSingleRequest();
                 googletag.enableServices();
             });
@@ -104,8 +103,8 @@
         
             
        <h2>Prebid.js Example 2</h2>
-        <h5>Div 970x250 枠ID:125545 safeframe</h5>
-        <div style="height: 970px;width: 250px;">
+        <h5>Div 300x250 枠ID:125546 friendly frame</h5>
+        <div style="height: 300px;width: 250px;">
             <div id='div2'>
                 <script type='text/javascript'>
                     googletag.cmd.push(function() {
