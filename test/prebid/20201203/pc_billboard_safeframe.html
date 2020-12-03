@@ -13,7 +13,7 @@
 
             var adUnits = [
                 {
-                    code: '/18339668/test_demo/pmp_prebid_multi_friendly',
+                    code: '/18339668/test_demo/pmp_prebid_multi',
                     mediaTypes: {
                         banner: {
                             sizes: div_sizes
@@ -62,7 +62,7 @@
             }, FAILSAFE_TIMEOUT);
 
             googletag.cmd.push(function() {
-                googletag.defineSlot('/18339668/test_demo/pmp_prebid_multi_friendly', div_sizes, 'div').addService(googletag.pubads());
+                googletag.defineSlot('/18339668/test_demo/pmp_prebid_multi', div_sizes, 'div').addService(googletag.pubads());
                 googletag.pubads().enableSingleRequest();
                 googletag.enableServices();
             });
