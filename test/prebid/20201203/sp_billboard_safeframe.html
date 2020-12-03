@@ -4,7 +4,6 @@
         <link rel="icon" type="image/png" href="/favicon.png">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
-        <!-- <script async src="prebid2.31.0.js"></script> -->
         <script async src="prebid.js"></script>
         <script>
             var div_sizes = [[320, 180],[1, 1]];
@@ -14,7 +13,7 @@
 
             var adUnits = [
                 {
-                    code: '/18339668/test_demo/prebid_320x180',
+                    code: '/18339668/test_demo/pmp_prebid_multi',
                     mediaTypes: {
                         banner: {
                             sizes: div_sizes
@@ -63,7 +62,7 @@
             }, FAILSAFE_TIMEOUT);
 
             googletag.cmd.push(function() {
-                googletag.defineSlot('/18339668/test_demo/prebid_320x180', div_sizes, 'div').addService(googletag.pubads());
+                googletag.defineSlot('/18339668/test_demo/pmp_prebid_multi', div_sizes, 'div').addService(googletag.pubads());
                 googletag.pubads().enableSingleRequest();
                 googletag.enableServices();
             });
