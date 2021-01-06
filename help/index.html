@@ -5,7 +5,25 @@
 <style type="text/css">
 
 
-
+		
+ul.cdd_menu,
+li.cdd_menu-dropdown > ul {
+    padding: 0;
+    list-style: none;
+}
+li.cdd_menu-dropdown > ul {
+    position: absolute;
+    background: #f0f3f5;
+    visibility: hidden;
+    opacity: 0;
+}
+li.cdd_menu-dropdown:hover > ul {
+    visibility: visible;
+    transition: .5s;
+    opacity: 1;
+   }
+	
+	
 	
 nav li:not(:last-child){
 border-right:2px solid #ddd;
