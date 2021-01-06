@@ -1,0 +1,79 @@
+<html>
+<header>
+
+
+<style type=""text/css"">
+ul.cdd_menu a {
+    text-decoration: none;
+    color: #646464;
+    background: transparent;
+}
+ul.cdd_menu a:hover {
+    opacity: .5;
+    transition: .5s;
+    background: rgba(225,225,225,.8);
+}
+ul.cdd_menu {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 9999;
+    background: #EEE;
+    text-align: center;
+}
+ul.cdd_menu > li {
+    display: inline-block;
+    }
+ul.cdd_menu li a {
+    display: block;
+    margin: 0;
+    padding: .5rem 2rem;
+}		
+ul.cdd_menu,
+li.cdd_menu-dropdown > ul {
+    padding: 0;
+    list-style: none;
+}
+li.cdd_menu-dropdown > ul {
+    position: absolute;
+    background: #CCC;
+    visibility: hidden;
+    opacity: 0;
+}
+li.cdd_menu-dropdown:hover > ul {
+    visibility: visible;
+    transition: .5s;
+    opacity: 1;
+   }
+   </style>
+
+</header>
+<body>
+<ul class=”cdd_menu”>
+  <li class=”cdd_menu-dropdown”><a href=”#”>ヘルプ</a>
+  </li>
+  <li class=”cdd_menu-dropdown”><a href=”#”>アドジェネ導入の前に</a>
+    <ul>
+      <li><a href=”#”>メニュー２</a></li>
+      <li><a href=”#”>メニュー２</a></li>
+      <li><a href=”#”>メニュー２</a></li>
+      <li><a href=”#”>メニュー２</a></li>
+      <li><a href=”#”>メニュー２</a></li>
+    </ul>
+  </li>
+  <li class=”cdd_menu-dropdown”><a href=”#”>広告の種類・サイズ</a>
+    <ul>
+      <li><a href=”#”>配信できる広告について</a></li>
+      <li><a href=”#”>バナー各種</a></li>
+      <li><a href=”#”>ネイティブ広告</a></li>
+      <li><a href=”#”>動画リワード</a></li>
+      <li><a href=”#”>全画面インタースティシャル</a></li>
+      <li><a href=”#”>ヘッダービディング</a></li>
+    </ul>
+  </li>
+  <li><a href=”#”>導入からお支払いまで</a></li>
+  <li><a href=”#”>実装ガイド</a></li>
+  <li><a href=”#”>さらに使いこなす</a></li>
+</ul>
+</body>
+</html>
