@@ -12,15 +12,21 @@ nav li:not(:last-child){
 border-right:2px solid #ddd;
 }
 	
-.add-nav-dropdown{
-    text-decoration: none;
-    color: rgba(0,0,0,.5);
-    background: transparent;
+add-nav-dropdown > ul {
+    padding: 0;
+    list-style: none;
 }
-.add-nav-dropdown :hover {
-    opacity: .5;
+add-nav-dropdown > ul {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+}
+add-nav-dropdown:hover > ul {
+    visibility: visible;
     transition: .5s;
-}
+    opacity: 1;
+   }
+	
    </style>
 
 <title>配信できる広告について | 広告の種類 | Ad Generation ヘルプ - Ad Generation(アドジェネ)</title>
