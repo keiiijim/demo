@@ -8,25 +8,12 @@
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
         
-  googletag.pubads().setForceSafeFrame(true);
-
-var pageConfig = {
-  allowOverlayExpansion: true,
-  allowPushExpansion: true,
-  sandbox: true,
-  useUniqueDomain: true
-};
-
-var slotConfig = {allowOverlayExpansion: false};
-
-
         
         
         window.googletag = window.googletag || {cmd: []};    
         googletag.cmd.push(function() {
-            googletag.defineSlot('/94253236/test_970x250', [[1, 1], [970, 250]], 'div').setSafeFrameConfig(slotConfig).setTargeting('iframe', ['safeframe']).addService(googletag.pubads());
+            googletag.defineSlot('/94253236/test_970x250', [[1, 1], [970, 250]], 'div').setTargeting('iframe', ['safeframe']).addService(googletag.pubads());
             googletag.pubads().enableSingleRequest();
-                    googletag.pubads().setSafeFrameConfig(pageConfig);
             googletag.enableServices();
         });
     </script>
