@@ -14,37 +14,6 @@
 
 
 
-
-    <script src="https://i.socdm.com/sdk/js/adg-script-gate.js"></script>
-    <script>
-    var parentWin = window.top.document;
-    var targetDom = parentWin.getElementsByClassName("wrapper")[0];
-    var adgGateAd;
-    var adg_gate_retry = 0;
-    (function () {
-        if (!(adg_gate_retry < 40)) return;
-        try {
-            adgGateAd = new ADGGateAd({
-                contentsSize: 970,
-                contentsDom: targetDom,
-                logLevel: 'debug',
-                setStyle: function () {
-                    targetDom.setAttribute("style", "z-index: 1;margin:auto;margin-top: 194px;");
-                },
-                failedCallback: function (failCode) {
-	          
-                }
-            });
-        }catch (e) {}
-        if (adgGateAd) {
-            adgGateAd.loadAd(106001);
-            return;
-        }
-        adg_gate_retry++;
-        setTimeout(arguments.callee, 300);
-    })();
-</script>
-  
   
 
   <div class="wrapper">
@@ -78,5 +47,38 @@
     <div class="box-d">
     </div>
   </div>
+	
+	
+
+    <script src="https://i.socdm.com/sdk/js/adg-script-gate.js"></script>
+    <script>
+    var parentWin = window.top.document;
+    var targetDom = parentWin.getElementsByClassName("wrapper")[0];
+    var adgGateAd;
+    var adg_gate_retry = 0;
+    (function () {
+        if (!(adg_gate_retry < 40)) return;
+        try {
+            adgGateAd = new ADGGateAd({
+                contentsSize: 970,
+                contentsDom: targetDom,
+                logLevel: 'debug',
+                setStyle: function () {
+                    targetDom.setAttribute("style", "z-index: 1;margin:auto;margin-top: 194px;");
+                },
+                failedCallback: function (failCode) {
+	          
+                }
+            });
+        }catch (e) {}
+        if (adgGateAd) {
+            adgGateAd.loadAd(106001);
+            return;
+        }
+        adg_gate_retry++;
+        setTimeout(arguments.callee, 300);
+    })();
+</script>
+  
 </body>
 </html>
