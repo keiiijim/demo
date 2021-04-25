@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>demopage</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="demo" content="demo">
+  <link rel="stylesheet" href="css/pc_style.css">
+
+
+
+</head>
+<body>
+
+
+
+
+    <script src="https://i.socdm.com/sdk/js/adg-script-gate.js"></script>
+    <script>
+    var parentWin = window.top.document;
+    var targetDom = parentWin.getElementsByClassName("wrapper")[0];
+    var adgGateAd;
+    var adg_gate_retry = 0;
+    (function () {
+        if (!(adg_gate_retry < 40)) return;
+        try {
+            adgGateAd = new ADGGateAd({
+                contentsSize: 970,
+                contentsDom: targetDom,
+                logLevel: 'debug',
+                setStyle: function () {
+                    targetDom.setAttribute("style", "z-index: 1;margin:auto;margin-top: 194px;");
+                },
+                failedCallback: function (failCode) {
+	          
+                }
+            });
+        }catch (e) {}
+        if (adgGateAd) {
+            adgGateAd.loadAd(106001);
+            return;
+        }
+        adg_gate_retry++;
+        setTimeout(arguments.callee, 300);
+    })();
+</script>
+  
+  
+
+  <div class="wrapper">
+    <div class="box-a">
+      <div class="logo"><p class="tx-logo"></p>
+</div>
+      <div class="logoright"></div>
+    </div>
+    <div class="billboard">
+     
+      <div>
+      </div>
+    </div>
+    <div class="box-b">
+      <div class="title"></div>
+      <div class="subtitle"></div>
+      <div class="article"></div>
+      <div class="subtitle"></div>
+      <div class="article"></div>
+      <div class="article"></div>
+  
+      <div class="article"></div>
+    </div>
+    <div class="box-c">
+      <div class="right-column">
+     
+        <div class="inner-column"> </div>
+   
+      </div>
+    </div>
+    <div class="box-d">
+    </div>
+  </div>
+</body>
+</html>
