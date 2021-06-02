@@ -148,16 +148,12 @@ const checkScroll = () => {
     
     inline.style.width = "320px"
     inline.style.height = "180px"
-    wipe.style.width = "160px";
-    wipe.style.height = "110px";
-    adWipe.style.width = "160px";
-    adWipe.style.height = "90px";
+ 
 
     if(adTop < -1 && !isClosed){
         wipe.style.display ="block";
         wipe.style.position = 'fixed';
-        wipe.style.top = "20px";
-        wipe.style.right = "20px";
+
 
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
