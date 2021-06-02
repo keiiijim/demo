@@ -226,7 +226,8 @@ function move(e){
         } else {
             var event = e.changedTouches[0];
         }
-
+        e.preventDefault();
+        
         drag.style.top = event.pageY - y + "px";
         drag.style.left = event.pageX - x + "px";
 
