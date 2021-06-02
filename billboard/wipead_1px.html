@@ -148,18 +148,17 @@ const checkScroll = () => {
     
     inline.style.width = "320px"
     inline.style.height = "180px"
- 
+
 
     if(adTop < -1 && !isClosed){
         wipe.style.display ="block";
         wipe.style.position = 'fixed';
 
-
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
             adWipe.appendChild(adImg)
-            adVideo.style.width = "160px"
-            adVideo.style.height = "90px"
+            adVideo.style.width = "192px"
+            adVideo.style.height = "108px"
         }
     } else{
         adImg.style.position = 'relative';
