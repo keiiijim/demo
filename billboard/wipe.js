@@ -58,11 +58,11 @@ var el_div5 = document.createElement("div");
 var el_div6 = document.createElement("div");
 	el_div6.id = "titlearea";
 	el_div6.innerText='Advertisement';
-	el_div6.style = "border-top-left-radius: 5px;border-top-right-radius: 5px;border-bottom-right-radius: 5px;border-bottom-left-radius: 5px;margin:0 0 5px 0;padding:0 0 0 10px;background-color:#aaaaaa;height:35px;font-size:20px;";
+	el_div6.style = "padding-top: 10px;border-top-left-radius: 5px;border-top-right-radius: 5px;border-bottom-right-radius: 5px;border-bottom-left-radius: 5px;margin:0 0 5px 0;padding:0 0 0 10px;background-color:#aaaaaa;height:35px;font-size:20px;";
 
 var el_span1 = document.createElement("span");
 	el_span1.id = "closearea";
-	el_span1.style = "float:right;color:#555555;padding-right:10px;";
+	el_span1.style = "float:right;color:#555555;padding-right:10px;    padding-top: 10px;";
 	el_span1.innerText='x';
 
 var el_div7 = document.createElement("div");
@@ -75,7 +75,7 @@ var el_div8 = document.createElement("div");
 var el_div9 = document.createElement("div");
 	el_div9.id = "wipedetailarea";
 	el_div9.innerText='詳しく見る';
-	el_div9.style='float:left;width:160px;background-color: #888888;color:#ffffff;height:90px;';
+	el_div9.style='float:left;width:160px;background-color: #888888;color:#ffffff;height:90px;    padding-top: 10px;';
 
 
 ad.appendChild(el_div5);
