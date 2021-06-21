@@ -143,8 +143,8 @@ const checkVanish = () => {
     // 3秒で消える
     // 再生中
     if(isFinish) {
-        closeSec += 10000
-        if(closeSec >= 300000) {
+        closeSec += 100
+        if(closeSec >= 3000) {
             isClosed = true;
         }
     } else {
