@@ -1,5 +1,5 @@
 var ad = window.top.document.getElementById('ad');
-
+ad.style="margin-bottom: 20px;";
 
 
 var el_div1 = document.createElement("div");
