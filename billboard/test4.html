@@ -7,13 +7,24 @@
 <style>
   .img {
 }
+.img.fadeout {
+    animation: fadein-keyframes 0.5s ease 0.2s 1 forwards;
+  }
 
+  @keyframes fadein-keyframes {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
 
   
- .img.fadeout{ 
+ .img.fadeout2{ 
   animation-name:sample01;
   animation-duration:1s; 
-  animation-iteration-count: infinite;
   animation-fill-mode: forwards;
 }
 @keyframes sample01 {
@@ -37,11 +48,22 @@
     left: 10px;
     width: 98%;
   }
+  
+    #img02 {
+    position: fixed;
+    top: 300px;
+    left: 10px;
+    width: 98%;
+  }
   </style>
   <script type="text/javascript">
-    function LinkClick() {
+        function LinkClick() {
       var elem = document.getElementById("img01");
       elem.classList.add("fadeout");
+    }
+    function LinkClick2() {
+      var elem = document.getElementById("img01");
+      elem.classList.add("fadeout2");
     }
   </script>
 </head>
@@ -74,10 +96,15 @@ CCIでメディアプランニングからセールス、メニュー開発な�
 </div>
 <br><br><br><br>
   
-    上へフェードアウトのデモ ↓をクリック
+      フェードアウトのデモ ↓をクリック
   0.5秒で設定
   <div><img id="img01" class="img" src="vanish.png" /></div>
   <a href="javascript:LinkClick();">上へフェードアウト</a>
+  
+    上へフェードアウトのデモ ↓をクリック
+  0.5秒で設定
+  <div><img id="img02" class="img" src="vanish.png" /></div>
+  <a href="javascript:LinkClick2();">上へフェードアウト</a>
   <br><br><br><br>
   
  
