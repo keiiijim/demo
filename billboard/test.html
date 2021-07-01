@@ -241,7 +241,7 @@ const checkScroll = () => {
 var closeSec = 0
 
 // スクロール距離で消える用
-/*
+
 var pageSize = 0
 var startY = 0
 var vanishPer = 100
@@ -268,13 +268,13 @@ const checkVanish = () => {
     }
     
     if(startY > 1 && pageYOffset > startY + pageSize * vanishPer / 100){
-        isClosed = true;
+  //      isClosed = true;
     }
 }
 
 setInterval(checkScroll, 100);
 setInterval(checkVanish, 100);
-*/
+
 
 document.getElementById("closearea").addEventListener('click', function() {
     isClosed = true;
