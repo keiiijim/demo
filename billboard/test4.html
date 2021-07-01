@@ -1,32 +1,27 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
   <title></title>
 <style>
-  
- 
-.img.fadeup.is-animated {
-  animation: fadeup 1s cubic-bezier(0.33, 1, 0.68, 1) 1 forwards;
+  .img {
 }
- 
-@keyframes fadeup {
-  0% {
-    transform: translateY(0px);
-    opacity: 1;
+
+  .img.fadeout {
+    animation: fadein-keyframes 0.5s ease 0.2s 1 forwards;
+    transform:translateY(-30px);
   }
-  80% {
-    opacity: 1;
+
+  @keyframes fadein-keyframes {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
   }
-  100% {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-}
-  
-  
-  
-  
   #img01 {
     position: fixed;
     top: 100px;
@@ -70,9 +65,9 @@ CCIでメディアプランニングからセールス、メニュー開発な�
 </div>
 <br><br><br><br>
   
-    フェードアウト+スライドアウトのデモ ↓をクリック
+    フェードアウトのデモ ↓をクリック
   0.5秒で設定
-  <div class="img"><img id="img01"  src="vanish.png" /></div>
+  <div><img id="img01" class="img" src="vanish.png" /></div>
   <a href="javascript:LinkClick();">フェードアウト</a>
   <br><br><br><br>
   
