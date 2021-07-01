@@ -19,7 +19,7 @@ font-size:20px;
 float:right;
 color:#555555;
 padding-right:10px;
-padding-top:73px;
+padding-top:83px;
 }
 #endcard{
 display:none;
@@ -39,12 +39,12 @@ float:left;
 
 #wipedetailarea{
 float:left;
-width:143px;
+width:125px;
 background-color: #888888;
-   background-image: url(right.png);
-   background-size: 143px 100px;
+   background-image: url(right2.png);
+   background-size: 125px 110px;
 color:#ffffff;
-height:100px;
+height:110px;
 }
 
 </style>
@@ -212,8 +212,8 @@ const checkScroll = () => {
     inline.style.width = "320px"
     inline.style.height = "180px"
     wipe.style.width = "320px";
-    wipe.style.height = "100px";
-    adWipe.style.height = "100px";
+    wipe.style.height = "110px";
+    adWipe.style.height = "110px";
 
     if(adTop < -1 && !isClosed){
         wipe.style.display ="block";
@@ -225,8 +225,8 @@ const checkScroll = () => {
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
             adWipeVideo.appendChild(adImg)
-            endCard.style.width = adVideo.style.width = "177px"
-            endCard.style.height = adVideo.style.height = "100px"
+            endCard.style.width = adVideo.style.width = "195px"
+            endCard.style.height = adVideo.style.height = "110px"
         }
     } else{
         adImg.style.position = 'relative';
