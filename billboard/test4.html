@@ -23,6 +23,35 @@
       opacity: 0;
     }
   }
+  
+  
+  
+ .img{ 
+　opacity:0;
+  animation-name:sample01;
+  animation-duration:5s; 
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+@keyframes sample01 {
+0% {
+ opacity: 0;
+ transform: translateY(-30px);
+}
+  50%{
+    opacity: 1;
+     transform: translateY(0);
+  }
+ 100% {
+ opacity:0;
+ transform: translateY(30px);
+ } 
+}
+  
+  
+  
+  
+  
   #img01 {
     position: fixed;
     top: 100px;
