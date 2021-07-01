@@ -8,43 +8,22 @@
   .img {
 }
 
-  .img.fadeout {
-    transform:translateY(-50px);
-    animation: fadein-keyframes 0.5s ease 0.2s 1 forwards;
 
-  }
-
-  @keyframes fadein-keyframes {
-    0% {
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 0;
-    }
-  }
-  
-  
   
  .img{ 
-　opacity:0;
   animation-name:sample01;
-  animation-duration:5s; 
+  animation-duration:1s; 
   animation-iteration-count: infinite;
   animation-fill-mode: forwards;
 }
 @keyframes sample01 {
 0% {
- opacity: 0;
- transform: translateY(-30px);
+ opacity: 1;
+ transform: translateY(0px);
 }
-  50%{
-    opacity: 1;
-     transform: translateY(0);
-  }
  100% {
  opacity:0;
- transform: translateY(30px);
+ transform: translateY(-30px);
  } 
 }
   
