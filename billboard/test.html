@@ -47,6 +47,23 @@ color:#ffffff;
 height:100px;
 }
 
+   
+   
+   .wipe.fadeout2{ 
+          animation-name:fadeout_2;
+          animation-duration:1s; 
+          animation-fill-mode: forwards;
+        }
+        @keyframes fadeout_2 {
+          0% {
+             opacity: 1;
+             transform: translateY(0px);
+          }
+          100% {
+            opacity:0;
+            transform: translateY(-30px);
+          } 
+        }
 </style>
 
 
@@ -231,21 +248,8 @@ const checkScroll = () => {
     } else{
         adImg.style.position = 'relative';
        // wipe.style.display ="none";
-        .wipe.fadeout2{ 
-          animation-name:fadeout_2;
-          animation-duration:1s; 
-          animation-fill-mode: forwards;
-        }
-        @keyframes fadeout_2 {
-          0% {
-             opacity: 1;
-             transform: translateY(0px);
-          }
-          100% {
-            opacity:0;
-            transform: translateY(-30px);
-          } 
-        }
+      wipe.classList.add("fadeout2");
+        
   
        
        
