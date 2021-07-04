@@ -258,6 +258,7 @@ const checkScroll = () => {
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
                  if(videoareareturn = true){wipe.style.display ="none";
+                                            console.info('上スクロールで戻る');
        }else{
   wipe.classList.add("fadeout2");
         }
@@ -336,7 +337,7 @@ document.getElementById("wipearea").addEventListener('mouseup', function(e) {
     if (e.offsetX - startX > 100) {
        videoareareturn = true;
        isClosed = true;
-console.info('上スクロールで戻る');
+
     }
 })
 
