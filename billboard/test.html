@@ -235,13 +235,15 @@ const checkScroll = () => {
     adWipe.style.height = "110px";
 
     if(adTop < -1 && !isClosed){
+       if(overlayCount == 0){
         wipe.style.display ="block";
         wipe.style.position = 'fixed';
         wipe.style.top = "20px";
         wipe.style.left = "50%";
         wipe.style.marginLeft = "-160px";
-        overlayCount = overlayCount + 1;
+        overlayCount = 1;
        console.info(overlayCount);
+       }
 
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
