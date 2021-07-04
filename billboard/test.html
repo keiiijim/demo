@@ -251,14 +251,16 @@ const checkScroll = () => {
         
 
 
-      if(videoareareturn = true){//wipe.style.display ="none";
-       }
+
         if(adImg.parentNode === adWipeVideo){
             adWipeVideo.removeChild(adImg);
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
+                 if(videoareareturn = true){wipe.style.display ="none";
+       }else{
   wipe.classList.add("fadeout2");
+        }
         }
 
           
