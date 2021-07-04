@@ -248,10 +248,10 @@ const checkScroll = () => {
         }
     } else{
         adImg.style.position = 'relative';
-       // wipe.style.display ="none";
+        
 
-  
-      if(videoareareturn = false){          wipe.classList.add("fadeout2");}
+  wipe.classList.add("fadeout2");
+      if(videoareareturn = true){wipe.style.display ="none";}
        
         if(adImg.parentNode === adWipeVideo){
             adWipeVideo.removeChild(adImg);
