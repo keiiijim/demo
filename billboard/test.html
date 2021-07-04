@@ -259,7 +259,8 @@ const checkScroll = () => {
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
-                 if(videoareareturn = true){wipe.style.display ="none";
+           console.info('上スクロールで戻る');
+                 if(videoareareturn == true){wipe.style.display ="none";
                                             console.info('上スクロールで戻る');
        }else{
   wipe.classList.add("fadeout2");
@@ -285,8 +286,8 @@ const checkVanish = () => {
     if(isFinish) {
         closeSec += 100
         if(closeSec >= 3000) {
+           videoareareturn = true;
            isClosed = true;
-
               console.info('3秒でクローズ');
         }
     } else {
@@ -313,7 +314,7 @@ setInterval(checkVanish, 100);
 
 document.getElementById("closearea").addEventListener('click', function() {
    
-   
+ videoareareturn = true;   
  isClosed = true;
 
    console.info('クローズボタン');
