@@ -247,10 +247,9 @@ const checkScroll = () => {
     } else{
         adImg.style.position = 'relative';
        // wipe.style.display ="none";
-      wipe.classList.add("fadeout2");
         
   
-       
+      
        
         if(adImg.parentNode === adWipeVideo){
             adWipeVideo.removeChild(adImg);
@@ -258,6 +257,7 @@ const checkScroll = () => {
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
         }
+       else{      wipe.classList.add("fadeout2");}
     }
 }
 
