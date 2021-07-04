@@ -230,7 +230,25 @@ const checkScroll = () => {
         }
     } else{
         adImg.style.position = 'relative';
-        wipe.style.display ="none";
+       // wipe.style.display ="none";
+        .wipe.fadeout2{ 
+          animation-name:fadeout_2;
+          animation-duration:1s; 
+          animation-fill-mode: forwards;
+        }
+        @keyframes fadeout_2 {
+          0% {
+             opacity: 1;
+             transform: translateY(0px);
+          }
+          100% {
+            opacity:0;
+            transform: translateY(-30px);
+          } 
+        }
+  
+       
+       
         if(adImg.parentNode === adWipeVideo){
             adWipeVideo.removeChild(adImg);
             inline.appendChild(adImg);
@@ -270,9 +288,9 @@ const checkVanish = () => {
         console.log(startY)
     }
     
-    if(startY > 1 && pageYOffset > startY + pageSize * vanishPer / 100){
-  //      isClosed = true;
-    }
+    //if(startY > 1 && pageYOffset > startY + pageSize * vanishPer / 100){
+    //     isClosed = true;
+    // }
 }
 
 setInterval(checkScroll, 100);
