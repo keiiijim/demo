@@ -283,6 +283,7 @@ const checkVanish = () => {
         closeSec += 100
         if(closeSec >= 3000) {
            isClosed = true;
+           console.log("3秒でクローズ")
         }
     } else {
         closeSec = 0
@@ -310,6 +311,7 @@ document.getElementById("closearea").addEventListener('click', function() {
    
    
  isClosed = true;
+   console.log("クローズボタン")
 });
 
 
@@ -332,7 +334,7 @@ document.getElementById("wipearea").addEventListener('mouseup', function(e) {
     if (e.offsetX - startX > 100) {
        videoareareturn = true;
        isClosed = true;
-
+console.log("上スクロールで戻る")
     }
 })
 
