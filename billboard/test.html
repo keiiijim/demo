@@ -247,7 +247,7 @@ const checkScroll = () => {
     } else{
         adImg.style.position = 'relative';
        // wipe.style.display ="none";
-        
+          wipe.classList.add("fadeout2");
   
       
        
@@ -258,7 +258,7 @@ const checkScroll = () => {
             endCard.style.height = adVideo.style.height = "180px"
 
         }
-       else{//wipe.classList.add("fadeout2");
+       else{/
        }
           
     }
@@ -306,8 +306,7 @@ setInterval(checkVanish, 100);
 document.getElementById("closearea").addEventListener('click', function() {
    
    
-   document.getElementById("wipearea").style.display ="none";
-  ////  isClosed = true;
+ isClosed = true;
 });
 
 
