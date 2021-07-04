@@ -239,14 +239,12 @@ const checkScroll = () => {
         wipe.style.top = "20px";
         wipe.style.left = "50%";
         wipe.style.marginLeft = "-160px"
-                 console.info(' ookii');
 
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
             adWipeVideo.appendChild(adImg)
             endCard.style.width = adVideo.style.width = "195px"
             endCard.style.height = adVideo.style.height = "110px"
-                            console.info('tiisai');
         }
     } else{
         adImg.style.position = 'relative';
@@ -259,12 +257,13 @@ const checkScroll = () => {
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
-           console.info('上スクロールで戻る');
-                 if(videoareareturn == true){wipe.style.display ="none";
-                                            console.info('上スクロールで戻る2');
+
+                 if(videoareareturn == true){
+                                            console.info('クリックか、3秒で消える');
                                                wipe.classList.add("fadeout2");
        }else{
-
+                     console.info('上スクロールで戻る');
+wipe.style.display ="none";
         }
         }
 
