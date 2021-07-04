@@ -256,7 +256,7 @@ const checkScroll = () => {
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
-           wipe.style.display ="none";
+
         }
        else{//wipe.classList.add("fadeout2");
        }
@@ -279,8 +279,7 @@ const checkVanish = () => {
     if(isFinish) {
         closeSec += 100
         if(closeSec >= 3000) {
-           // isClosed = true;
-           document.getElementById("wipearea").classList.add("fadeout2");
+           isClosed = true;
         }
     } else {
         closeSec = 0
@@ -305,7 +304,10 @@ setInterval(checkVanish, 100);
 
 
 document.getElementById("closearea").addEventListener('click', function() {
-    isClosed = true;
+   
+   
+   document.getElementById("wipearea").style.display ="none";
+  ////  isClosed = true;
 });
 
 
