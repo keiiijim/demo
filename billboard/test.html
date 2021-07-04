@@ -239,12 +239,14 @@ const checkScroll = () => {
         wipe.style.top = "20px";
         wipe.style.left = "50%";
         wipe.style.marginLeft = "-160px"
+                 console.info(' ookii');
 
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
             adWipeVideo.appendChild(adImg)
             endCard.style.width = adVideo.style.width = "195px"
             endCard.style.height = adVideo.style.height = "110px"
+                            console.info('tiisai');
         }
     } else{
         adImg.style.position = 'relative';
