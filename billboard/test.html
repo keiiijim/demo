@@ -214,6 +214,7 @@ CCIでメディアプランニングからセールス、メニュー開発な�
 var isClosed = false;
 var isFinish = false;
 var videoareareturn = false;
+var overlayCount = 0;
 
    
 const checkScroll = () => {
@@ -238,7 +239,9 @@ const checkScroll = () => {
         wipe.style.position = 'fixed';
         wipe.style.top = "20px";
         wipe.style.left = "50%";
-        wipe.style.marginLeft = "-160px"
+        wipe.style.marginLeft = "-160px";
+        overlayCount = overlayCount + 1;
+       console.info(overlayCount);
 
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
@@ -248,23 +251,17 @@ const checkScroll = () => {
         }
     } else{
         adImg.style.position = 'relative';
-        
-
-
-
         if(adImg.parentNode === adWipeVideo){
             adWipeVideo.removeChild(adImg);
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
-
-                 if(videoareareturn == true){
-                                            console.info('クリックか、3秒で消える');
-                                               wipe.classList.add("fadeout2");
-       }else{
-                     console.info('上スクロールで戻る');
-wipe.style.display ="none";
-        }
+            if(videoareareturn == true){
+                wipe.classList.add("fadeout2");
+            }
+            else{
+               wipe.style.display ="none";
+            }
         }
 
           
@@ -288,7 +285,6 @@ const checkVanish = () => {
         if(closeSec >= 3000) {
            videoareareturn = true;
            isClosed = true;
-              console.info('3秒でクローズ');
         }
     } else {
         closeSec = 0
@@ -312,12 +308,9 @@ setInterval(checkScroll, 100);
 setInterval(checkVanish, 100);
 
 
-document.getElementById("closearea").addEventListener('click', function() {
-   
+document.getElementById("closearea").addEventListener('click', function() {  
  videoareareturn = true;   
  isClosed = true;
-
-   console.info('クローズボタン');
 });
 
 
