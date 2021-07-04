@@ -50,7 +50,7 @@ height:139px;
    
 .fadeout2{ 
           animation-name:fadeout_2;
-          animation-duration:1s; 
+          animation-duration:s; 
           animation-fill-mode: forwards;
         }
         @keyframes fadeout_2 {
@@ -279,7 +279,8 @@ const checkVanish = () => {
     if(isFinish) {
         closeSec += 100
         if(closeSec >= 3000) {
-            isClosed = true;
+           // isClosed = true;
+           wipe.classList.add("fadeout2");
         }
     } else {
         closeSec = 0
