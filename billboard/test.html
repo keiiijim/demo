@@ -213,7 +213,9 @@ CCIでメディアプランニングからセールス、メニュー開発な�
 <script>
 var isClosed = false;
 var isFinish = false;
+var videoareareturn = false;
 
+   
 const checkScroll = () => {
     var winScroll = window.scrollY;
     var inline = document.getElementById("inlinearea");
@@ -247,9 +249,9 @@ const checkScroll = () => {
     } else{
         adImg.style.position = 'relative';
        // wipe.style.display ="none";
-          wipe.classList.add("fadeout2");
+
   
-      
+      if(videoareareturn = false){          wipe.classList.add("fadeout2");}
        
         if(adImg.parentNode === adWipeVideo){
             adWipeVideo.removeChild(adImg);
@@ -328,6 +330,7 @@ document.getElementById("wipearea").addEventListener('mousedown', function(e) {
 document.getElementById("wipearea").addEventListener('mouseup', function(e) {
     if (e.offsetX - startX > 100) {
         isClosed = true;
+       videoareareturn = true;
     }
 })
 
