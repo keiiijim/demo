@@ -17,9 +17,9 @@ font-size:20px;
 }
 #closearea{
 float:right;
-color:#555555;
-padding-right:10px;
-padding-top:83px;
+opacity: 0;
+padding-right:0px;
+padding-top:109px;
 }
 #endcard{
 display:none;
@@ -38,15 +38,43 @@ float:left;
 }
 
 #wipedetailarea{
-float:left;
-width:125px;
-background-color: #888888;
-   background-image: url(right2.png);
-   background-size: 125px 110px;
-color:#ffffff;
-height:110px;
-}
+/* float:left;　*/
+width:320px;
 
+color:#ffffff;
+height:136px;
+
+}
+#wipedetailarea:before{
+content: "";
+display: inline-block;
+width:320px;
+height:136px;
+background-image: url(08.png);
+background-size: 320px 139px;
+background-position: 0px -4px;
+filter: drop-shadow(0px 1px 1px grey);
+top: -114px;
+position: relative;
+z-index: -1;
+}
+   
+   
+.fadeout2{ 
+          animation-name:fadeout_2;
+          animation-duration:0.5s; 
+          animation-fill-mode: forwards;
+        }
+        @keyframes fadeout_2 {
+          0% {
+             opacity: 1;
+             transform: translateY(0px);
+          }
+          100% {
+            opacity:0;
+            transform: translateY(-30px);
+          } 
+        }
 </style>
 
 
@@ -78,7 +106,7 @@ Supershipの「ScaleOut DSP」が「Oracle Advertising」と連携〜ポストCo
 </div>
 
 <!-- <img src="https://placehold.jp/320x180.png" /> -->
-<video src="sample.mp4" id="advideo" style="width:320px;height:180px;" autoplay muted playsinline></video>
+<video src="sample.mp4" id="advideo" style="width:320px;height:195px;" autoplay muted playsinline></video>
 </div>
 
 </div>
@@ -187,7 +215,7 @@ CCIでメディアプランニングからセールス、メニュー開発な�
 <!-- <div id="titlearea">Advertisement</div> -->
 <div id="wipeadarea">
 <div id="wipevideoarea"></div>
-<div id="wipedetailarea"><span id="closearea">x</span></div>
+<div id="wipedetailarea"><span id="closearea">xxxxx</span></div>
 </div>
 </div>
 
@@ -197,7 +225,10 @@ CCIでメディアプランニングからセールス、メニュー開発な�
 <script>
 var isClosed = false;
 var isFinish = false;
+var videoareareturn = false;
+var overlayCount = 0;
 
+   
 const checkScroll = () => {
     var winScroll = window.scrollY;
     var inline = document.getElementById("inlinearea");
@@ -216,27 +247,38 @@ const checkScroll = () => {
     adWipe.style.height = "110px";
 
     if(adTop < -1 && !isClosed){
+       if(overlayCount == 0){
         wipe.style.display ="block";
         wipe.style.position = 'fixed';
         wipe.style.top = "20px";
         wipe.style.left = "50%";
-        wipe.style.marginLeft = "-160px"
+        wipe.style.marginLeft = "-160px";
+        overlayCount = 1;
+       console.info(overlayCount);
 
         if(adImg.parentNode === inline){
             inline.removeChild(adImg)
             adWipeVideo.appendChild(adImg)
             endCard.style.width = adVideo.style.width = "195px"
             endCard.style.height = adVideo.style.height = "110px"
+       }
         }
     } else{
         adImg.style.position = 'relative';
-        wipe.style.display ="none";
         if(adImg.parentNode === adWipeVideo){
             adWipeVideo.removeChild(adImg);
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
+            if(videoareareturn == true){
+                wipe.classList.add("fadeout2");
+            }
+            else{
+               wipe.style.display ="none";
+            }
         }
+
+          
     }
 }
 
@@ -255,7 +297,8 @@ const checkVanish = () => {
     if(isFinish) {
         closeSec += 100
         if(closeSec >= 3000) {
-            isClosed = true;
+           videoareareturn = true;
+           isClosed = true;
         }
     } else {
         closeSec = 0
@@ -270,17 +313,18 @@ const checkVanish = () => {
         console.log(startY)
     }
     
-    if(startY > 1 && pageYOffset > startY + pageSize * vanishPer / 100){
-  //      isClosed = true;
-    }
+    //if(startY > 1 && pageYOffset > startY + pageSize * vanishPer / 100){
+    //     isClosed = true;
+    // }
 }
 
 setInterval(checkScroll, 100);
 setInterval(checkVanish, 100);
 
 
-document.getElementById("closearea").addEventListener('click', function() {
-    isClosed = true;
+document.getElementById("closearea").addEventListener('click', function() {  
+ videoareareturn = true;   
+ isClosed = true;
 });
 
 
@@ -301,7 +345,9 @@ document.getElementById("wipearea").addEventListener('mousedown', function(e) {
 })
 document.getElementById("wipearea").addEventListener('mouseup', function(e) {
     if (e.offsetX - startX > 100) {
-        isClosed = true;
+       videoareareturn = true;
+       isClosed = true;
+
     }
 })
 
