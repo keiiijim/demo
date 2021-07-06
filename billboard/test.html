@@ -99,6 +99,7 @@ Supershipの「ScaleOut DSP」が「Oracle Advertising」と連携〜ポストCo
 
 <div id="inlinearea" style="margin:auto; padding: 10px 0px;height:180px">
 <div id="adimg">
+<img src="https://cdn.apvdr.com/ui/3.1/volume-off@2x.png" width="30%" height="30%" id="sound" style="position: absolute; top: 125px;left: 0px;width: 60px;height: auto;" />
 
 <div id="endcard">
 <div id="endcardbtn">
@@ -357,6 +358,7 @@ document.getElementById("wipearea").addEventListener('mouseup', function(e) {
 document.getElementById('advideo').addEventListener('ended', function() {
     isFinish = true;
     document.getElementById('endcard').style.display ="block";
+    document.getElementById('sound').style.display ="none";
 });
 
 // replay
@@ -364,5 +366,6 @@ document.getElementById('replay').addEventListener('click', function() {
     isFinish = false;
     document.getElementById('endcard').style.display ="none";
     document.getElementById('advideo').play();
+    document.getElementById('sound').style.display ="block";
 });
 </script></body></html>
