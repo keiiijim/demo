@@ -269,6 +269,7 @@ const checkScroll = () => {
             adWipeVideo.appendChild(adImg)
             endCard.style.width = adVideo.style.width = "195px"
             endCard.style.height = adVideo.style.height = "110px"
+            document.getElementById("sound").style.bottom = "-7px";
        }
         }
     } else{
@@ -278,15 +279,13 @@ const checkScroll = () => {
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
-            document.getElementById("sound").style.bottom = "-5px";
-
+           
             if(videoareareturn == true){
                 wipe.classList.add("fadeout2");
             }
             else{
                wipe.style.display ="none";
                document.getElementById("sound").style.bottom = "7px"
-
             }
         }
 
