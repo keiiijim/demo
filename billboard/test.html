@@ -111,8 +111,8 @@ Supershipの「ScaleOut DSP」が「Oracle Advertising」と連携〜ポストCo
     <img src="adg_video_button_detail.png" width="30%" height="30%" >
    </div>
 </div>
-<div id="sound" style="z-index:1;">
-   <img src="https://cdn.apvdr.com/ui/3.1/volume-off@2x.png" style="width: 45.952px; height: 45.952px;">
+<div id="sound" style="z-index:1;"s
+   <img src="https://cdn.apvdr.com/ui/3.1/volume-off@2x.png" style="width: 45.952px; height: 45.952px;" id="sound-img">
 </div>
    <video src="sample.mp4" id="advideo" style="width:320px;height:195px;" autoplay muted playsinline></video>
 </div>
@@ -278,11 +278,15 @@ const checkScroll = () => {
             inline.appendChild(adImg);
             endCard.style.width = adVideo.style.width = "320px"
             endCard.style.height = adVideo.style.height = "180px"
+                                    document.getElementById("sound").syle.bottom = "-5px"
+
             if(videoareareturn == true){
                 wipe.classList.add("fadeout2");
             }
             else{
                wipe.style.display ="none";
+               document.getElementById("sound").syle.bottom = "7px"
+
             }
         }
 
