@@ -23,7 +23,7 @@
                     bids: [{
                         bidder: 'adg',
                         params: {
-                            id: '82724'
+                            id: '82723'
                         }
                     }]
                 },
@@ -89,16 +89,10 @@
 
     <body>
         <h2>Prebid.js Example - PC　</h2>
-        <p>prebid/GAMへの設定サイズ：　 [[336, 280],[300, 250],[320, 180]]</P>
         <p>ADG発行枠サイズ:prebid</P>
-        <p>dealIDを紐付け、テストクリエイティブを設置。PMP案件が当たらなければ、OpenAuction案件が流れる</P>
-        <p>GAMのクリエイティブに、console.logを設定</P>
-        <p>上の枠 PMP配信時：console.log('PMP LineItem - FriendlyIframe');     OA配信時:　console.log('OA LineItem - friendlyframe');</P>
-        <p>下の枠 PMP配信時：console.log('PMP LineItem - Safeframe');     OA配信時:console.log('OA LineItem - safeframe');</P>
 
         <br>
-        <h5>PMP案件 300x250 - friendly iframe</h5>
-        <div style="width: 336px;height: 280px;">
+        <div style="82723">
             <div id='div'>
                 <script type='text/javascript'>
                     googletag.cmd.push(function() {
@@ -108,8 +102,8 @@
             </div>
         </div>
         
-        <h5>PMP案件 300x250  - safe iframe</h5>
-        <div style="width: 336px;height: 280px;">
+
+        <div style="82724">
             <div id='div2'>
                 <script type='text/javascript'>
                     googletag.cmd.push(function() {
