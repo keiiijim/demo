@@ -1,0 +1,127 @@
+<html>
+
+    <head>
+        <link rel="icon" type="image/png" href="/favicon.png">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+        <!-- <script async src="prebid2.31.0.js"></script> -->
+        <script async src="prebid5.4.0.js"></script>
+        <script>
+            var div_sizes = [[320, 180],[1, 1],[0, 0]];
+            
+            var PREBID_TIMEOUT = 3000;
+            var FAILSAFE_TIMEOUT = 5000;
+
+            var adUnits = [
+                {
+                    code: '/18339668/prod-stg-adg/Multi_Prebid_FriendlyIframe',
+                    mediaTypes: {
+                        banner: {
+                            sizes: div_sizes
+                        }
+                    },
+                    bids: [{
+                        bidder: 'adg',
+                        params: {
+                            id: '132864'
+                        }
+                    }]
+                },
+                {
+                    code: '/18339668/prod-stg-adg/Multi_Prebid_SafeFrame',
+                    mediaTypes: {
+                        banner: {
+                            sizes: div_sizes
+                        }
+                    },
+                    bids: [{
+                        bidder: 'adg',
+                        params: {
+                            id: '132864'
+                        }
+                    }]
+                }
+            ];
+
+            // ======== DO NOT EDIT BELOW THIS LINE =========== //
+            var googletag = googletag || {};
+            googletag.cmd = googletag.cmd || [];
+            googletag.cmd.push(function() {
+                googletag.pubads().disableInitialLoad();
+            });
+
+            var pbjs = pbjs || {};
+            pbjs.que = pbjs.que || [];
+
+            pbjs.que.push(function() {
+                pbjs.addAdUnits(adUnits);
+                pbjs.requestBids({
+                    bidsBackHandler: initAdserver,
+                    timeout: PREBID_TIMEOUT
+                });
+            });
+
+            function initAdserver() {
+                if (pbjs.initAdserverSet) return;
+                pbjs.initAdserverSet = true;
+                googletag.cmd.push(function() {
+                    pbjs.que.push(function() {
+                        pbjs.setTargetingForGPTAsync();
+                        googletag.pubads().refresh();
+                    });
+                });
+            }
+            // in case PBJS doesn't load
+            setTimeout(function() {
+                initAdserver();
+            }, FAILSAFE_TIMEOUT);
+
+            googletag.cmd.push(function() {
+                googletag.defineSlot('/18339668/prod-stg-adg/Multi_Prebid_FriendlyIframe', div_sizes, 'div').addService(googletag.pubads());
+                googletag.defineSlot('/18339668/prod-stg-adg/Multi_Prebid_SafeFrame', div_sizes, 'div2').addService(googletag.pubads());
+                googletag.pubads().enableSingleRequest();
+                googletag.enableServices();
+            });
+
+        </script>
+
+    </head>
+
+    <body>
+        <h2>Prebid.js Example - SP　</h2>
+        <p>prebid/GAMへの設定サイズ：　 [[320, 180],[300, 250]]</P>
+        <p>ADG発行枠サイズ:prebid</P>
+        <p>dealIDを紐付け、テストクリエイティブを設置。PMP案件が当たらなければ、OpenAuction案件が流れる</P>
+        <p>GAMのクリエイティブに、console.logを設定</P>
+        <p>上の枠 PMP配信時：console.log('PMP LineItem - FriendlyIframe');     OA配信時:　console.log('OA LineItem - friendlyframe');</P>
+        <p>下の枠 PMP配信時：console.log('PMP LineItem - Safeframe');     OA配信時:console.log('OA LineItem - safeframe');</P>
+
+        <br>
+        <h5>PMP案件 320x180 - friendly iframe</h5>
+        <div style="width: ３２0px;height: １８0px;">
+            <div id='div'>
+                <script type='text/javascript'>
+                    googletag.cmd.push(function() {
+                        googletag.display('div');
+                    });
+                </script>
+            </div>
+        </div>
+        
+        <h5>PMP案件 320x180  - safe iframe</h5>
+        <div style="width: 320px;height: 180px;">
+            <div id='div2'>
+                <script type='text/javascript'>
+                    googletag.cmd.push(function() {
+                        googletag.display('div2');
+                    });
+                </script>
+            </div>
+        </div>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+END
+    </body>
+
+</html>
