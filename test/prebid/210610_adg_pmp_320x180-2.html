@@ -8,6 +8,7 @@
         <script async src="prebid5.4.0.js"></script>
         <script>
             var div_sizes = [[1, 1]];
+            var div_sizes2 = [[320, 180]];  
             
             var PREBID_TIMEOUT = 1000;
             var FAILSAFE_TIMEOUT = 3000;
@@ -31,7 +32,7 @@
                     code: '/18339668/prod-stg-adg/Multi_Prebid_SafeFrame',
                     mediaTypes: {
                         banner: {
-                            sizes: div_sizes
+                            sizes: div_sizes2
                         }
                     },
                     bids: [{
@@ -78,7 +79,7 @@
 
             googletag.cmd.push(function() {
                 googletag.defineSlot('/18339668/prod-stg-adg/Multi_Prebid_FriendlyIframe', div_sizes, 'div').addService(googletag.pubads());
-                googletag.defineSlot('/18339668/prod-stg-adg/Multi_Prebid_SafeFrame', div_sizes, 'div2').addService(googletag.pubads());
+                googletag.defineSlot('/18339668/prod-stg-adg/Multi_Prebid_SafeFrame', div_sizes2, 'div2').addService(googletag.pubads());
                 googletag.pubads().enableSingleRequest();
                 googletag.enableServices();
             });
