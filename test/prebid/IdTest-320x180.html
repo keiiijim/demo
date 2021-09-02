@@ -7,11 +7,13 @@
         <!-- <script async src="prebid2.31.0.js"></script> -->
         <script async src="prebid5.4.0.js"></script>
 
-        
 
-        <script>
+    </head>
+
+    <body>
+             <script>
             
-            
+          const showMessage = () => {          
             
         let elements = document.getElementsByName('size');
         let len = elements.length;
@@ -24,7 +26,7 @@
         }
             console.log('選択されているのは ' + checkValue + ' です');
 
-        const showMessage = () => {
+
       const textbox = document.getElementById("input-message");
       const inputValue = textbox.value;
 
@@ -99,10 +101,8 @@
                 googletag.enableServices();
             });
   </script>
-
-    </head>
-
-    <body>
+        
+        
         <h2>Prebid.js Example - SP　</h2>
         <p>prebid/GAMへの設定サイズ：　 [[320, 180]]</P>
     
