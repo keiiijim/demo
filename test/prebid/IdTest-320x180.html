@@ -15,15 +15,14 @@
       const textbox = document.getElementById("input-message");
       const inputValue = textbox.value;
 
-      //テキストボックスの値を使って、出力するメッセージを生成する
-      const output = "入力された内容は「" + inputValue + "」です。";
+      const output = "入力されたIDは「" + inputValue + "」です。";
       //出力用のp要素にメッセージを表示
       document.getElementById("output-message").innerHTML = output;
  }
   
         
             var div_sizes = [[320, 180]];
-            var page_id = nameText.value
+            var page_id = window.document.getElementById("input-message").value;
             
             var PREBID_TIMEOUT = 1000;
             var FAILSAFE_TIMEOUT = 3000;
