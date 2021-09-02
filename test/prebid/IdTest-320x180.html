@@ -106,10 +106,8 @@
         
         
         <h2>Prebid.js Example - SP　</h2>
-        <p>prebid/GAMへの設定サイズ：　 [[320, 180]]</P>
     
-    
-        <p>dealIDを紐付け、テストクリエイティブを設置。PMP案件が当たらなければ、OpenAuction案件が流れる</P>
+
         <p>GAMのクリエイティブに、console.logを設定</P>
         <p>上の枠 PMP配信時：console.log('PMP LineItem - FriendlyIframe');     OA配信時:　console.log('OA LineItem - friendlyframe');</P>
         <p>下の枠 PMP配信時：console.log('PMP LineItem - Safeframe');     OA配信時:console.log('OA LineItem - safeframe');</P>
@@ -117,11 +115,11 @@
 
   <form id="form1" action="#">
       
-      <label><input type="radio" name="size" value="970x250" checked>970x250</label>
-      <label><input type="radio" name="size" value="320x180">320x180</label>
-      <label><input type="radio" name="size" value="300x250">300x250</label>
-      
-   <label>PageID :  <input type="text" id="input-message"></lavel>
+      <label><input type="radio" name="size" value="970x250" checked>970x250</label><br>
+      <label><input type="radio" name="size" value="320x180">320x180</label><br>
+      <label><input type="radio" name="size" value="300x250">300x250</label><br>
+      <br>
+   <label>PageID :  <input type="text" id="input-message"></lavel><br>
     
     <input type="button" onclick="showMessage()" value="Submit">
   </form>
