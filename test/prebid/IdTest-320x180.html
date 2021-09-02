@@ -24,20 +24,20 @@
                 checkValue = elements.item(i).value;
             }
         }
-            console.log('選択されているのは ' + checkValue + ' です');
-
 
       const textbox = document.getElementById("input-message");
       const inputValue = textbox.value;
 
-      const output = "入力されたIDは「" + inputValue + "」です。";
+      const output = "設定サイズは「" + checkValue + "」です。";
+      const output2 = "入力されたIDは「" + inputValue + "」です。";
       //出力用のp要素にメッセージを表示
       document.getElementById("output-message").innerHTML = output;
+      document.getElementById("output-message2").innerHTML = output2;              
 
   
         
-            var div_sizes = [[320, 180]];
-            var page_id = window.document.getElementById("input-message").value;
+            var div_sizes = checkValue;
+            var page_id = inputValue;
             
             var PREBID_TIMEOUT = 1000;
             var FAILSAFE_TIMEOUT = 3000;
@@ -115,9 +115,9 @@
 
   <form id="form1" action="#">
       
-      <label><input type="radio" name="size" value="970x250" checked>970x250</label><br>
-      <label><input type="radio" name="size" value="320x180">320x180</label><br>
-      <label><input type="radio" name="size" value="300x250">300x250</label><br>
+      <label><input type="radio" name="size" value="[[970, 250]]" checked>970x250</label><br>
+      <label><input type="radio" name="size" value="[[320, 180]]">320x180</label><br>
+      <label><input type="radio" name="size" value="[[300, 250]]">300x250</label><br>
       <br>
    <label>PageID :  <input type="text" id="input-message"></lavel><br>
     
