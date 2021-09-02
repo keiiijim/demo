@@ -12,6 +12,8 @@
 
     <body>
              <script>
+                
+                 
             
           const showMessage = () => {          
             
@@ -101,6 +103,14 @@
                 googletag.enableServices();
             });
               
+              
+              
+              
+              
+              var el_01 = document.createElement('script');
+              el_01.innerHTML = "googletag.cmd.push(function() { googletag.display('div'); });";
+document.body.appendChild(el_01);
+              
                     }
   </script>
         
@@ -133,10 +143,7 @@
         <h5>PMP案件 320x180 - friendly iframe</h5>
         <div style="width: ３２0px;height: １８0px;">
             <div id='div'>
-                <script type='text/javascript'>
-                    googletag.cmd.push(function() {
-                        googletag.display('div');
-                    });
+
                 </script>
             </div>
         </div>
