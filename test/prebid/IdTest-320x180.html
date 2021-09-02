@@ -11,8 +11,14 @@
 
 
 
-function butotnClick(){
-  msg.innerText = 'ID:' + nameText.value;
+    const showMessage = () => {
+      const textbox = document.getElementById("input-message");
+      const inputValue = textbox.value;
+
+      //テキストボックスの値を使って、出力するメッセージを生成する
+      const output = "入力された内容は「" + inputValue + "」です。";
+      //出力用のp要素にメッセージを表示
+      document.getElementById("output-message").innerHTML = output;
 
   
         
@@ -84,15 +90,6 @@ function butotnClick(){
 
 
 
-}   
-            
-            
-let nameText = document.getElementById('nameText');
-nameText.value = '名前';
-let msg = document.getElementById('msg');
-
-let checkButton = document.getElementById('checkButton');
-checkButton.addEventListener('click', butotnClick);
         </script>
 
     </head>
@@ -107,10 +104,13 @@ checkButton.addEventListener('click', butotnClick);
         <p>下の枠 PMP配信時：console.log('PMP LineItem - Safeframe');     OA配信時:console.log('OA LineItem - safeframe');</P>
 
 
-<label>ID：<input type="text" size="40" id="nameText"></label>
-<input type="button" value="Check" id="checkButton">
+  <form id="form1" action="#">
+    <input type="text" id="input-message">
+    <input type="button" onclick="showMessage()" value="送信">
+  </form>
+<p id="output-message"></p>
 
-<p id="msg"></p>
+
 
         <br>
         <h5>PMP案件 320x180 - friendly iframe</h5>
