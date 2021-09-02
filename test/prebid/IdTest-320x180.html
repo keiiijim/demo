@@ -15,11 +15,13 @@ nameText.addEventListener('change', inputChange);
 let msg = document.getElementById('msg');
 
 
-function butotnClick(){
+function inputChange(event){
+  msg.innerText = 'ID:' + nameText.value;
 
   
         
             var div_sizes = [[320, 180]];
+            var page_id = nameText.value
             
             var PREBID_TIMEOUT = 1000;
             var FAILSAFE_TIMEOUT = 3000;
@@ -37,7 +39,7 @@ function butotnClick(){
                     bids: [{
                         bidder: 'adg',
                         params: {
-                            id: nameText.value
+                            id: page_id
                         }
                     }]
                 }
