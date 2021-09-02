@@ -1,0 +1,61 @@
+<html>
+
+    <head>
+        <link rel="icon" type="image/png" href="/favicon.png">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+
+        
+
+        <script>
+
+        let elements = document.getElementsByName('size');
+        let len = elements.length;
+        let checkValue = '';
+
+        for (let i = 0; i < len; i++){
+            if (elements.item(i).checked){
+                checkValue = elements.item(i).value;
+            }
+        }
+      document.getElementById("output-message").innerHTML = checkValue;
+          
+          
+
+      const textbox = document.getElementById("input-message");
+      const inputValue = textbox.value;
+
+      const output = "入力されたIDは「" + inputValue + "」です。";
+      //出力用のp要素にメッセージを表示
+      document.getElementById("output-message2").innerHTML = output;
+  
+  </script>
+
+    </head>
+
+    <body>
+        <h2>Prebid.js 表示テスト</h2>
+    
+        <p>GAMのクリエイティブに、console.logを設定</P>
+        <p>上の枠 PMP配信時：console.log('PMP LineItem - FriendlyIframe');     OA配信時:　console.log('OA LineItem - friendlyframe');</P>
+        <p>下の枠 PMP配信時：console.log('PMP LineItem - Safeframe');     OA配信時:console.log('OA LineItem - safeframe');</P>
+
+
+
+表示項目
+  <form id="form1" action="#">
+      
+      <label><input type="radio" name="size" value="970x250" checked>970x250</label><br>
+      <label><input type="radio" name="size" value="320x180">320x180</label><br>
+      <label><input type="radio" name="size" value="300x250">300x250</label><br>
+      <br><br>
+   <label>PageID :  <input type="text" id="input-message"></lavel><br>
+    
+    <input type="button" onclick="showMessage()" value="Submit">
+  </form>
+<p id="output-message"></p>
+<p id="output-message2"></p>
+
+
+    </body>
+
+</html>
