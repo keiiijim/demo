@@ -58,9 +58,8 @@
             else if(size == "pc_bil"){ div_sizes = [[970, 250]];}
             
             
-                  const output = "設定サイズは「" + size + "」です。";
-      const output2 = "入力されたIDは「" + id + "」です。";
-      //出力用のp要素にメッセージを表示
+      var output = "設定サイズは「" + size + "」です。";
+      var output2 = "入力されたIDは「" + id + "」です。";
       document.getElementById("output-message").innerHTML = output;
       document.getElementById("output-message2").innerHTML = output2;   
             
@@ -151,7 +150,7 @@
         
         
         <p id="output-message"></p>
-<p id="output-message2"></p>
+        <p id="output-message2"></p>
         
         
         <p>prebid/GAMへの設定サイズ：　 [[300, 250],[320, 180]]</P>
