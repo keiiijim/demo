@@ -45,19 +45,21 @@
                 }else{
                     size="size不明";
                 }
+
  
                 document.form1.pram.value="id："+id+"\n"+"size："+size+"\n";
             }
 
           
           
+          var page_id = id;
+               
           
           
-          
-          
-          
-          
-            var div_sizes = [[300, 250],[320, 180]];
+            var div_sizes;
+            if(size == "rect"){ div_sizes = "[[300, 250]]";}
+            else if(size == "sp_bil"){ div_sizes = "[[320, 180]]";}
+            else if(size == "pc_bil"){ div_sizes = "[[970, 250]]";}
             
             var PREBID_TIMEOUT = 1000;
             var FAILSAFE_TIMEOUT = 3000;
@@ -73,7 +75,7 @@
                     bids: [{
                         bidder: 'adg',
                         params: {
-                            id: '134649'
+                            id: page_id
                         }
                     }]
                 },
@@ -87,7 +89,7 @@
                     bids: [{
                         bidder: 'adg',
                         params: {
-                            id: '134649'
+                            id: page_id
                         }
                     }]
                 }
@@ -138,6 +140,18 @@
     </head>
 
     <body>
+        
+        
+        <form name="form1" action="#">
+            <fieldset>
+                <legend>受け取ったパラメータを表示</legend>
+                <textarea cols="40" rows="4" name="pram" style="border:0;overflow:visible" readonly="readonly"></textarea>
+            </fieldset>
+        </form>
+        
+        
+        
+        
         <h2>Prebid.js Example - SP　</h2>
         <p>prebid/GAMへの設定サイズ：　 [[300, 250],[320, 180]]</P>
         <p>ADG発行枠サイズ:prebid</P>
