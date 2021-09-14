@@ -9,7 +9,7 @@
         <script>
           
             /* パラメータを受取る側 */
-            function pramWrite() {
+ 
                 /* アドレスの「?」以降の引数(パラメータ)を取得 */
                 var pram=location.search;
                 /* 引数がない時は処理しない */
@@ -48,13 +48,11 @@
 
  
                 document.form1.pram.value="id："+id+"\n"+"size："+size+"\n";
-            }
+
 
           
           
-          var page_id = id;
-               
-          
+          var page_id = id;               
           
             var div_sizes;
             if(size == "rect"){ div_sizes = "[[300, 250]]";}
