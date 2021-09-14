@@ -57,6 +57,14 @@
             else if(size == "sp_bil"){ div_sizes = [[320, 180]];}
             else if(size == "pc_bil"){ div_sizes = [[970, 250]];}
             
+            
+                  const output = "設定サイズは「" + size + "」です。";
+      const output2 = "入力されたIDは「" + id + "」です。";
+      //出力用のp要素にメッセージを表示
+      document.getElementById("output-message").innerHTML = output;
+      document.getElementById("output-message2").innerHTML = output2;   
+            
+            
             var PREBID_TIMEOUT = 1000;
             var FAILSAFE_TIMEOUT = 3000;
 
@@ -139,7 +147,13 @@
         
  
         
-        <h2>Prebid.js Example - SP　</h2>
+        <h2>Prebid.js Example </h2>
+        
+        
+        <p id="output-message"></p>
+<p id="output-message2"></p>
+        
+        
         <p>prebid/GAMへの設定サイズ：　 [[300, 250],[320, 180]]</P>
         <p>ADG発行枠サイズ:prebid</P>
         <p>dealIDを紐付け、テストクリエイティブを設置。PMP案件が当たらなければ、OpenAuction案件が流れる</P>
