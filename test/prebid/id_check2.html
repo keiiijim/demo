@@ -149,9 +149,43 @@
         <p id="output-message"></p>
         <p id="output-message2"></p>
         <script>
-        
-       const output = "設定サイズは「" + checkValue + "」です。";
-      const output2 = "入力されたIDは「" + inputValue + "」です。";
+          /* アドレスの「?」以降の引数(パラメータ)を取得 */
+                var pram=location.search;
+
+                /* 先頭の?をカット */
+                pram=pram.substring(1);
+                /* 「&」で引数を分割して配列に */
+                var pair=pram.split("&");
+                var i=temp="";
+                var key=new Array();
+                for (i=0; i < pair.length; i++) {
+                    /* 配列の値を「=」で分割 */
+                    temp=pair[i].split("=");
+                    keyName=temp[0];
+                    keyValue=temp[1];
+                    /* キーと値の連想配列を生成 */
+                    key[keyName]=keyValue;
+                }
+                var id="";
+                var size="";
+                
+                /* id */
+                 if (!key["id"] || key["id"]==""){
+                    id="匿名希望";
+                }else{
+                    /* コード変換 */
+                    id=unescape(key["id"]);
+                }
+                /* size */
+                
+                 if(key["size"]!="") {
+                    size=unescape(key["size"]);
+                }else{
+                    size="size不明";
+                }
+            
+       const output = "設定サイズは「" + id + "」です。";
+      const output2 = "入力されたIDは「" + size + "」です。";
       //出力用のp要素にメッセージを表示
       document.getElementById("output-message").innerHTML = output;
       document.getElementById("output-message2").innerHTML = output2;        
