@@ -7,7 +7,72 @@
   <meta name="demo" content="demo">
   <meta property="article:section" content="demo" />
   <link rel="stylesheet" href="../css/sp_style.css">
+  <script async src="../prebid/prebid5.4.0.js"></script>
 
+
+<script>
+      var div_sizes = [[320, 180]];
+
+      var PREBID_TIMEOUT = 1000;
+      var FAILSAFE_TIMEOUT = 3000;
+
+      var adUnits = [
+        {
+          code: '/18339668/Prod_PMP/Multi_Prebid_SafeFrame',
+          mediaTypes: {
+            banner: {
+              sizes: div_sizes
+            }
+          },
+          bids: [{
+            bidder: 'adg',
+            params: {
+              id: '140342'
+            }
+          }]
+        }
+      ];
+
+      // ======== DO NOT EDIT BELOW THIS LINE =========== //
+      var googletag = googletag || {};
+      googletag.cmd = googletag.cmd || [];
+      googletag.cmd.push(function() {
+        googletag.pubads().disableInitialLoad();
+      });
+
+      var pbjs = pbjs || {};
+      pbjs.que = pbjs.que || [];
+
+      pbjs.que.push(function() {
+        pbjs.addAdUnits(adUnits);
+        pbjs.requestBids({
+          bidsBackHandler: initAdserver,
+          timeout: PREBID_TIMEOUT
+        });
+      });
+
+      function initAdserver() {
+        if (pbjs.initAdserverSet) return;
+        pbjs.initAdserverSet = true;
+        googletag.cmd.push(function() {
+          pbjs.que.push(function() {
+            pbjs.setTargetingForGPTAsync();
+            googletag.pubads().refresh();
+          });
+        });
+      }
+      // in case PBJS doesn't load
+      setTimeout(function() {
+        initAdserver();
+      }, FAILSAFE_TIMEOUT);
+
+      googletag.cmd.push(function() {
+        googletag.defineSlot('/18339668/Prod_PMP/Multi_Prebid_SafeFrame', div_sizes, 'div').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+      });
+
+    </script>
 
 </head>
 <body>
@@ -16,7 +81,11 @@
       <div class="logo">320x180</div>
       <div class="billboard">
         <!-- demo_SP_320x180 -->
-        
+        <div id='div'>
+    <script>
+      googletag.cmd.push(function() { googletag.display('div'); });
+    </script>
+</div>
       </div>
       <div class="navi"></div>
     </div>
