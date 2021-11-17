@@ -1,0 +1,143 @@
+<html>
+
+    <head>
+
+  <meta name="viewport" content="width=375px">
+        <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+        <script async src="prebid2.12.0.js"></script>
+
+
+
+  <script>
+  var size_fluid = [
+    [1, 1]
+  ];
+  var PREBID_TIMEOUT = 3000;
+  var FAILSAFE_TIMEOUT = 3000;
+
+  var adUnits = [{
+    code: '/18339668/prebid/test_prebid_native_mediastyle',
+    //sizes: size_fluid,
+    mediaTypes: {
+      native: {
+        title: {
+          required: true,
+          sendId: true
+        },
+        body: {
+          required: false,
+          sendId: true
+        },
+        icon: {
+          required: false,
+          sendId: true
+        },
+        image: {
+          required: true,
+          sendId: true
+        },
+        sponsoredBy: {
+          required: true,
+          sendId: true
+        },
+        clickUrl: {
+          required: true,
+          sendId: true
+        },
+        privacyLink: {
+          required: true,
+          sendId: true
+        },
+        cta: {
+          required: false,
+          sendId: true
+        },
+      }
+    },
+    bids: [{
+        bidder: 'adg',
+        params: {
+          id: "146831"
+        }
+      }
+    ]
+  }];
+
+  var pbjs = pbjs || {};
+  pbjs.que = pbjs.que || [];
+
+
+  pbjs.que.push(function() {
+    pbjs.setConfig({
+      enableSendAllBids: false});
+      pbjs.bidderSettings = {
+        //adgeneration: {
+        adg: {
+          bidCpmAdjustment : function(bidCpm, bid){
+            // adjust the bid in real time before the auction takes place
+            console.log('Bidder is: ' + bid.bidderCode);
+            return bidCpm * 100;
+          }
+        }
+      };
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({
+      bidsBackHandler: initAdserver,
+      timeout: PREBID_TIMEOUT
+    });
+  });
+
+
+  function initAdserver() {
+    if (pbjs.initAdserverSet) return;
+    pbjs.initAdserverSet = true;
+    googletag.cmd.push(function() {
+      pbjs.que.push(function() {
+        pbjs.setTargetingForGPTAsync();
+        googletag.pubads().refresh();
+      });
+    });
+  }
+
+  // in case PBJS doesn't load
+  setTimeout(function() {
+    initAdserver();
+  }, FAILSAFE_TIMEOUT);
+
+
+  // GPT setup
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+  googletag.cmd.push(function() {
+    googletag.pubads().disableInitialLoad();
+  });
+
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/18339668/prebid/test_prebid_native_mediastyle', ['fluid'], 'div-1').addService(googletag.pubads());
+
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+            </head>
+
+            <body>
+
+                <div style="height:200px;"></div>
+                <div id='div-1'>
+                    <p>No response</p>
+                    <script type='text/javascript'>
+                        googletag.cmd.push(function() {
+                            googletag.display('div-1');
+                        });
+
+                    </script>
+                </div>
+
+                <br>
+                <br>
+
+
+            </body>
+
+        </html>
