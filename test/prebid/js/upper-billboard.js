@@ -1,5 +1,5 @@
 var el = document.createElement("script");
-el.src = "prebid6.1.0.js.js";
+el.src = "prebid6.1.0.js";
 document.getElementsByTagName('head')[0].appendChild(el);
 
 var sizes = [
