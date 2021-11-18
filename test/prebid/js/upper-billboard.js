@@ -1,7 +1,7 @@
 var el = document.createElement("script");
 el.src = "https://keiiijim.github.io/demo/test/prebid/prebid6.1.0.js";
 document.getElementsByTagName('head')[0].appendChild(el);
-window.setTimeout(function(){
+
 var sizes = [
                           [320, 180]
                       ];
@@ -46,5 +46,5 @@ var sizes = [
                           });
                       });
                       var passbackTagHtml = 'NO AD';
-  }, 1000);
+
  
