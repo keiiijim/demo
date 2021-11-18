@@ -1,7 +1,7 @@
 var el = document.createElement("script");
 el.src = "https://keiiijim.github.io/demo/test/prebid/prebid6.1.0.js";
 document.getElementsByTagName('head')[0].appendChild(el);
-
+window.setTimeout(function(){
 var sizes = [
                           [320, 180]
                       ];
@@ -48,4 +48,6 @@ var sizes = [
 
                       // Define the passback HTML tag here.
                       // Note that this tag is usually in either Script tag form or iFrame form.
+                      var passbackTagHtml = 'TO ADD';
+  }, 1000);
                       var passbackTagHtml = 'TO ADD';
