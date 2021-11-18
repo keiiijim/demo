@@ -45,9 +45,6 @@ var sizes = [
                               }
                           });
                       });
-
-                      // Define the passback HTML tag here.
-                      // Note that this tag is usually in either Script tag form or iFrame form.
-                      var passbackTagHtml = 'TO ADD';
+                      var passbackTagHtml = 'NO AD';
   }, 1000);
-                      var passbackTagHtml = 'TO ADD';
+ 
