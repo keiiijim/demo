@@ -1,5 +1,5 @@
 var el = document.createElement("script");
-el.src = "prebid6.1.0.js";
+el.src = "https://keiiijim.github.io/demo/test/prebid/prebid6.1.0.js";
 document.getElementsByTagName('head')[0].appendChild(el);
 
 var sizes = [
