@@ -46,5 +46,4 @@ var sizes = [
                           });
                       });
                       var passbackTagHtml = 'NO AD';
-
  
