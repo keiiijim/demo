@@ -16,7 +16,8 @@ var sizes = [
                           bids: [{
                             bidder: 'adg',
                             params: {
-                                    id: 147582
+                                    id: '147582',
+                                    marginTop: v_margintop
                               }
                           }]
                       }];
