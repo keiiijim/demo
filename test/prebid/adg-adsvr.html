@@ -1,0 +1,106 @@
+<html>
+<head>
+  ...
+  <script type="text/javascript" src="prebid6.14.0.js" async></script>
+  <script>
+    var PREBID_TIMEOUT = 2000;
+    var ads = [{
+      pbjsAdUnit: {
+        code: '83561', // 広告枠ID
+        sizes: [[300, 250]],
+        bids: [
+          {
+            bidder: 'adg', // Bidder Codeを指定
+            params: {
+              bidParams: '83500' // リクエストに必要なパラメタを指定（Bidder毎に異なります）
+            }
+          }
+        ]
+      },
+      adid: '83561',
+      targetid: '83561', // 広告枠のコンテナ(divタグ)のID
+      adType: 'RECT', // SP(320x50), LARGE(320x100), TABLET(728×90), RECT(300x250)
+      elementid: 'adg-div', // 広告を設置するdivのID
+      displayid: '1' // 1:inline 9:overlay
+    },
+    {
+      // 複数のbidリクエストを送信する場合、その数だけAdUnitを追加してください。
+      // pbjsAdUnit: {
+      //  code: '<ad-generation-adID2>',
+      //  sizes: [[300, 250]],
+      //  bids: [{
+      //    bidder: 'Bidder Code',
+      //    params: {
+      //      bidParams: 'xxxxxxxx',
+      //    }
+      //   }],
+      // },
+      // adid: '<ad-generation-adID2>',
+      // targetid: '<adgeneration-targetID2>',
+      // adType: 'RECT',
+      // elementid: 'adg-div2',
+      // displayid: '1'
+    }];
+
+    // Prebid.js bidリクエストの情報を抽出
+    var pbjsAdUnits = ads.map(function(ad) {
+        return ad.pbjsAdUnit;
+      })
+      .filter(Boolean);
+
+    var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+    pbjs.que.push(function() {
+      pbjs.addAdUnits(pbjsAdUnits);
+      pbjs.requestBids({
+        bidsBackHandler: sendAdserverRequest,
+      });
+    });
+
+    function sendAdserverRequest() {
+      if (pbjs.initAdserverSet) return;
+      pbjs.initAdserverSet = true;
+      ads.forEach(function(ad) {
+        try {
+          // scriptタグを生成
+          var adgSrc =
+            'https://i.socdm.com/sdk/js/adg-script-loader.js' +
+            '?id=' + ad.adid +
+            '&targetID=adg_' + ad.targetid +
+            '&adType=' + ad.adType +
+            '&displayid=' + ad.displayid +
+            '&async=true&flexibleOL=true&autoPadding=true&tagver=2.0.0';
+
+          if (ad.pbjsAdUnit && ad.pbjsAdUnit.code) {
+            var targeting = pbjs.getAdserverTargetingForAdUnitCode(ad.pbjsAdUnit.code);
+            if (targeting && Object.keys(targeting).length) {
+              adgSrc +=
+                '&gp_hb_pb=' + targeting.hb_pb +
+                '&gp_hb_adid=' + targeting.hb_adid +
+                '&gp_hb_bidder=' + targeting.hb_bidder +
+                '&gp_hb_size=' + targeting.hb_size;
+            }
+          }
+          // scriptタグを挿入
+          var adgscript = document.createElement('script');
+          adgscript.src = adgSrc;
+          document.getElementById(ad.elementid).appendChild(adgscript);
+        } catch (e) {
+            console.log(e);
+          }
+      });
+    }
+    setTimeout(function() {
+      sendAdserverRequest();
+    }, PREBID_TIMEOUT);
+  </script>
+  ...
+</head>
+<body>
+  ...
+  <!-- 広告を配置する場所にdiv要素を追加 -->
+  <div id="adg-div"></div>
+  <!-- <div id='adg-div2'></div> -->
+  ...
+</body>
+</html>
