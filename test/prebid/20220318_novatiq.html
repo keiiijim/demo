@@ -3,7 +3,6 @@
         <link rel="icon" type="image/png" href="/favicon.png">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
-        <!-- <script async src="prebid2.31.0.js"></script> -->
         <script async src="prebid6.16.0.js"></script>
         <script>
             var div_sizes = [[300, 250]];
@@ -39,7 +38,7 @@
             pbjs.que = pbjs.que || [];
 
             pbjs.que.push(function() {
-                pbjs.addAdUnits(adUnits);
+
                 pbjs.setConfig({
                   bidderSequence: "fixed", 
                   userSync: {
@@ -60,12 +59,15 @@
                   auctionDelay: 1000
                   }
                 });
+                
+               　　pbjs.addAdUnits(adUnits);
 
                 pbjs.requestBids({
                     bidsBackHandler: initAdserver,
                     timeout: PREBID_TIMEOUT
                 });
             });
+            
 
             function initAdserver() {
                 if (pbjs.initAdserverSet) return;
