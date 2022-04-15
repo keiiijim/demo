@@ -1,0 +1,1043 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Prebid JS client fileチェック！">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="https://flux-g.com/wp-content/themes/flux/img/favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/page/index.css">
+    <title>test-novatiqId Prebid タグテスト</title>
+    <script type="text/javascript">
+        var pbjsGlobalVarName = "pbjs";
+    </script>
+    <script src='/js/manual_ver1_0_0/tag-test.js?9f268173760e8312f1b30935c5cb4a55'></script>
+    <!-- FLUX head -->
+    <script src="https://flux-training.com/client/test/test-novatiqId.min.js?6c957fee5bf7125a8a72ad030f658939"></script>
+    <script type="text/javascript">
+        window.pbjs = window.pbjs || {que: []};
+    </script>
+
+
+<!-- DFP head -->
+    <script async='async' src='https://securepubads.g.doubleclick.net/tag/js/gpt.js'></script>
+    <script type="text/javascript">
+        window.googletag = window.googletag || {cmd: []};
+    </script>
+
+    <!-- Define callback function -->
+    <script type="text/javascript">
+        window.fluxtag = {
+            readyBids: {
+                prebid: false,
+                google: false
+            },
+            failSafeTimeout: 3e3,
+            isFn: function isFn(object) {
+                var _t = 'Function';
+                var toString = Object.prototype.toString;
+                return toString.call(object) === '[object ' + _t + ']';
+            },
+            launchAdServer: function () {
+                if (!fluxtag.readyBids.prebid) {
+                    return;
+                }
+                fluxtag.requestAdServer();
+            },
+            requestAdServer: function () {
+                if (!fluxtag.readyBids.google) {
+                    fluxtag.readyBids.google = true;
+                    googletag.cmd.push(function () {
+                        if (!!(pbjs.setTargetingForGPTAsync) && fluxtag.isFn(pbjs.setTargetingForGPTAsync)) {
+                            pbjs.que.push(function () {
+                                pbjs.setTargetingForGPTAsync();
+                            });
+                        }
+                        googletag.pubads().refresh();
+                    });
+                }
+            },
+            renderAds: function (lines, pbjsTimeout) {
+                // 【注意】timeoutの秒数は環境に合わせて枠情報をご設定してください
+                pbjsTimeout = (!!pbjsTimeout) ? pbjsTimeout : 2e3;
+                var apsTimeout = ((pbjsTimeout - 1000) <= 0) ? (pbjsTimeout - 1000) : pbjsTimeout;
+                var allTimeout = pbjsTimeout + 1000;
+
+                googletag.cmd.push(function () {
+                    var refreshLines = [];
+                    var params = (function () {
+                        // GAMを呼び出したかを確認にするフラグ
+                        var readyBids = {
+                            amazon: false,
+                            google: false,
+                            prebid: false,
+                        };
+                        var refreshSlots = [];
+                        var apsSlots = [];
+                        var divIds = [];
+                        var apsDivIds = [];
+                        var definedSlots = [];
+                        var displayDivIds = [];
+
+                        googletag.pubads().getSlots().forEach(function (slot) {
+                            // 既にdefineSlotされていた場合
+                            definedSlots[slot.getSlotElementId()] = slot;
+                        });
+                        for (var i = 0; i < lines.length; i++) {
+                            var divId = lines[i].divId;
+                            var adUnitCode = lines[i].code;
+                            var sizes = lines[i].sizes;
+                            var isAps = lines[i].isAps || false;
+
+                            refreshLines.push({
+                                code: adUnitCode,
+                                size: sizes,
+                                id: divId
+                            });
+                            if (definedSlots[divId]) {
+                                refreshSlots.push(definedSlots[divId]);
+                            } else {
+                                refreshSlots.push(
+                                    googletag.defineSlot(adUnitCode, sizes, divId).addService(googletag
+                                        .pubads())
+                                );
+                                displayDivIds.push(divId);
+                            }
+
+                            divIds.push(divId);
+                            // TAM並走枠の場合
+                            if (isAps) {
+                                apsSlots.push({
+                                    slotID: divId,
+                                    slotName: adUnitCode,
+                                    sizes: sizes
+                                });
+                                apsDivIds.push(divId);
+                            }
+                        }
+                        // APSの枠がない場合
+                        if (apsSlots.length === 0) {
+                            readyBids.amazon = true;
+                        }
+                        // Prebid、APSでオークション後に起動する関数 (GAMコール、広告Display)
+                        var adServerSend = function () {
+                            if (!readyBids.amazon || !readyBids.prebid) {
+                                return;
+                            }
+                            if (!readyBids.google) {
+                                readyBids.google = true;
+                                for (var i = 0; i < displayDivIds.length; i++) {
+                                    googletag.display(displayDivIds[i]);
+                                }
+                                if (!!(pbjs.setTargetingForGPTAsync) && fluxtag.isFn(pbjs.setTargetingForGPTAsync)) {
+                                    pbjs.que.push(function () {
+                                        pbjs.setTargetingForGPTAsync(divIds);
+                                    });
+                                }
+                                if (apsSlots.length > 0 && !!(window.apstag) && fluxtag.isFn(window.apstag.fetchBids)) {
+                                    window.apstag.setDisplayBids(apsDivIds);
+                                }
+                                googletag.pubads().refresh(refreshSlots);
+                            }
+                        };
+                        // APSオークション後に起動する関数
+                        var apsCallback = function () {
+                            readyBids.amazon = true;
+                            adServerSend();
+                        };
+                        // Prebidオークション後に起動する関数
+                        var prebidCallback = function () {
+                            readyBids.prebid = true;
+                            adServerSend();
+                        };
+                        // もしtimeout以内にPrebidが動作できなかった場合、最終的にGAMをコール
+                        setTimeout(function () {
+                            readyBids.amazon = true;
+                            readyBids.prebid = true;
+                            adServerSend();
+                        }, allTimeout);
+
+                        return {
+                            aps: {
+                                slots: apsSlots,
+                                callback: apsCallback,
+                            },
+                            prebid: {
+                                callback: prebidCallback,
+                            }
+                        };
+                    })();
+                    // Prebid呼び出し
+                    if (!!(window.pbFlux) && window.pbFlux.refresh && fluxtag.isFn(window.pbFlux.refresh)) {
+                        pbjs.que.push(function () {
+                            pbFlux.refresh({
+                                lines: refreshLines,
+                                callback: params.prebid.callback,
+                                timeout: pbjsTimeout
+                            });
+                        });
+                    } else {
+                        params.prebid.callback();
+                    }
+
+                    if (params.aps.slots.length > 0 && !!(window.apstag) && fluxtag.isFn(window.apstag.fetchBids)) {
+                        // APS呼び出し
+                        window.apstag.fetchBids({
+                            slots: params.aps.slots,
+                            timeout: apsTimeout // 【注意】環境に合わせて枠情報をご設定してください
+                        }, function (bids) {
+                            params.aps.callback();
+                        });
+                    } else {
+                        params.aps.callback();
+                    }
+                });
+            }
+        };
+    </script>
+    <script type="text/javascript">
+    setTimeout(function() {
+        fluxtag.requestAdServer();
+    }, fluxtag.failSafeTimeout);
+    </script>
+
+    <script>
+        googletag.cmd.push(function () {
+            // add slot (defineSoltの記述）
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-yahoossp"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-aja"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-adgen"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-microad-pc"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-microad-sp"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-criteo"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-appnexus"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-appier"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-pubmatic"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-pubmatic-video"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-logicad"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-rtbhouse"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-rubicon"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-yieldone"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-yieldone-video"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-openx"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-cci"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-fluct"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-gumgum"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-ix"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-teads"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-dg-pc"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-dg-sp"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-gmossp"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-nobid"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-craft"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-onemobile"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-relaido"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-unicorn"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-richaudience"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-unruly"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-justpremium"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-connectad"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-amx"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-brightcom"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-dictrictDMX"
+            ).addService(googletag.pubads());
+                        googletag.defineSlot(
+                "/21725117012/check-pb/adunit-rec1",
+                [[1, 1],[300, 250]],
+                "div-gpt-ad-sovrn"
+            ).addService(googletag.pubads());
+            
+            googletag.pubads().enableSingleRequest();
+            // 必要な記述になります ↓
+            googletag.pubads().disableInitialLoad();
+            googletag.enableServices();
+            // Prebidが呼び出せる状態の場合
+            if (!!(window.pbFlux) && !!(window.pbFlux.prebidBidder) && fluxtag.isFn(window.pbFlux.prebidBidder)) {
+                pbjs.que.push(function () {
+                window.pbFlux.prebidBidder();
+                });
+            } else {
+                // Prebidが呼び出せない場合、すぐにGAMを呼び出す
+                fluxtag.readyBids.prebid = true;
+                fluxtag.launchAdServer();
+            }
+        });
+    </script>
+    <!-- /DFP head -->
+    <script>
+        var refreshAllUnits = function() {
+            var lines = [];
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-yahoossp"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-aja"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-adgen"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-microad-pc"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-microad-sp"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-criteo"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-appnexus"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-appier"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-pubmatic"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-pubmatic-video"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-logicad"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-rtbhouse"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-rubicon"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-yieldone"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-yieldone-video"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-openx"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-cci"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-fluct"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-gumgum"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-ix"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-teads"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-dg-pc"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-dg-sp"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-gmossp"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-nobid"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-craft"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-onemobile"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-relaido"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-unicorn"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-richaudience"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-unruly"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-justpremium"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-connectad"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-amx"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-brightcom"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-dictrictDMX"
+                });
+                            lines.push({
+                    code: "/21725117012/check-pb/adunit-rec1",
+                    sizes: [[1, 1],[300, 250]],
+                    divId: "div-gpt-ad-sovrn"
+                });
+                        window.fluxtag.renderAds(lines);
+        };
+    </script>
+</head>
+<body>
+<div class="board" style="margin:10px;">
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <p class="card-text">テスト中のJSタグ: https://flux-training.com/client/test/test-novatiqId.min.js</p>
+        <p class="card-text">マニュアルバージョン: 1.0.0</p>
+        </div>
+    </div>
+    <div style="display:flex;">
+        <div class="card" style="width: 50%;">
+            <div class="card-body">
+                <h5 class="card-title">Prebidの設値周り</h5>
+                <table class="table table-sm">
+                    <tbody>
+                    <tr>
+                        <th>名前</th>
+                        <th>状態</th>
+                    </tr>
+                    <tr class="table-dark" id="prebid-info-ver">
+                        <td>Prebid Ver</td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-dark" id="prebid-info-enable-send-all-bids">
+                        <td>Prebid enableSendAllbids</td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-dark" id="prebid-info-currency">
+                        <td>Prebid 通貨</td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-dark" id="prebid-info-custom-price-bucket">
+                        <td>Prebid customPriceBucket</td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-dark" id="prebid-info-ad-units">
+                        <td>Prebid adUnits</td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-dark" id="prebid-info-secondary">
+                        <td>Secondary Bidders</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card" style="width: 50%;">
+            <div class="card-body">
+                <h5 class="card-title">Ready Bids</h5>
+                <table class="table table-sm">
+                    <tbody>
+                    <tr>
+                        <th>名前</th>
+                        <th>状態</th>
+                    </tr>
+                    <tr class="table-dark" id="ready-bid-prebid">
+                        <td>Prebid</td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-dark" id="ready-bid-google">
+                        <td>Google</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">エラー</h5>
+            <table class="table table-sm">
+                <tbody id="debug-message">
+                <tr>
+                    <th>番号</th>
+                    <th>エラー内容</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">KeyValueの設値</h5>
+            <table class="table table-sm">
+                <tbody id="key-value-body">
+                <tr>
+                    <th>番号</th>
+                    <th>設定内容</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="bs-example bs-example-bg-classes">
+    <button type="button" class="btn btn-info" onclick="showAllBids()">Show ALL Bids</button>
+    <button type="button" class="btn btn-info" onclick="googletag.openConsole()">OpenConsole</button>
+    <button type="button" class="btn btn-info" onclick="refreshAllUnits();">Refresh</button>
+</div>
+<div id='show-all-bids'></div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-yahoossp</p>
+    <div id="div-gpt-ad-yahoossp">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-yahoossp");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-aja</p>
+    <div id="div-gpt-ad-aja">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-aja");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-adgen</p>
+    <div id="div-gpt-ad-adgen">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-adgen");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-microad-pc</p>
+    <div id="div-gpt-ad-microad-pc">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-microad-pc");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-microad-sp</p>
+    <div id="div-gpt-ad-microad-sp">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-microad-sp");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-criteo</p>
+    <div id="div-gpt-ad-criteo">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-criteo");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-appnexus</p>
+    <div id="div-gpt-ad-appnexus">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-appnexus");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-appier</p>
+    <div id="div-gpt-ad-appier">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-appier");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-pubmatic</p>
+    <div id="div-gpt-ad-pubmatic">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-pubmatic");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-pubmatic-video</p>
+    <div id="div-gpt-ad-pubmatic-video">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-pubmatic-video");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-logicad</p>
+    <div id="div-gpt-ad-logicad">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-logicad");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-rtbhouse</p>
+    <div id="div-gpt-ad-rtbhouse">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-rtbhouse");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-rubicon</p>
+    <div id="div-gpt-ad-rubicon">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-rubicon");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-yieldone</p>
+    <div id="div-gpt-ad-yieldone">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-yieldone");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-yieldone-video</p>
+    <div id="div-gpt-ad-yieldone-video">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-yieldone-video");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-openx</p>
+    <div id="div-gpt-ad-openx">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-openx");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-cci</p>
+    <div id="div-gpt-ad-cci">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-cci");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-fluct</p>
+    <div id="div-gpt-ad-fluct">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-fluct");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-gumgum</p>
+    <div id="div-gpt-ad-gumgum">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-gumgum");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-ix</p>
+    <div id="div-gpt-ad-ix">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-ix");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-teads</p>
+    <div id="div-gpt-ad-teads">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-teads");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-dg-pc</p>
+    <div id="div-gpt-ad-dg-pc">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-dg-pc");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-dg-sp</p>
+    <div id="div-gpt-ad-dg-sp">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-dg-sp");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-gmossp</p>
+    <div id="div-gpt-ad-gmossp">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-gmossp");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-nobid</p>
+    <div id="div-gpt-ad-nobid">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-nobid");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-craft</p>
+    <div id="div-gpt-ad-craft">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-craft");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-onemobile</p>
+    <div id="div-gpt-ad-onemobile">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-onemobile");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-relaido</p>
+    <div id="div-gpt-ad-relaido">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-relaido");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-unicorn</p>
+    <div id="div-gpt-ad-unicorn">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-unicorn");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-richaudience</p>
+    <div id="div-gpt-ad-richaudience">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-richaudience");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-unruly</p>
+    <div id="div-gpt-ad-unruly">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-unruly");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-justpremium</p>
+    <div id="div-gpt-ad-justpremium">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-justpremium");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-connectad</p>
+    <div id="div-gpt-ad-connectad">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-connectad");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-amx</p>
+    <div id="div-gpt-ad-amx">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-amx");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-brightcom</p>
+    <div id="div-gpt-ad-brightcom">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-brightcom");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-dictrictDMX</p>
+    <div id="div-gpt-ad-dictrictDMX">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-dictrictDMX");
+            });
+        </script>
+    </div>
+    <p>/21725117012/check-pb/adunit-rec1</p>
+    <p>div-gpt-ad-sovrn</p>
+    <div id="div-gpt-ad-sovrn">
+        <script>
+            googletag.cmd.push(function () {
+                googletag.display("div-gpt-ad-sovrn");
+            });
+        </script>
+    </div>
+
+<script src='/js/index.js?83b0095775bb905957a6eab3762beb37'></script>
+</body>
+</html>
