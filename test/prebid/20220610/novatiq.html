@@ -1,0 +1,41 @@
+<head>
+</head>
+<body>
+ <script>
+const uuidv4 = require('uuid/v4');
+const randomHex = require('random-hex-string');
+class NovatiqSnowflakeGenerator {
+constructor(hostname, sspid, pubid) {
+this.snowflake = null;
+this.hostname = hostname;
+this.sspid = sspid;
+this.pubid = pubid;
+this.generateSnowflake();
+this.syncSnowflake();
+}
+generateSnowflake() {
+this.snowflake = uuidv4() + randomHex.sync(2);
+}
+syncSnowflake() {
+var syncUrl =
+'https://spadsync.com/sync?sptoken={SNOWFLAKE}
+//&sspid={SSPID}&ssphost={HOSTNAME}&pu
+bid={PUBID}';
+var Http = new XMLHttpRequest();
+Http.timeout = 2000;
+Http.open("GET", syncUrl.replace('{SNOWFLAKE}', this.snowflake)
+.replace('{PUBID}', this.pubid)
+.replace('{SSPID}', this.sspid)
+.replace('{HOSTNAME}', this.hostname));
+
+Http.send();
+}
+getSnowflake() {
+return this.snowflake;
+}
+}
+module.exports = (hostname, sspid) => {
+return new NovatiqSnowflakeGenerator(hostname, sspid)
+};
+  </script>
+</body>
