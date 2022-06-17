@@ -39,60 +39,7 @@
 
             pbjs.que.push(function() {
 
-                
-                   pbjs.setConfig({             
-                userSync: {
-	iframeEnabled: true,
-	filterSettings: {
-		all: {
-			bidders: "*",
-			filter: "include"
-		}
-	},
-	userIds: [{
-		name: "criteo"
-	}, {
-		name: 'sharedId',
-		storage: {
-			name: '_sharedID',
-			type: 'cookie',
-			expires: 90
-		}
-	}, {
-
-		name: "imuid",
-		params: {
-			cid: 1008868
-		}
-	}, {
-		name: 'id5Id',
-		params: {
-			partner: 1027, //FourMID
-		},
-		storage: {
-			type: 'html5',
-			name: 'id5id',
-			expires: 90,
-			refreshInSeconds: 8 * 3600
-		}
-	}, {
-		name: 'novatiq',
-		params: {
-			useSharedId: false,
-			useCallbacks: true,
-			urlParams: {
-				novatiqId: "snowflake",
-				useStandardUuid: true,
-				useSspId: false,
-				useSspHost: false
-			},
-		},
-		bidders: ['adg'] //bidsに設定したbiddercode
-	}],
-	syncDelay: 5000,
-	auctionDelay: 500,
-}
-
+            
                 
           /*      
                 
@@ -117,8 +64,8 @@
                       syncsPerBidder: 10,
                       filterSettings:[{
                         all: {bidders: '*', filter: 'include'}}]
-                  }*/
-                });
+                  }
+                });*/
                 
                　　pbjs.addAdUnits(adUnits);
 
