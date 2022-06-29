@@ -3,6 +3,7 @@
         <link rel="icon" type="image/png" href="/favicon.png">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+        <script type="text/javascript" async="" src="https://static.criteo.net/js/ld/publishertag.prebid.117.js"></script>
         <script async src="prebid7.3.0.js"></script>
         <script>
             var div_sizes = [[300, 250]];
@@ -47,7 +48,9 @@
     syncDelay: 6000,
     auctionDelay: 1000,
     userIds: [
-
+       {
+            name: criteo
+        },
         {
             name: sharedId,
             storage: {
