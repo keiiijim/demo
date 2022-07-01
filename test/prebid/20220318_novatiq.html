@@ -40,10 +40,35 @@
 
             pbjs.que.push(function() {
        
-
-                      
-                      
+  
                 pbjs.setConfig({
+                  userSync: {
+                    userIds: [{
+                      name: 'novatiq',
+                      params: {
+                        useSharedId: false,
+                        useCallbacks: true,
+                        urlParams: {
+                          novatiqId: "snowflake",
+                          useStandardUuid: true,
+                          useSspId: false,
+                          useSspHost: false
+                        },
+                      },
+                      bidders: [ 'adg' ]
+                    }],
+                  auctionDelay: 500,
+                  syncDelay: 5000,
+                      syncsPerBidder: 10,
+                      filterSettings:[{
+                        all: {bidders: '*', filter: 'include'}}]
+                  }
+                });
+                
+                
+                      
+                      
+             /*      pbjs.setConfig({
                   userSync: {
     syncEnabled: true,
 
@@ -51,7 +76,7 @@
     syncDelay: 6000,
     auctionDelay: 1000,
     userIds: [
-    /*   {
+    {
             name: criteo
         },
         {
@@ -112,7 +137,7 @@
     iframeEnabled: true
                       
                   }     });
-        */
+   
              
                 pbjs.setConfig({
                   userSync: {
@@ -132,7 +157,7 @@
                     }],
                   auctionDelay: 500
                   }
-                });
+                });     */
                 
                　　pbjs.addAdUnits(adUnits);
 
