@@ -43,6 +43,10 @@
   
                 pbjs.setConfig({
                   userSync: {
+                                        auctionDelay: 500,
+                  syncDelay: 5000,
+                　　　　syncsPerBidder: 10,   
+                　　　　syncEnabled: true,
                     userIds: [{
                       name: 'novatiq',
                       params: {
@@ -56,12 +60,7 @@
                         },
                       },
                       bidders: [ 'adg' ]
-                    }],
-                  auctionDelay: 500,
-                  syncDelay: 5000,
-                      syncsPerBidder: 10,
-                      filterSettings:[{
-                        all: {bidders: '*', filter: 'include'}}]
+                    }]
                   }
                 });
                 
