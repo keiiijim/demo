@@ -48,6 +48,47 @@
                 　　　　syncsPerBidder: 10,   
                 　　　　syncEnabled: true,
                     userIds: [{
+            name: criteo
+        },
+        {
+            name: sharedId,
+            storage: {
+                name: _sharedID,
+                type: cookie,
+                expires: 90
+            }
+        },
+
+        {
+            name: identityLink,
+            params: {
+                pid: 13626
+            },
+            storage: {
+                type: cookie,
+                name: idl_env,
+                expires: 90
+            }
+        },     
+        {
+            name: imuid,
+            params: {
+                cid: 1008868
+            }
+        },
+        {
+            name: id5Id,
+            params: {
+                partner: 1027
+            },
+            storage: {
+                type: html5,
+                name: id5id,
+                expires: 90,
+                refreshInSeconds: 28800
+            }
+        },   
+                              {
                       name: 'novatiq',
                       params: {
                         useSharedId: false,
