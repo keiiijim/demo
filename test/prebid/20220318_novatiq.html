@@ -50,7 +50,17 @@
                 　　　　syncEnabled: true,
                     userIds: [{
             name: 'criteo'
-        },
+        },{
+            name: identityLink,
+            params: {
+                pid: 13626
+            },
+            storage: {
+                type: cookie,
+                name: idl_env,
+                expires: 90
+            }
+        },     
         {
             name: 'sharedId',
             storage: {
