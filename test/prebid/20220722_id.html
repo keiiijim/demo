@@ -43,9 +43,6 @@ pbjs.que.push(function() {
 	pbjs.setConfig({
 		userSync: {
 			auctionDelay: 500,
-			syncDelay: 5000,
-			　　　　syncsPerBidder: 10,
-			　　　　syncEnabled: true,
 			userIds: [{
 				name: 'criteo'
 			}, {
@@ -65,13 +62,6 @@ pbjs.que.push(function() {
 					name: "id5id",
 					expires: 90,
 					refreshInSeconds: 28800
-				}
-			},{
-				name: 'sharedId',
-				storage: {
-					type: "cookie",
-					name: "_sharedid",
-					expires: 90
 				}
 			},{
 				name: 'novatiq',
