@@ -66,7 +66,14 @@ pbjs.que.push(function() {
 					expires: 90,
 					refreshInSeconds: 28800
 				}
-			}, {
+			},{
+				name: 'sharedId',
+				storage: {
+					type: "cookie",
+					name: "_sharedid",
+					expires: 90
+				}
+			},{
 				name: 'novatiq',
 				params: {
 					useSharedId: false,
