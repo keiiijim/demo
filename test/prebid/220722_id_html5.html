@@ -132,7 +132,8 @@ googletag.cmd.push(function() {
 	  <ul id="list">
 </ul>
  <script>
-
+const cookies = document.cookie;
+const array = cookies.split(';');
 
 array.forEach(function(value) {
   const content = value.split('=');
