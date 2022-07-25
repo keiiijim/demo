@@ -134,9 +134,10 @@ googletag.cmd.push(function() {
  <script>
 const cookies = document.cookie;
 const array = cookies.split(';');
-
+const content;
+	 
 array.forEach(function(value) {
-  const content = value.split('=');
+  content = value.split('=');
   console.log(content[1]); // valueを取得
 })
 	 
