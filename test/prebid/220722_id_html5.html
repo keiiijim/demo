@@ -128,6 +128,25 @@ googletag.cmd.push(function() {
         </script>
       </div>
     </div>
+	  
+	  <ul id="list">
+</ul>
+ <script>
+
+
+array.forEach(function(value) {
+  const content = value.split('=');
+  console.log(content[1]); // valueを取得
+})
+	 
+	 
+	 
+for (var i = 0; i < content.length; i++) { 
+　var cookieList = document.createElement('li'); 
+　cookieList.textContent = content[i];
+　document.getElementById('list').appendChild(cookieList); 
+}
+	  </script>			
   </div>
 </body>
 </html>
