@@ -139,15 +139,11 @@ var content;
 array.forEach(function(value) {
   content = value.split('=');
   console.log(content[1]); // valueを取得
+	　var cookieList = document.createElement('li'); 
+　cookieList.textContent = content[１];
+　document.getElementById('list').appendChild(cookieList); 
 })
 	 
-	 
-	 
-for (var i = 0; i < content.length; i++) { 
-　var cookieList = document.createElement('li'); 
-　cookieList.textContent = content[i];
-　document.getElementById('list').appendChild(cookieList); 
-}
 	  </script>			
   </div>
 </body>
