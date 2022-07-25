@@ -134,14 +134,16 @@ googletag.cmd.push(function() {
  <script>
 var cookies = document.cookie;
 var array = cookies.split(';');
-var content;
+
 	 
 array.forEach(function(value) {
+	var content;
   content = value.split('=');
+	
   console.log(content[1]); // valueを取得
 　　　　var cookieList = document.createElement('li'); 
-　　　　cookieList.textContent = content[１];
-　　　　document.getElementById('list').appendChild(cookieList); 
+　　　　cookieList.textContent = content;
+　　　　document.getElementById('list').appendChild(content); 
 })
 	 
 	  </script>			
