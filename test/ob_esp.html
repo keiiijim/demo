@@ -1,14 +1,118 @@
 <html>
   <head>
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    <script async src="prebid/prebid7.7.0.js"></script>
     <script>
-      window.googletag = window.googletag || {cmd: []};
-      googletag.cmd.push(function() {
-        googletag.defineSlot('/18339668/test-delivary/test_openbidding', [300, 250], 'div-gpt-ad-1661390055111-0').addService(googletag.pubads());
-        googletag.pubads().enableSingleRequest();
-        googletag.enableServices();
-      });
-    </script>
+   var div_sizes = [
+	[300, 250]
+];
+
+var PREBID_TIMEOUT = 10000;
+var FAILSAFE_TIMEOUT = 3000;
+
+var adUnits = [{
+	code: '/18339668/test_demo/prebid_300x250',
+	mediaTypes: {
+		banner: {
+			sizes: div_sizes
+		}
+	},
+	bids: [{
+		bidder: 'adg',
+		params: {
+			id: '152013'
+		}
+	}]
+}];
+
+// ======== DO NOT EDIT BELOW THIS LINE =========== //
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+googletag.cmd.push(function() {
+	googletag.pubads().disableInitialLoad();
+});
+
+var pbjs = pbjs || {};
+pbjs.que = pbjs.que || [];
+
+pbjs.que.push(function() {
+
+
+	pbjs.setConfig({
+		userSync: {
+			auctionDelay: 500,
+			userIds: [{
+				name: 'criteo'
+			}, {
+				name: 'sharedId',
+				storage: {
+					name: "_sharedID",
+					type: "cookie",
+					expires: 90
+				}
+			}, {
+				name: 'id5Id',
+				params: {
+					partner: 1142
+				},
+				storage: {
+					type: "html5",
+					name: "id5id",
+					expires: 90,
+					refreshInSeconds: 28800
+				}
+			},{
+				name: 'novatiq',
+				params: {
+					useSharedId: false,
+					useCallbacks: true,
+					urlParams: {
+						novatiqId: "snowflake",
+						useStandardUuid: true,
+						useSspId: false,
+						useSspHost: false
+					},
+				},
+				bidders: ['adg']
+			}]
+		}
+	});
+
+
+	　　
+	pbjs.addAdUnits(adUnits);
+
+	pbjs.requestBids({
+		bidsBackHandler: initAdserver,
+		timeout: PREBID_TIMEOUT
+	});
+});
+
+
+function initAdserver() {
+	if (pbjs.initAdserverSet) return;
+	pbjs.initAdserverSet = true;
+	googletag.cmd.push(function() {
+		pbjs.que.push(function() {
+			pbjs.setTargetingForGPTAsync();
+			googletag.pubads().refresh();
+		});
+	});
+}
+// in case PBJS doesn't load
+setTimeout(function() {
+	initAdserver();
+}, FAILSAFE_TIMEOUT);
+
+googletag.cmd.push(function() {
+	googletag.defineSlot('/18339668/test-delivary/test_openbidding', div_sizes, 'div-gpt-ad-1661390055111-0')
+		.addService(googletag.pubads());
+	googletag.pubads().enableSingleRequest();
+	googletag.enableServices();
+});
+
+  </script>
+    
   </head>
   <body>
     <!-- /18339668/test-delivary/test_openbidding -->
