@@ -41,29 +41,26 @@
 
             pbjs.que.push(function() {
        
-  
-                pbjs.setConfig({
-                  userSync: {
-                                        auctionDelay: 500,
-                  syncDelay: 5000,
-                　　　　syncsPerBidder: 10,   
-                　　　　syncEnabled: true,
-                    userIds: [ {
-                      name: 'novatiq',
-                      params: {
-                        useSharedId: false,
-                        useCallbacks: true,
-                        urlParams: {
-                          novatiqId: "snowflake",
-                          useStandardUuid: true,
-                          useSspId: false,
-                          useSspHost: false
-                        },
-                      },
-                      bidders: [ 'adg' ]
-                    }]
-                  }
-                });
+  pbjs.setConfig({
+          userSync: {
+            userIds: [{
+              name: 'novatiq',
+              params: {
+                useSharedId: false,
+                useCallbacks: true,
+                urlParams: {
+                  novatiqId: "snowflake",
+                  useStandardUuid: true,
+                  useSspId: false,
+                  useSspHost: false
+                },
+              },
+              bidders: [ 'adg' ] // bidsに設定したbiddercode
+            }],
+            auctionDelay: 3000 
+          }
+  });
+
                 
                 
                　　pbjs.addAdUnits(adUnits);
