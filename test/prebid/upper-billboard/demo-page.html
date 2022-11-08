@@ -26,7 +26,7 @@
             bidder: 'adg',
             params: {
               id: '147582', // upperBillboard ICON有り
-              marginTop: '50px'
+              // marginTop: '50px',
             }
           },
         ]
@@ -34,49 +34,6 @@
 
       var pbjs = pbjs || {};
       pbjs.que = pbjs.que || [];
-      
-      pbjs.que.push(function() {
-
-
-	pbjs.setConfig({
-		userSync: {
-			auctionDelay: 500,
-			userIds: [{
-				name: 'criteo'
-			}, {
-				name: 'sharedId',
-				storage: {
-					name: "_sharedID",
-					type: "cookie",
-					expires: 90
-				}
-			}, {
-				name: 'id5Id',
-				params: {
-					partner: 1142
-				},
-				storage: {
-					type: "html5",
-					name: "id5id",
-					expires: 90,
-					refreshInSeconds: 28800
-				}
-			},{
-				name: 'novatiq',
-				params: {
-					useSharedId: false,
-					useCallbacks: true,
-					urlParams: {
-						novatiqId: "snowflake",
-						useStandardUuid: true,
-						useSspId: false,
-						useSspHost: false
-					},
-				},
-				bidders: ['adg']
-			}]
-		}
-	});
     </script>
 
     <script>
