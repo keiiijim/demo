@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+    <script async src="https://sdk-temp.s3.ap-northeast-1.amazonaws.com/prebidjs/prebid7.24.0.js"></script>
+    <script>
+      var div_sizes = [[1, 1], [320, 180]];
+      var div_sizes2 = [300, 250];
+
+      var PREBID_TIMEOUT = 1000;
+      var FAILSAFE_TIMEOUT = 3000;
+
+      var adUnits = [
+        {
+          code: '/18339668/Prod_PMP/Multi_Prebid_SafeFrame',
+          mediaTypes: {
+            banner: {
+              sizes: div_sizes
+            }
+          },
+          bids: [{
+            bidder: 'adg',
+            params: {
+              id: '140342'
+            }
+          }]
+        }
+      ];
+
+      // ======== DO NOT EDIT BELOW THIS LINE =========== //
+      var googletag = googletag || {};
+      googletag.cmd = googletag.cmd || [];
+      googletag.cmd.push(function() {
+        googletag.pubads().disableInitialLoad();
+      });
+
+      var pbjs = pbjs || {};
+      pbjs.que = pbjs.que || [];
+
+      pbjs.que.push(function() {
+        pbjs.addAdUnits(adUnits);
+        pbjs.requestBids({
+          bidsBackHandler: initAdserver,
+          timeout: PREBID_TIMEOUT
+        });
+      });
+
+      function initAdserver() {
+        if (pbjs.initAdserverSet) return;
+        pbjs.initAdserverSet = true;
+        googletag.cmd.push(function() {
+          pbjs.que.push(function() {
+            pbjs.setTargetingForGPTAsync();
+            googletag.pubads().refresh();
+          });
+        });
+      }
+      // in case PBJS doesn't load
+      setTimeout(function() {
+        initAdserver();
+      }, FAILSAFE_TIMEOUT);
+
+      googletag.cmd.push(function() {
+        googletag.defineSlot('/18339668/Prod_PMP/Multi_Prebid_SafeFrame', div_sizes, 'div').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+      });
+
+    </script>
+</head>
+<body>
+<h1>320x180</h1>
+<div id='div'>
+    <script type='text/javascript'>
+        googletag.cmd.push(function() {
+            googletag.display('div');
+        });
+    </script>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</body>
+</html>
