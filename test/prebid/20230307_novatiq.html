@@ -96,6 +96,8 @@ pbjs.setConfig({
             debug: true,
                 userSync: {
                     userIds: [{
+				name: 'criteo'
+			},{
                             name: 'novatiq',
                             params: {
                                     sourceid: 'adgeneration', 
@@ -112,11 +114,14 @@ pbjs.setConfig({
                                         enabled: true
                                     }
                             },
-                    bidders: [ 'adtarget' ]
+                    bidders: [ 'adg' ]
                 }],
                 auctionDelay: 500
             }
         });
+		    
+		    
+		    
                 
                 
                　　pbjs.addAdUnits(adUnits);
