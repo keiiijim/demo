@@ -40,7 +40,7 @@
 
             pbjs.que.push(function() {
        
-	/*
+	
 pbjs.setConfig({
 		userSync: {
 			auctionDelay: 500,
@@ -90,37 +90,7 @@ pbjs.setConfig({
 				bidders: ['adg']
 			}]
 		}
-	}); */
-		    
-		    pbjs.setConfig({
-            debug: true,
-                userSync: {
-                    userIds: [{
-				name: 'criteo'
-			},{
-                            name: 'novatiq',
-                            params: {
-                                    sourceid: 'adgeneration', 
-                                    useSharedId: false,
-                                    useCallbacks: true,
-                                    removeAdditionalInfo: false,
-                                    urlParams: {
-                                        novatiqId: "snowflake",
-                                        useStandardUuid: true,
-                                        useSspId: false,
-                                        useSspHost: false
-                                    },
-                                    debugmsg: {
-                                        enabled: true
-                                    }
-                            },
-                    bidders: [ 'adg' ]
-                }],
-                auctionDelay: 500
-            }
-        });
-		    
-		    
+	});
 		    
                 
                 
