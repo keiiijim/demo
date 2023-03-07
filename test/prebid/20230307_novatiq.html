@@ -40,11 +40,12 @@
 
             pbjs.que.push(function() {
        
-
+	/*
 pbjs.setConfig({
 		userSync: {
 			auctionDelay: 500,
-			userIds: [/*{
+	
+			userIds: [{
 				name: 'criteo'
 			}, {
 				name: 'sharedId',
@@ -64,7 +65,7 @@ pbjs.setConfig({
 					expires: 90,
 					refreshInSeconds: 28800
 				}
-			},*/{
+			},{
 				name: 'novatiq',
                                params: {
                                     sourceid: 'adgeneration',
@@ -76,7 +77,7 @@ pbjs.setConfig({
                                         useSspId: false,
                                         useSspHost: false
                                     },
-			/*	params: {
+				params: {
 					useSharedId: false,
 					useCallbacks: true,
 					urlParams: {
@@ -84,12 +85,37 @@ pbjs.setConfig({
 						useStandardUuid: true,
 						useSspId: false,
 						useSspHost: false
-					},*/
+					},
 				},
 				bidders: ['adg']
 			}]
 		}
-	});
+	}); */
+		    
+		    pbjs.setConfig({
+            debug: true,
+                userSync: {
+                    userIds: [{
+                            name: 'novatiq',
+                            params: {
+                                    sourceid: 'adgeneration',
+                                    useSharedId: false,
+                                    useCallbacks: true,
+                                    urlParams: {
+                                        novatiqId: "snowflake",
+                                        useStandardUuid: true,
+                                        useSspId: false,
+                                        useSspHost: false
+                                    },
+                                    debugmsg: {
+                                        enabled: true
+                                    }
+                            },
+                    bidders: [ 'adtarget' ]
+                }],
+                auctionDelay: 500
+            }
+        });
                 
                 
                　　pbjs.addAdUnits(adUnits);
