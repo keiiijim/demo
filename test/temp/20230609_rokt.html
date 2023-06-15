@@ -6,8 +6,13 @@
     <!--
 商用テスト媒体 nativetest-rokt 191796
 -->
-<script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=180875&targetID=adg_180875&displayid=1&adType=INFEED&async=true&tagver=2.0.0"></script>
-
-
+<script>
+setTimeout(function() {
+  var scriptTag = document.createElement('script');
+  scriptTag.src = "//i.socdm.com/sdk/js/adg-script-loader.js?id=180875&targetID=adg_180875&displayid=1&adType=INFEED&async=true&tagver=2.0.0";
+  document.head.appendChild(scriptTag);
+}, 1000);
+    </script>
+    
   </body>
 </html>
