@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
         <!-- <script async src="prebid2.31.0.js"></script> -->
-        <script async src="prebid6.14.0.js"></script>
+        <script async src="prebid7.49.0.js"></script>
         <script>
           
             /* パラメータを受取る側 */
@@ -107,6 +107,44 @@
             pbjs.que = pbjs.que || [];
 
             pbjs.que.push(function() {
+                pbjs.setConfig({
+		userSync: {
+			auctionDelay: 500,
+			userIds: [{
+				name: 'criteo'
+			}, {
+				name: 'sharedId',
+				storage: {
+					name: "_sharedID",
+					type: "cookie",
+					expires: 90
+				}
+			}, {
+				name: 'id5Id',
+				params: {
+					partner: 1142
+				},
+				storage: {
+					type: "html5",
+					name: "id5id",
+					expires: 90,
+					refreshInSeconds: 28800
+				}
+			},{
+				name: 'novatiq',
+				params: {
+					useSharedId: false,
+					useCallbacks: true,
+					urlParams: {
+						novatiqId: "snowflake",
+						useStandardUuid: true,
+						useSspId: false,
+						useSspHost: false
+					},
+				}
+			}]
+		}
+	});
                 pbjs.addAdUnits(adUnits);
                 pbjs.requestBids({
                     bidsBackHandler: initAdserver,
