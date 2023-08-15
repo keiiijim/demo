@@ -60,7 +60,17 @@
                     bidsBackHandler: initAdserver,
                     timeout: PREBID_TIMEOUT
                 });
+                pbjs.setConfig({
+    "priceGranularity": "low",
+    "currency": {
+       "adServerCurrency": "JPY",
+       "granularityMultiplier": 108,
+       "defaultRates": { "USD": { "JPY": 110 }}
+    }
+});
             });
+
+            
 
             function initAdserver() {
                 if (pbjs.initAdserverSet) return;
