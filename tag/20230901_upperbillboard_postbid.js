@@ -1,7 +1,3 @@
-<html>
-    <body style="margin:0;padding:0">
-    <script async src="//cdn.jsdelivr.net/npm/prebid.js@latest/dist/not-for-prod/prebid.js"></script>
-        <script>
         	var sizes = [
                 [300, 250]
             ];
@@ -49,24 +45,5 @@
 
             // Define the passback HTML tag here.
             // Note that this tag is usually in either Script tag form or iFrame form. 
-            var passbackTagHtml = 'TO ADD';
-            
-            
-        </script>
+            var passbackTagHtml = 'NO AD';
 
-        <iframe id='postbid_iframe' 
-            FRAMEBORDER="0"
-            SCROLLING="no"
-            MARGINHEIGHT="0"
-            MARGINWIDTH="0"
-            TOPMARGIN="0" 
-            LEFTMARGIN="0" 
-            ALLOWTRANSPARENCY="true"
-            WIDTH="0"
-            HEIGHT="0">
-        </iframe>
-
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-	    
-</html>
