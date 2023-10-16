@@ -136,30 +136,52 @@ pbjs.setConfig({
             </div>
         </div>
 <div id="result">
-<p>Hyper id :</p>
+	<p>Hyper id :</p>
+	<p id="resulttext1"></p>
+	<br>
+	<p>responce code :</p>	
 	<p id="resulttext1"></p>
 </div>
 <script>
-	setTimeout(function() {
+setTimeout(function() {
     var resources = performance.getEntriesByType("resource");
-    var snowflakeValues = [];
+    var hyperidValues = [];
 
+    // snowflakeの値をhyperidValuesとして取得
     for (var i = 0; i < resources.length; i++) {
         if (resources[i].name.startsWith('https://spadsync.com')) {
             var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
             if (match) {
-                snowflakeValues.push(match[1]);
+                hyperidValues.push(match[1]);
             }
         }
     }
 
-    var resultParagraph = document.getElementById('resulttext1');
-    if (snowflakeValues.length > 0) {
-        resultParagraph.textContent = snowflakeValues.join(', ');
+    var resultParagraph1 = document.getElementById('resulttext1');
+    if (hyperidValues.length > 0) {
+        resultParagraph1.textContent = hyperidValues.join(', ');
     } else {
-        resultParagraph.textContent = 'null';
+        resultParagraph1.textContent = 'null';
     }
-}, 2000); 
+
+    var resultParagraph2 = document.getElementById('resulttext2');
+    var found = false;
+
+    // https://d.socdm.com/adsv/v1?で始まるリソースの中でhyperidの値が含まれているかを確認
+    for (var i = 0; i < resources.length; i++) {
+        if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+            for (var j = 0; j < hyperidValues.length; j++) {
+                if (resources[i].name.includes(hyperidValues[j])) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    resultParagraph2.textContent = found ? '200' : '204';
+
+}, 2000);  // 2秒待機してから実行
 </script>
 
 	
