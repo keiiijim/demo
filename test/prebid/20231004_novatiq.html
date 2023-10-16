@@ -135,20 +135,22 @@ pbjs.setConfig({
                 </script>
             </div>
         </div>
-<div id="result"></div>
+<div id="result">
+	<p id="resulttext1"></p>
+</div>
 <script>
-	window.addEventListener('load', function() {
+	document.addEventListener('DOMContentLoaded', function() {
     const snowflakeValues = performance.getEntriesByType("resource")
       .filter(entry => entry.name.startsWith("https://spadsync.com"))
       .map(entry => {
         const url = new URL(entry.name);
-        return url.searchParams.get("snowflake");
-      })
-      .filter(value => value !== null);  // nullの場合はフィルタリング
+        const snowflakeValue = url.searchParams.get("snowflake");
+        return snowflakeValue ? snowflakeValue : 'null';  // snowflakeがなければ 'null' を返す
+      });
 
-    // divタグに結果を表示
-    const resultDiv = document.getElementById("result");
-    resultDiv.textContent = snowflakeValues.join(', ');
+    // <p>タグに結果を表示
+    const resultParagraph = document.getElementById("resulttext1");
+    resultParagraph.textContent = snowflakeValues.join(', ');
 });
 </script>
 
