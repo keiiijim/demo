@@ -135,21 +135,24 @@ pbjs.setConfig({
                 </script>
             </div>
         </div>
-<div>
+<div id="result"></div>
 <script>
-	const snowflakeValues = performance.getEntriesByType("resource")
-  .filter(entry => entry.name.startsWith("https://spadsync.com"))
-  .map(entry => {
-    const url = new URL(entry.name);
-    return url.searchParams.get("snowflake");
-  })
-  .filter(value => value !== null);  // nullの場合はフィルタリング
+	window.addEventListener('load', function() {
+    const snowflakeValues = performance.getEntriesByType("resource")
+      .filter(entry => entry.name.startsWith("https://spadsync.com"))
+      .map(entry => {
+        const url = new URL(entry.name);
+        return url.searchParams.get("snowflake");
+      })
+      .filter(value => value !== null);  // nullの場合はフィルタリング
 
-console.log(snowflakeValues);
+    // divタグに結果を表示
+    const resultDiv = document.getElementById("result");
+    resultDiv.textContent = snowflakeValues.join(', ');
+});
 </script>
 
 	
-</div>
         
         </div>
     </body>
