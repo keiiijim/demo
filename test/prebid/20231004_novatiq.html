@@ -140,17 +140,24 @@ pbjs.setConfig({
 </div>
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
-    const snowflakeValues = performance.getEntriesByType("resource")
-      .filter(entry => entry.name.startsWith("https://spadsync.com"))
-      .map(entry => {
-        const url = new URL(entry.name);
-        const snowflakeValue = url.searchParams.get("snowflake");
-        return snowflakeValue ? snowflakeValue : 'null';  // snowflakeがなければ 'null' を返す
-      });
+    var resources = performance.getEntriesByType("resource");
+    var snowflakeValues = [];
 
-    // <p>タグに結果を表示
-    const resultParagraph = document.getElementById("resulttext1");
-    resultParagraph.textContent = snowflakeValues.join(', ');
+    for (var i = 0; i < resources.length; i++) {
+        if (resources[i].name.startsWith('https://spadsync.com')) {
+            var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+            if (match) {
+                snowflakeValues.push(match[1]);
+            }
+        }
+    }
+
+    var resultParagraph = document.getElementById('resulttext1');
+    if (snowflakeValues.length > 0) {
+        resultParagraph.textContent = snowflakeValues.join(', ');
+    } else {
+        resultParagraph.textContent = 'null';
+    }
 });
 </script>
 
