@@ -135,7 +135,21 @@ pbjs.setConfig({
                 </script>
             </div>
         </div>
+<div>
+<script>
+	const snowflakeValues = performance.getEntriesByType("resource")
+  .filter(entry => entry.name.startsWith("https://spadsync.com"))
+  .map(entry => {
+    const url = new URL(entry.name);
+    return url.searchParams.get("snowflake");
+  })
+  .filter(value => value !== null);  // nullの場合はフィルタリング
 
+console.log(snowflakeValues);
+</script>
+
+	
+</div>
         
         </div>
     </body>
