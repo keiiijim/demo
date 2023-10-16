@@ -139,7 +139,7 @@ pbjs.setConfig({
 	<p id="resulttext1"></p>
 </div>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
+	setTimeout(function() {
     var resources = performance.getEntriesByType("resource");
     var snowflakeValues = [];
 
@@ -158,7 +158,7 @@ pbjs.setConfig({
     } else {
         resultParagraph.textContent = 'null';
     }
-});
+}, 2000); 
 </script>
 
 	
