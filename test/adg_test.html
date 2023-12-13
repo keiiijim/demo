@@ -1,0 +1,17 @@
+<script>
+document.getElementById('tagForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  // パラメータの取得
+  var param1 = document.getElementById('param1').value;
+  var param2 = document.getElementById('param2').value;
+  var param3 = document.getElementById('param3').value;
+  var param4 = document.getElementById('param4').value;
+
+  // スクリプトタグの生成
+  var scriptTag = '<script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=' + param1 + '&targetID=adg_' + param1 + '&displayid=' + param2 + '&adType=' + param3 + '&async=' + param4 + '&tagver=2.0.0"><\/script>';
+
+  // 生成したタグを表示
+  document.getElementById('generatedTag').innerHTML = scriptTag;
+});
+</script>
