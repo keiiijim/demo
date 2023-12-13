@@ -16,4 +16,17 @@ document.getElementById('tagForm').addEventListener('submit', function(e) {
   document.getElementById('generatedTag').innerHTML = scriptTag;
 });
 </script>
+
+<body>
+  <form id="tagForm">
+  <input type="text" id="param1" placeholder="param1">
+  <input type="text" id="param2" placeholder="param2">
+  <input type="text" id="param3" placeholder="param3">
+  <input type="text" id="param4" placeholder="param4">
+  <button type="submit">タグを生成</button>
+</form>
+
+<!-- 生成されたタグを表示するエリア -->
+<div id="generatedTag"></div>
+  </body>
 </html>
