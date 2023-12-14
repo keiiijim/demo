@@ -78,14 +78,14 @@
       var param4 = document.getElementById('param4').value;
 
 
-       // 新しいスクリプトタグの生成
+      // 新しいスクリプトタグの生成
   var script = document.createElement('script');
   script.id = 'adgScript'; // スクリプトにIDを設定
-      // スクリプトタグの生成
-      var script = "//i.socdm.com/sdk/js/adg-script-loader.js?id=" + encodeURIComponent(param1) + "&targetID=adg_" + encodeURIComponent(param1) + "&displayid=" + encodeURIComponent(param2) + "&adType=" + encodeURIComponent(param3) + "&async=" + encodeURIComponent(param4) + "&tagver=2.0.0";
+  script.src = "//i.socdm.com/sdk/js/adg-script-loader.js?id=" + encodeURIComponent(param1) + "&targetID=adg_" + encodeURIComponent(param1) + "&displayid=" + encodeURIComponent(param2) + "&adType=" + encodeURIComponent(param3) + "&async=" + encodeURIComponent(param4) + "&tagver=2.0.0";
 
-      // 生成したタグを表示
-       document.body.appendChild(script);
+  // 生成したスクリプトタグをbodyに追加
+  document.body.appendChild(script);
+      
     });
   </script>
 </body>
