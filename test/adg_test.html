@@ -38,21 +38,23 @@
   <form id="tagForm">
     <div class="form-group">
       <label for="param1">Page ID</label>
-      <input type="text" id="param1" placeholder="Page ID" value="115904">
+      <input type="text" id="param1" placeholder="Page ID" value="">
     </div>
     <div class="form-group">
       <label for="param2">displayid</label>
       <select id="param2">
-        <option value="1" selected>1</option>
-        <option value="2">2</option>
+        <option value="1" selected>1:inline</option>
+        <option value="9">9:overlay</option>
       </select>
     </div>
     <div class="form-group">
       <label for="param3">adType</label>
       <select id="param3">
-        <option value="sp">sp</option>
-        <option value="pc">pc</option>
-        <option value="INFEED" selected>INFEED</option>        
+        <option value="sp">SP(320x50)</option>
+        <option value="LARGE">LARGE(320x100)</option>
+        <option value="TABLET">TABLET(728×90)</option>
+        <option value="RECT">RECT(300x250) </option>
+        <option value="INFEED" selected>INFEED</option> 
       </select>
     </div>
     <div class="form-group">
@@ -62,7 +64,7 @@
         <option value="false">false</option>
       </select>
     </div>
-    <button type="submit">タグを生成</button>
+    <button type="submit">広告を生成</button>
   </form>
 
   <!-- 生成されたタグを表示するエリア -->
