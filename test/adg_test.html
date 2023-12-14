@@ -85,7 +85,7 @@
       var script = "//i.socdm.com/sdk/js/adg-script-loader.js?id=" + encodeURIComponent(param1) + "&targetID=adg_" + encodeURIComponent(param1) + "&displayid=" + encodeURIComponent(param2) + "&adType=" + encodeURIComponent(param3) + "&async=" + encodeURIComponent(param4) + "&tagver=2.0.0";
 
       // 生成したタグを表示
-      document.getElementById('generatedTag').appendChild(script);
+       document.body.appendChild(script);
     });
   </script>
 </body>
