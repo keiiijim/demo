@@ -20,13 +20,15 @@
 
       </div>
       <div class="navi"></div>
+      
     </div>
     <div class="box-b">
       <div class="title"></div>
       <div class="subtitle"></div>
+    <button id="showAdButton">広告を表示</button>
+      
       <div class="article"></div>
 
-    
 
       <div class="article"></div>
       <div class="article"></div>
@@ -42,33 +44,31 @@
     </div>
   </div>
   <div id="demo_SP_overlay"></div>
-  <script data-playerPro="current">(function(){var s=document.querySelector('script[data-playerPro="current"]');s.removeAttribute("data-playerPro");(playerPro=window.playerPro||[]).push({id:"ppk2LDAXpzyt",after:s});})();</script>
-<script>
-// リワード広告の設定
-const placement_id = 'ppk2LDAXpzyt'; // 配布されたplacement_idを設定
-const el = document.createElement('div');
-document.body.append(el);
-(playerPro=window.playerPro||[]).push({
-    id:placement_id,
-    after:el,
-    init: (api) => {
-        api.on('AdStopped', function(){
-            // 広告が表示を停止
-            alert('インセンティブ獲得！');
-        });
-        api.on('AdUserClose', function(){
-            // AdUserCloseイベントは、ユーザーが広告上の「閉じる」ボタンをクリック
-            alert('閉じる押したからインセンティブ獲得なし');
-        });
-        api.on('AdSkipped', function(){
-            // AdSkippedイベントは、広告がスキップされ、表示が停止し
-            alert('スキップしたからインセンティブ獲得なし');
-        });      
-        api.on('AdError', function(){
-            // 広告エラー発生時にアラート表示
-            alert('広告エラー');
-        });
-    }
+
+
+  <script>
+document.getElementById('showAdButton').addEventListener('click', function() {
+    const placement_id = 'ppk2LDAXpzyt'; 
+    const el = document.createElement('div');
+    document.body.append(el);
+    (playerPro=window.playerPro||[]).push({
+        id:placement_id,
+        after:el,
+        init: (api) => {
+            api.on('AdStopped', function(){
+                alert('インセンティブ獲得！');
+            });
+            api.on('AdUserClose', function(){
+                alert('閉じる押したからインセンティブ獲得なし');
+            });
+            api.on('AdSkipped', function(){
+                alert('スキップしたからインセンティブ獲得なし');
+            });
+            api.on('AdError', function(){
+                alert('広告エラー');
+            });
+        }
+    });
 });
 </script>
 </body>
