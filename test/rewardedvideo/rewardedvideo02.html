@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja" style="background: #212121;">
+<head>
+  <meta charset="utf-8">
+  <title>demopage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="demo" content="demo">
+  <meta property="article:section" content="demo" />
+  <link rel="stylesheet" href="../css/sp_style.css">
+<script async src="https://serving.lookverin.com/player/adlook.js"></script>
+
+</head>
+<body style="position:relative; margin:auto;background: white;">
+  <div class="wrapper">
+    <div class="box-a">
+      <div class="logo"></div>
+      <div class="billboard">
+       
+
+      </div>
+      <div class="navi"></div>
+    </div>
+    <div class="box-b">
+      <div class="title"></div>
+      <div class="subtitle"></div>
+      <div class="article"></div>
+
+    
+
+      <div class="article"></div>
+      <div class="article"></div>
+
+      <div class="article"></div>    
+      <div class="article"></div>
+      <div class="article"></div>
+    </div>
+    <div class="rect">
+     
+    </div>
+    <div class="box-c">
+    </div>
+  </div>
+  <div id="demo_SP_overlay"></div>
+  <script data-playerPro="current">(function(){var s=document.querySelector('script[data-playerPro="current"]');s.removeAttribute("data-playerPro");(playerPro=window.playerPro||[]).push({id:"ppk2LDAXpzyt",after:s});})();</script>
+<script>
+// リワード広告の設定
+const placement_id = 'ppk2LDAXpzyt'; // 配布されたplacement_idを設定
+const el = document.createElement('div');
+document.body.append(el);
+(playerPro=window.playerPro||[]).push({
+    id:placement_id,
+    after:el,
+    init: (api) => {
+        api.on('AdStopped', function(){
+            // 広告が表示を停止
+            alert('インセンティブ獲得！');
+        });
+        api.on('AdUserClose', function(){
+            // AdUserCloseイベントは、ユーザーが広告上の「閉じる」ボタンをクリック
+            alert('閉じる押したからインセンティブ獲得なし');
+        });
+        api.on('AdSkipped', function(){
+            // AdSkippedイベントは、広告がスキップされ、表示が停止し
+            alert('スキップしたからインセンティブ獲得なし');
+        });      
+        api.on('AdError', function(){
+            // 広告エラー発生時にアラート表示
+            alert('広告エラー');
+        });
+    }
+});
+</script>
+</body>
+</html>
