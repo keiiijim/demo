@@ -31,34 +31,61 @@
   <link rel="stylesheet" href="../css/sp_style.css">
 <script async src="https://serving.lookverin.com/player/adlook.js"></script>
 
-  <script>
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    let adControlsOverlay = document.getElementById('adControlsOverlay');
+    const adControlsOverlay = document.getElementById('adControlsOverlay');
     let isDragging = false;
-    let dragOffsetX, dragOffsetY;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
 
-    // マウスダウンイベントでドラッグを開始
-    adControlsOverlay.addEventListener('mousedown', function(e) {
+    const startDrag = (pageX, pageY) => {
+        // 要素の現在の位置から、マウスまたはタッチの位置までのオフセットを計算
+        const rect = adControlsOverlay.getBoundingClientRect();
+        dragOffsetX = pageX - rect.left;
+        dragOffsetY = pageY - rect.top;
         isDragging = true;
-        dragOffsetX = e.clientX - adControlsOverlay.offsetLeft;
-        dragOffsetY = e.clientY - adControlsOverlay.offsetTop;
-        // マウスムーブイベントを追加
-        document.addEventListener('mousemove', onMouseMove);
-    });
+    };
 
-    // マウスアップイベントでドラッグを終了
-    document.addEventListener('mouseup', function() {
+    const onMove = (pageX, pageY) => {
+        if (!isDragging) return;
+        // 新しい位置を計算し、スタイルを更新
+        adControlsOverlay.style.left = (pageX - dragOffsetX) + 'px';
+        adControlsOverlay.style.top = (pageY - dragOffsetY) + 'px';
+    };
+
+    const endDrag = () => {
         isDragging = false;
-        document.removeEventListener('mousemove', onMouseMove);
+    };
+
+    // マウスイベントのハンドラ
+    adControlsOverlay.addEventListener('mousedown', (e) => {
+        startDrag(e.pageX, e.pageY);
+        e.preventDefault(); // テキスト選択などのデフォルトアクションを防止
     });
 
-    // マウスが動いている間、要素を移動
-    function onMouseMove(e) {
-        if (isDragging) {
-            adControlsOverlay.style.left = (e.clientX - dragOffsetX) + 'px';
-            adControlsOverlay.style.top = (e.clientY - dragOffsetY) + 'px';
+    document.addEventListener('mousemove', (e) => {
+        onMove(e.pageX, e.pageY);
+    });
+
+    document.addEventListener('mouseup', endDrag);
+
+    // タッチイベントのハンドラ
+    adControlsOverlay.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) { // シングルタッチのみを対象とする
+            const touch = e.touches[0];
+            startDrag(touch.pageX, touch.pageY);
         }
-    }
+        e.preventDefault(); // スクロールなどのデフォルトアクションを防止
+    }, {passive: false});
+
+    document.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            onMove(touch.pageX, touch.pageY);
+        }
+    }, {passive: false});
+
+    document.addEventListener('touchend', endDrag);
 });
 </script>
   
