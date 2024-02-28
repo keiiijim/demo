@@ -31,7 +31,6 @@
   <link rel="stylesheet" href="../css/sp_style.css">
 <script async src="https://serving.lookverin.com/player/adlook.js"></script>
 
-<script>
 document.addEventListener('DOMContentLoaded', function() {
     const adControlsOverlay = document.getElementById('adControlsOverlay');
     let isDragging = false;
@@ -41,14 +40,20 @@ document.addEventListener('DOMContentLoaded', function() {
         isDragging = true;
         startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
         startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
-        // 現在のスタイルからleftとtopの値を取得（ピクセル単位の数値に変換）
         let computedStyle = window.getComputedStyle(adControlsOverlay);
         adControlsOverlay.style.left = computedStyle.left;
         adControlsOverlay.style.top = computedStyle.top;
+
+        if (!e.type.includes('mouse')) {
+            document.body.style.overflow = 'hidden'; // ページのスクロールを防ぐ
+        }
     };
 
     const dragging = (e) => {
         if (!isDragging) return;
+        if (e.type.includes('touch')) {
+            e.preventDefault(); // タッチによるスクロールのデフォルトの挙動を防止
+        }
         let moveX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
         let moveY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
         let diffX = moveX - startX;
@@ -66,17 +71,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const dragEnd = () => {
         isDragging = false;
+        document.body.style.overflow = ''; // ページのスクロールを再度許可
     };
 
+    // マウスイベントの設定
     adControlsOverlay.addEventListener('mousedown', dragStart);
     document.addEventListener('mousemove', dragging);
     document.addEventListener('mouseup', dragEnd);
 
-    adControlsOverlay.addEventListener('touchstart', dragStart);
-    document.addEventListener('touchmove', dragging);
+    // タッチイベントの設定
+    adControlsOverlay.addEventListener('touchstart', dragStart, { passive: false });
+    document.addEventListener('touchmove', dragging, { passive: false });
     document.addEventListener('touchend', dragEnd);
 });
-</script>
   
 </head>
 <body style="position:relative; margin:auto;background: white;">
