@@ -56,52 +56,52 @@
         after:el,
         init: (api) => {
             api.on('AdLoaded', function(){
-                console.log('広告がロードされました', Date.now());
+                console.log('AdLoadedイベント：広告がロードされました', Date.now());
             });
             api.on('AdStarted', function(){
-                console.log('広告が開始しました', Date.now());
+                console.log('AdStartedイベント：広告が開始しました', Date.now());
             });
             api.on('AdVideoStart', function(){
-                console.log('動画広告が開始しました', Date.now());
+                console.log('AdVideoStartイベント：動画広告が開始しました', Date.now());
             });
             api.on('AdVideoFirstQuartile', function(){
-                console.log('進捗25%に達しました', Date.now());
+                console.log('AdVideoFirstQuartileイベント：進捗25%に達しました', Date.now());
             });
             api.on('AdVideoMidpoint', function(){
-                console.log('進捗50%に達しました', Date.now());
+                console.log('AdVideoMidpointイベント：進捗50%に達しました', Date.now());
             });
             api.on('AdVideoThirdQuartile', function(){
-                console.log('進捗75%に達しました', Date.now());
+                console.log('AdVideoThirdQuartileイベント：進捗75%に達しました', Date.now());
             });
             api.on('AdVideoComplete', function(){
-                console.log('動画再生完了イベント', Date.now());
+                console.log('AdVideoCompleteイベント：動画再生完了イベント', Date.now());
             });
             api.on('AdStopped', function(){
-                console.log('広告が停止しました', Date.now());
+                console.log('AdStoppedイベント：広告が停止しました', Date.now());
             });
             api.on('AdSkipped', function(){
-                console.log('広告がスキップされました', Date.now());
+                console.log('AdSkippedイベント：広告がスキップされました', Date.now());
             });
             api.on('AdPaused', function(){
-                console.log('広告が一時停止しました', Date.now());
+                console.log('AdPausedイベント：広告が一時停止しました', Date.now());
             });
             api.on('AdPlaying', function(){
-                console.log('広告が再生されました', Date.now());
+                console.log('AdPlayingイベント：広告が再生されました', Date.now());
             });
             api.on('AdError', function(message, error){
-                console.log('広告エラー:', message, error, Date.now());
+                console.log('AdErrorイベント：広告エラー:', message, error, Date.now());
             });
             api.on('AdVolumeChange', function(){
-                console.log('広告の音量が変更されました', Date.now());
+                console.log('AdVolumeChangeイベント：広告の音量が変更されました', Date.now());
             });
             api.on('AdSkippableStateChange', function(){
-                console.log('広告がスキップ可能になりました', Date.now());
+                console.log('AdSkippableStateChangeイベント：広告がスキップ可能になりました', Date.now());
             });
             api.on('AdClickThru', function(){
-                console.log('広告がクリックされました', Date.now());
+                console.log('AdClickThruイベント：広告がクリックされました', Date.now());
             });
             api.on('AdUserClose', function(){
-                console.log('広告が閉じられました', Date.now());
+                console.log('AdUserCloseイベント：広告が閉じられました', Date.now());
             });
         }
     });
