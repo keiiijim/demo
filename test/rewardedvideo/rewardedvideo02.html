@@ -30,7 +30,36 @@
   <meta property="article:section" content="demo" />
   <link rel="stylesheet" href="../css/sp_style.css">
 <script async src="https://serving.lookverin.com/player/adlook.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var adControlsOverlay = document.getElementById('adControlsOverlay');
+    var drag = false;
+    var offsetX = 0;
+    var offsetY = 0;
 
+    adControlsOverlay.addEventListener('mousedown', function(e) {
+        drag = true;
+        offsetX = e.clientX - adControlsOverlay.getBoundingClientRect().left;
+        offsetY = e.clientY - adControlsOverlay.getBoundingClientRect().top;
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+    function onMouseMove(e) {
+        if (!drag) return;
+        adControlsOverlay.style.position = 'fixed';
+        adControlsOverlay.style.left = (e.clientX - offsetX) + 'px';
+        adControlsOverlay.style.top = (e.clientY - offsetY) + 'px';
+        adControlsOverlay.style.margin = 0; // 追加スタイルを調整するため
+    }
+
+    function onMouseUp() {
+        drag = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    }
+});
+</script>
 </head>
 <body style="position:relative; margin:auto;background: white;">
   <div class="wrapper">
@@ -139,68 +168,69 @@
             api.on('AdUserClose', function(){
                 console.log('AdUserCloseイベント：広告が閉じられました', Date.now());
             });
-          // 広告を一時停止
-  document.getElementById('pauseAdButton').addEventListener('click', function() {
-    api.pauseAd();
-    console.log('広告が一時停止されました');
-  });
-
-  // 広告を再開
-  document.getElementById('resumeAdButton').addEventListener('click', function() {
-    api.resumeAd();
-    console.log('広告が再開されました');
-  });
-
-  // 広告を停止
-  document.getElementById('stopAdButton').addEventListener('click', function() {
-    api.stopAd();
-    console.log('広告が停止されました');
-  });
-
-  // 広告をスキップ
-  document.getElementById('skipAdButton').addEventListener('click', function() {
-    api.skipAd();
-    console.log('広告がスキップされました');
-  });
-
-  // 広告の音量を設定
-  document.getElementById('setVolumeButton').addEventListener('click', function() {
-    var volume = parseFloat(document.getElementById('volumeInput').value);
-    api.setAdVolume(volume);
-    console.log('広告の音量が設定されました:', volume);
-  });
-
-  // 広告の音量を取得
-  document.getElementById('getVolumeButton').addEventListener('click', function() {
-    var volume = api.getAdVolume();
-    console.log('現在の広告の音量:', volume);
-  });
-
-  // 広告をリサイズ
-  document.getElementById('resizeAdButton').addEventListener('click', function() {
-    var width = parseInt(document.getElementById('widthInput').value, 10);
-    var height = parseInt(document.getElementById('heightInput').value, 10);
-    api.resizeAd(width, height);
-    console.log('広告がリサイズされました:', width, height);
-  });
-
-  // 広告の再生時間を取得
-  document.getElementById('getRemainingTimeButton').addEventListener('click', function() {
-    var remainingTime = api.getAdRemainingTime();
-    console.log('広告の残り再生時間:', remainingTime);
-  });
-
-  // 広告の総再生時間を取得
-  document.getElementById('getDurationButton').addEventListener('click', function() {
-    var duration = api.getAdDuration();
-    console.log('広告の総再生時間:', duration);
-  });
-
-  // 広告のスキップ可能状態を取得
-  document.getElementById('getSkippableStateButton').addEventListener('click', function() {
-    var skippableState = api.getAdSkippableState();
-    console.log('広告がスキップ可能か:', skippableState);
-  });
+          
+            // 広告を一時停止
+            document.getElementById('pauseAdButton').addEventListener('click', function() {
+              api.pauseAd();
+              console.log('広告が一時停止されました');
+            });
+          
+            // 広告を再開
+            document.getElementById('resumeAdButton').addEventListener('click', function() {
+              api.resumeAd();
+              console.log('広告が再開されました');
+            });
+          
+            // 広告を停止
+            document.getElementById('stopAdButton').addEventListener('click', function() {
+              api.stopAd();
+              console.log('広告が停止されました');
+            });
+          
+            // 広告をスキップ
+            document.getElementById('skipAdButton').addEventListener('click', function() {
+              api.skipAd();
+              console.log('広告がスキップされました');
+            });
+          
+            // 広告の音量を設定
+            document.getElementById('setVolumeButton').addEventListener('click', function() {
+              var volume = parseFloat(document.getElementById('volumeInput').value);
+              api.setAdVolume(volume);
+              console.log('広告の音量が設定されました:', volume);
+            });
+          
+            // 広告の音量を取得
+            document.getElementById('getVolumeButton').addEventListener('click', function() {
+              var volume = api.getAdVolume();
+              console.log('現在の広告の音量:', volume);
+            });
+          
+            // 広告をリサイズ
+            document.getElementById('resizeAdButton').addEventListener('click', function() {
+              var width = parseInt(document.getElementById('widthInput').value, 10);
+              var height = parseInt(document.getElementById('heightInput').value, 10);
+              api.resizeAd(width, height);
+              console.log('広告がリサイズされました:', width, height);
+            });
+          
+            // 広告の再生時間を取得
+            document.getElementById('getRemainingTimeButton').addEventListener('click', function() {
+              var remainingTime = api.getAdRemainingTime();
+              console.log('広告の残り再生時間:', remainingTime);
+            });
+          
+            // 広告の総再生時間を取得
+            document.getElementById('getDurationButton').addEventListener('click', function() {
+              var duration = api.getAdDuration();
+              console.log('広告の総再生時間:', duration);
+            });
+          
+            // 広告のスキップ可能状態を取得
+            document.getElementById('getSkippableStateButton').addEventListener('click', function() {
+              var skippableState = api.getAdSkippableState();
+              console.log('広告がスキップ可能か:', skippableState);
+            });
         }
     });
 });
