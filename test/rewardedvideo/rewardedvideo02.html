@@ -30,36 +30,38 @@
   <meta property="article:section" content="demo" />
   <link rel="stylesheet" href="../css/sp_style.css">
 <script async src="https://serving.lookverin.com/player/adlook.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var adControlsOverlay = document.getElementById('adControlsOverlay');
-    var drag = false;
-    var offsetX = 0;
-    var offsetY = 0;
 
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    let adControlsOverlay = document.getElementById('adControlsOverlay');
+    let isDragging = false;
+    let dragOffsetX, dragOffsetY;
+
+    // マウスダウンイベントでドラッグを開始
     adControlsOverlay.addEventListener('mousedown', function(e) {
-        drag = true;
-        offsetX = e.clientX - adControlsOverlay.getBoundingClientRect().left;
-        offsetY = e.clientY - adControlsOverlay.getBoundingClientRect().top;
+        isDragging = true;
+        dragOffsetX = e.clientX - adControlsOverlay.offsetLeft;
+        dragOffsetY = e.clientY - adControlsOverlay.offsetTop;
+        // マウスムーブイベントを追加
         document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
     });
 
-    function onMouseMove(e) {
-        if (!drag) return;
-        adControlsOverlay.style.position = 'fixed';
-        adControlsOverlay.style.left = (e.clientX - offsetX) + 'px';
-        adControlsOverlay.style.top = (e.clientY - offsetY) + 'px';
-        adControlsOverlay.style.margin = 0; // 追加スタイルを調整するため
-    }
-
-    function onMouseUp() {
-        drag = false;
+    // マウスアップイベントでドラッグを終了
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
         document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
+    });
+
+    // マウスが動いている間、要素を移動
+    function onMouseMove(e) {
+        if (isDragging) {
+            adControlsOverlay.style.left = (e.clientX - dragOffsetX) + 'px';
+            adControlsOverlay.style.top = (e.clientY - dragOffsetY) + 'px';
+        }
     }
 });
 </script>
+  
 </head>
 <body style="position:relative; margin:auto;background: white;">
   <div class="wrapper">
