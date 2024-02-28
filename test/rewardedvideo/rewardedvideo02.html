@@ -4,7 +4,28 @@
   <meta charset="utf-8">
   <title>demopage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<style>
+        #adControlsOverlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .ad-control-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
   <meta name="demo" content="demo">
   <meta property="article:section" content="demo" />
   <link rel="stylesheet" href="../css/sp_style.css">
@@ -44,6 +65,21 @@
     </div>
   </div>
   <div id="demo_SP_overlay"></div>
+<div id="adControlsOverlay">
+    <button id="pauseAdButton" class="ad-control-btn">広告を一時停止</button>
+    <button id="resumeAdButton" class="ad-control-btn">広告を再開</button>
+    <button id="stopAdButton" class="ad-control-btn">広告を停止</button>
+    <button id="skipAdButton" class="ad-control-btn">広告をスキップ</button>
+    <button id="setVolumeButton" class="ad-control-btn">音量を設定</button>
+    <input id="volumeInput" type="number" min="0" max="1" step="0.1" value="1" style="margin: 10px auto; display: block;">
+    <button id="getVolumeButton" class="ad-control-btn">現在の音量を取得</button>
+    <button id="resizeAdButton" class="ad-control-btn">広告をリサイズ</button>
+    <input id="widthInput" type="number" placeholder="幅(px)" style="margin: 10px auto; display: block;">
+    <input id="heightInput" type="number" placeholder="高さ(px)" style="margin: 10px auto; display: block;">
+    <button id="getRemainingTimeButton" class="ad-control-btn">残り時間を取得</button>
+    <button id="getDurationButton" class="ad-control-btn">総再生時間を取得</button>
+    <button id="getSkippableStateButton" class="ad-control-btn">スキップ可能状態を取得</button>
+</div>
 
 
   <script>
