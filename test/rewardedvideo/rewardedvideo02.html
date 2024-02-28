@@ -35,57 +35,46 @@
 document.addEventListener('DOMContentLoaded', function() {
     const adControlsOverlay = document.getElementById('adControlsOverlay');
     let isDragging = false;
-    let dragOffsetX = 0;
-    let dragOffsetY = 0;
+    let startX, startY;
 
-    const startDrag = (pageX, pageY) => {
-        // 要素の現在の位置から、マウスまたはタッチの位置までのオフセットを計算
-        const rect = adControlsOverlay.getBoundingClientRect();
-        dragOffsetX = pageX - rect.left;
-        dragOffsetY = pageY - rect.top;
+    const dragStart = (e) => {
         isDragging = true;
+        startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+        startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+        // 現在のスタイルからleftとtopの値を取得（ピクセル単位の数値に変換）
+        let computedStyle = window.getComputedStyle(adControlsOverlay);
+        adControlsOverlay.style.left = computedStyle.left;
+        adControlsOverlay.style.top = computedStyle.top;
     };
 
-    const onMove = (pageX, pageY) => {
+    const dragging = (e) => {
         if (!isDragging) return;
-        // 新しい位置を計算し、スタイルを更新
-        adControlsOverlay.style.left = (pageX - dragOffsetX) + 'px';
-        adControlsOverlay.style.top = (pageY - dragOffsetY) + 'px';
+        let moveX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+        let moveY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+        let diffX = moveX - startX;
+        let diffY = moveY - startY;
+
+        let left = parseInt(adControlsOverlay.style.left);
+        let top = parseInt(adControlsOverlay.style.top);
+
+        adControlsOverlay.style.left = `${left + diffX}px`;
+        adControlsOverlay.style.top = `${top + diffY}px`;
+
+        startX = moveX;
+        startY = moveY;
     };
 
-    const endDrag = () => {
+    const dragEnd = () => {
         isDragging = false;
     };
 
-    // マウスイベントのハンドラ
-    adControlsOverlay.addEventListener('mousedown', (e) => {
-        startDrag(e.pageX, e.pageY);
-        e.preventDefault(); // テキスト選択などのデフォルトアクションを防止
-    });
+    adControlsOverlay.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', dragging);
+    document.addEventListener('mouseup', dragEnd);
 
-    document.addEventListener('mousemove', (e) => {
-        onMove(e.pageX, e.pageY);
-    });
-
-    document.addEventListener('mouseup', endDrag);
-
-    // タッチイベントのハンドラ
-    adControlsOverlay.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) { // シングルタッチのみを対象とする
-            const touch = e.touches[0];
-            startDrag(touch.pageX, touch.pageY);
-        }
-        e.preventDefault(); // スクロールなどのデフォルトアクションを防止
-    }, {passive: false});
-
-    document.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 1) {
-            const touch = e.touches[0];
-            onMove(touch.pageX, touch.pageY);
-        }
-    }, {passive: false});
-
-    document.addEventListener('touchend', endDrag);
+    adControlsOverlay.addEventListener('touchstart', dragStart);
+    document.addEventListener('touchmove', dragging);
+    document.addEventListener('touchend', dragEnd);
 });
 </script>
   
