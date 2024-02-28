@@ -52,69 +52,53 @@ document.body.append(el);
     id:placement_id,
     after:el,
    init: (api) => {
-            // 広告がロードされた時
             api.on('AdLoaded', function(){
-                console.log('広告がロードされました');
+                console.log('広告がロードされました', Date.now());
             });
-            // 広告が開始された時
             api.on('AdStarted', function(){
-                console.log('広告が開始しました');
+                console.log('広告が開始しました', Date.now());
             });
-            // 動画広告が開始された時
             api.on('AdVideoStart', function(){
-                console.log('動画広告が開始しました');
+                console.log('動画広告が開始しました', Date.now());
             });
-            // 動画広告の進捗が25%に達した時
             api.on('AdVideoFirstQuartile', function(){
-                console.log('進捗25%に達しました');
+                console.log('進捗25%に達しました', Date.now());
             });
-            // 動画広告の進捗が50%に達した時
             api.on('AdVideoMidpoint', function(){
-                console.log('進捗50%に達しました');
+                console.log('進捗50%に達しました', Date.now());
             });
-            // 動画広告の進捗が75%に達した時
             api.on('AdVideoThirdQuartile', function(){
-                console.log('進捗75%に達しました');
+                console.log('進捗75%に達しました', Date.now());
             });
-            // 動画広告が完了した時
             api.on('AdVideoComplete', function(){
-                console.log('動画再生完了イベント');
+                console.log('動画再生完了イベント', Date.now());
             });
-            // 広告が停止された時
             api.on('AdStopped', function(){
-                console.log('広告が停止しました');
+                console.log('広告が停止しました', Date.now());
             });
-            // 広告がスキップされた時
             api.on('AdSkipped', function(){
-                console.log('広告がスキップされました');
+                console.log('広告がスキップされました', Date.now());
             });
-            // 広告が一時停止された時
             api.on('AdPaused', function(){
-                console.log('広告が一時停止しました');
+                console.log('広告が一時停止しました', Date.now());
             });
-            // 広告が再生された時
             api.on('AdPlaying', function(){
-                console.log('広告が再生されました');
+                console.log('広告が再生されました', Date.now());
             });
-            // 広告エラーが発生した時
             api.on('AdError', function(message, error){
-                console.log('広告エラー: ', message, error);
+                console.log('広告エラー:', message, error, Date.now());
             });
-            // 広告の音量が変更された時
             api.on('AdVolumeChange', function(){
-                console.log('広告の音量が変更されました');
+                console.log('広告の音量が変更されました', Date.now());
             });
-            // 広告がスキップ可能になった時
             api.on('AdSkippableStateChange', function(){
-                console.log('広告がスキップ可能になりました');
+                console.log('広告がスキップ可能になりました', Date.now());
             });
-            // 広告クリックスルーが発生した時
             api.on('AdClickThru', function(){
-                console.log('広告がクリックされました');
+                console.log('広告がクリックされました', Date.now());
             });
-            // ユーザーが広告を閉じた時
             api.on('AdUserClose', function(){
-                console.log('広告が閉じられました');
+                console.log('広告が閉じられました', Date.now());
             });
     }
 });
