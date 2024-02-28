@@ -139,12 +139,7 @@
             api.on('AdUserClose', function(){
                 console.log('AdUserCloseイベント：広告が閉じられました', Date.now());
             });
-        }
-    });
-});
-    // 広告APIのメソッドを使用するサンプル関数
-function setupAdControls(api) {
-  // 広告を一時停止
+          // 広告を一時停止
   document.getElementById('pauseAdButton').addEventListener('click', function() {
     api.pauseAd();
     console.log('広告が一時停止されました');
@@ -206,7 +201,10 @@ function setupAdControls(api) {
     var skippableState = api.getAdSkippableState();
     console.log('広告がスキップ可能か:', skippableState);
   });
-}
+        }
+    });
+});
+
 </script>
 </body>
 </html>
