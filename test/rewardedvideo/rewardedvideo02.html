@@ -47,25 +47,77 @@
 
 
   <script>
-document.getElementById('showAdButton').addEventListener('click', function() {
-    const placement_id = 'ppk2LDAXpzyt'; 
+    document.getElementById('showAdButton').addEventListener('click', function() {
+    const placement_id = 'ppk2LDAXpzyt';
     const el = document.createElement('div');
     document.body.append(el);
     (playerPro=window.playerPro||[]).push({
         id:placement_id,
         after:el,
         init: (api) => {
+            // 広告がロードされた時
+            api.on('AdLoaded', function(){
+                console.log('広告がロードされました');
+            });
+            // 広告が開始された時
+            api.on('AdStarted', function(){
+                console.log('広告が開始しました');
+            });
+            // 動画広告が開始された時
+            api.on('AdVideoStart', function(){
+                console.log('動画広告が開始しました');
+            });
+            // 動画広告の進捗が25%に達した時
+            api.on('AdVideoFirstQuartile', function(){
+                console.log('進捗25%に達しました');
+            });
+            // 動画広告の進捗が50%に達した時
+            api.on('AdVideoMidpoint', function(){
+                console.log('進捗50%に達しました');
+            });
+            // 動画広告の進捗が75%に達した時
+            api.on('AdVideoThirdQuartile', function(){
+                console.log('進捗75%に達しました');
+            });
+            // 動画広告が完了した時
+            api.on('AdVideoComplete', function(){
+                console.log('動画再生完了イベント');
+            });
+            // 広告が停止された時
             api.on('AdStopped', function(){
-                alert('インセンティブ獲得！');
+                console.log('広告が停止しました');
             });
-            api.on('AdUserClose', function(){
-                alert('閉じる押したからインセンティブ獲得なし');
-            });
+            // 広告がスキップされた時
             api.on('AdSkipped', function(){
-                alert('スキップしたからインセンティブ獲得なし');
+                console.log('広告がスキップされました');
             });
-            api.on('AdError', function(){
-                alert('広告エラー');
+            // 広告が一時停止された時
+            api.on('AdPaused', function(){
+                console.log('広告が一時停止しました');
+            });
+            // 広告が再生された時
+            api.on('AdPlaying', function(){
+                console.log('広告が再生されました');
+            });
+            // 広告エラーが発生した時
+            api.on('AdError', function(message, error){
+                console.log('広告エラー: ', message, error);
+            });
+            // 広告の音量が変更された時
+            api.on('AdVolumeChange', function(){
+                console.log('広告の音量が変更されました');
+            });
+            // 広告がスキップ可能になった時
+            api.on('AdSkippableStateChange', function(){
+                console.log('広告がスキップ可能になりました');
+            });
+            // 広告クリックスルーが発生した時
+            api.on('AdClickThru', function(){
+                console.log('広告がクリックされました');
+            });
+            // ユーザーが広告を閉じた時
+            api.on('AdUserClose', function(){
+                console.log('広告が閉じられました');
             });
         }
     });
