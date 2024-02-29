@@ -130,6 +130,8 @@ document.addEventListener('DOMContentLoaded', function() {
     <button id="resizeAdButton" class="ad-control-btn">広告をリサイズ</button>
     <input id="widthInput" type="number" placeholder="幅(px)" style="margin: 10px auto; display: block;">
     <input id="heightInput" type="number" placeholder="高さ(px)" style="margin: 10px auto; display: block;">
+    <input id="getAdWidthButton" class="ad-control-btn">現在再生中の広告（プレーヤー）の幅</button>
+    <input id="getAdHeightButton" class="ad-control-btn">現在再生中の広告（プレーヤー）の高さ</button>
     <button id="getRemainingTimeButton" class="ad-control-btn">残り時間を取得</button>
     <button id="getDurationButton" class="ad-control-btn">総再生時間を取得</button>
     <button id="getSkippableStateButton" class="ad-control-btn">スキップ可能状態を取得</button>
@@ -237,6 +239,18 @@ document.addEventListener('DOMContentLoaded', function() {
               var height = parseInt(document.getElementById('heightInput').value, 10);
               api.resizeAd(width, height);
               console.log('広告がリサイズされました:', width, height);
+            });
+          
+            // 現在再生中の広告（プレーヤー）の幅を取得
+            document.getElementById('getAdWidthButton').addEventListener('click', function() {
+              var AdWidth = api.getAdWidth();
+              console.log('現在再生中の広告（プレーヤー）の幅:', AdWidth);
+            });
+                    
+            // 現在再生中の広告（プレーヤー）の高さを取得
+            document.getElementById('getAdHeightButton').addEventListener('click', function() {
+              var AdHeight = api.getAdHeight();
+              console.log('現在再生中の広告（プレーヤー）の高さ:', AdHeight);
             });
           
             // 広告の再生時間を取得
