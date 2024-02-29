@@ -18,12 +18,13 @@
         .ad-control-btn {
             display: block;
             margin: 10px auto;
-            padding: 10px 20px;
+            padding: 5px 20px;
             background-color: #fff;
             color: #000;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 11px;
         }
     </style>
   <meta name="demo" content="demo">
@@ -130,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
     <button id="resizeAdButton" class="ad-control-btn">広告をリサイズ</button>
     <input id="widthInput" type="number" placeholder="幅(px)" style="margin: 10px auto; display: block;">
     <input id="heightInput" type="number" placeholder="高さ(px)" style="margin: 10px auto; display: block;">
-    <input id="getAdWidthButton" class="ad-control-btn">現在再生中の広告（プレーヤー）の幅</button>
-    <input id="getAdHeightButton" class="ad-control-btn">現在再生中の広告（プレーヤー）の高さ</button>
+    <button id="getAdWidthButton" class="ad-control-btn">現在再生中の広告の幅</button>
+    <button id="getAdHeightButton" class="ad-control-btn">現在再生中の広告の高さ</button>
     <button id="getRemainingTimeButton" class="ad-control-btn">残り時間を取得</button>
     <button id="getDurationButton" class="ad-control-btn">総再生時間を取得</button>
     <button id="getSkippableStateButton" class="ad-control-btn">スキップ可能状態を取得</button>
