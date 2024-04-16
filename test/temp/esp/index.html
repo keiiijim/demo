@@ -1,0 +1,52 @@
+<html>
+<head>
+	<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+
+	<!-- Variables must be set ** AFTER **  this line -->
+	<script src="novatiq_gam_integration.js"></script>
+
+
+	<script>
+		///////////////////////////////////////////////////////
+		// Set vars here
+
+		// if adform_sspId is not blank that value will be used for any adform calls
+		// otherwise sspId will be used
+		// adform_sspId = "yyy"
+
+		sspId = 'adgaterubicon';
+		pubId = 'demopublisher';
+		dspUser = 'novademo';
+		clientID = "novatiq";
+
+		// none = programmatic (gam - returns audiences)
+		// adform = adform only
+		// both = both (returns audiences)
+		adformIntegration = "none";
+		///////////////////////////////////////////////////////
+	</script>
+</head>
+
+<body>
+	<div className="result"></div>
+	<script>
+		// Variables must be set ** BEFORE **  this line
+		doSync();
+	</script>
+	<div id="banner-ad" style="width: 300px; height: 250px;">
+		<script>
+			function showAd() {
+				googletag.cmd.push(function () {
+					// console.log("Banner Ad Display method Called!");
+					// googletag.display('banner-ad');
+					// googletag.pubads().refresh();
+					// console.log("Refresh!");
+				});
+			}
+		</script>
+	</div>
+	</body>
+	</html>
+	
+	
+	
