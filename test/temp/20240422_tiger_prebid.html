@@ -97,21 +97,34 @@ pbjs.setConfig({
 
     </head>
 
-    <body>
-        <div style="height: 1000px;width: 100%;">
-        <h2>Prebid.js Example</h2>
-        <h5>Div 300x250 枠ID:181492 </h5>
-	<h5>Auction delay 50ms </h5>
-        <div style="height: 300px;width: 250px;">
-            <div id='div'>
-                <script type='text/javascript'>
-                    googletag.cmd.push(function() {
-                        googletag.display('div');
-                    });
-                </script>
-            </div>
-        </div>
-<div id="result">
+
+
+<body>
+  <div class="wrapper">
+    <div class="box-a">
+      <div class="logo"></div>
+      <div class="billboard">
+        <!-- demo_SP_320x180 -->
+        
+      </div>
+      <div class="navi"></div>
+    </div>
+    <div class="box-b">
+      <div class="title"><h2>Prebid.js Example</h2></div>
+      <div class="subtitle">300x250 枠ID:197069</div>
+      <div class="article"></div>
+      <div class="article"></div>
+      <div class="article"></div>
+      <!-- demo_SP_inread -->
+     
+      <div class="article"></div>
+      <div class="article"></div>
+    </div>
+    <div class="rect">
+      <!-- demo_SP_1st_300x250 -->
+    </div>
+    <div class="box-c">
+	    <div id="result">
 	<p>Hyper id :</p>
 	<p id="resulttext1"></p>
 	<br>
@@ -159,10 +172,8 @@ setTimeout(function() {
 
 }, 2000);  // 2秒待機してから実行
 </script>
-
-	
-        
-        </div>
-    </body>
-
+    </div>
+  </div>
+  <div id="demo_SP_overlay"></div>
+</body>
 </html>
