@@ -1,0 +1,61 @@
+<html>
+  <head></head>
+  <body>
+<script type="text/javascript">
+    /* パラメータを渡す側 */
+    function send() {
+
+        /* size */
+        var size="";
+        if(document.form1.size[0].checked){
+            size = escape(document.form1.size[0].value);
+        }else if(document.form1.size[1].checked){
+            size = escape(document.form1.size[1].value);
+        }else if(document.form1.size[2].checked){
+            size = escape(document.form1.size[2].value);
+        }else if(document.form1.size[3].checked){
+            size = escape(document.form1.size[3].value);
+        }else if(document.form1.size[4].checked){
+            size = escape(document.form1.size[4].value);
+        }else if(document.form1.size[5].checked){
+            size = escape(document.form1.size[5].value);
+        }else if(document.form1.size[6].checked){
+            size = escape(document.form1.size[6].value);
+        }else if(document.form1.size[7].checked){
+            size = escape(document.form1.size[7].value);
+        }else if(document.form1.size[8].checked){
+            size = escape(document.form1.size[8].value);
+        }
+
+
+        var pram=size="+size;
+        location.href="20240524_tiger_prebid2.html?"+pram;
+        return false;
+    }
+</script>
+
+<!-- ★送信フォーム [start] -->
+<form action="#" method="get" name="form1" onsubmit="return send();">
+    <fieldset>
+        <legend>表示確認をするサイズ・PageID選択</legend>
+
+       <p>
+    サイズ：
+    <input type="radio" name="size" value="300x250" checked="checked">300x250　page_id:197069
+    <input type="radio" name="size" value="336x280">336x280_PB　page_id:198143
+    <input type="radio" name="size" value="728x90">728x90_PB　page_id:198141
+    <input type="radio" name="size" value="468x60">468x60_PB　page_id:198144
+    <input type="radio" name="size" value="250x250">250x250_PB　page_id:198142
+    <input type="radio" name="size" value="160x600">160x600_PB　page_id:198145
+    <input type="radio" name="size" value="300x600">300x600_PB　page_id:198146
+    <input type="radio" name="size" value="320x50_PB">320x50_PB　page_id:198147
+    <input type="radio" name="size" value="320x100_PB">320x100_PB　page_id:198148
+</p>
+
+        <p>
+            <input type="submit" value="送信" />
+        </p>
+    </fieldset>
+</form>
+    </body>
+      </html>
