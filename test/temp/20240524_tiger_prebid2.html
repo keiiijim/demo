@@ -21,6 +21,7 @@
 
         function Create_prebid() {
             const size = getParameterByName('size');
+            console.log('Received size parameter:', size);
 
             const sizeMap = {
                 "300x250": [300, 250],
@@ -47,6 +48,9 @@
 
             const selectedSize = sizeMap[size];
             const selectedId = idMap[size];
+
+            console.log('Selected size:', selectedSize);
+            console.log('Selected ID:', selectedId);
 
             if (selectedSize && selectedId) {
                 var div_sizes = [selectedSize];
