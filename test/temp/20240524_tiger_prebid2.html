@@ -10,7 +10,7 @@
     <script>
         /* アドレスの「?」以降の引数(パラメータ)を取得 */
        function getParameterByName(name) {
-            const params = new URLSearchParams(window.location.search);
+            const params = window.location.search.substring(1);
             return params.get(name);
         }
 
