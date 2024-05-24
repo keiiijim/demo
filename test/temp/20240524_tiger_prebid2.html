@@ -21,25 +21,25 @@
 
            const sizeMap = {
                 "300x250": [300, 250],
-                "336x280_PB": [336, 280],
-                "728x90_PB": [728, 90],
-                "468x60_PB": [468, 60],
-                "250x250_PB": [250, 250],
-                "160x600_PB": [160, 600],
-                "300x600_PB": [300, 600],
-                "320x50_PB": [320, 50],
-                "320x100_PB": [320, 100]
+                "336x280": [336, 280],
+                "728x90": [728, 90],
+                "468x60": [468, 60],
+                "250x250": [250, 250],
+                "160x600": [160, 600],
+                "300x600": [300, 600],
+                "320x50": [320, 50],
+                "320x100": [320, 100]
             };
             const idMap = {
                 "300x250": '197069',
-                "336x280_PB": '198143',
-                "728x90_PB": '198141',
-                "468x60_PB": '198144',
-                "250x250_PB": '198142',
-                "160x600_PB": '198145',
-                "300x600_PB": '198146',
-                "320x50_PB": '198147',
-                "320x100_PB": '198148'
+                "336x280": '198143',
+                "728x90": '198141',
+                "468x60": '198144',
+                "250x250": '198142',
+                "160x600": '198145',
+                "300x600": '198146',
+                "320x50": '198147',
+                "320x100": '198148'
             };
            const selectedSize = sizeMap[size];
           　　const selectedId = idMap[size];
@@ -120,6 +120,8 @@
                 googletag.enableServices();
             });
 
+		document.getElementById('selectedSize').textContent = JSON.stringify(selectedSize);
+                document.getElementById('selectedId').textContent = selectedId;
          }
           window.onload = Create_prebid;
         </script>
@@ -137,7 +139,7 @@
             <div class="box-b">
                 <div class="title"></div>
                 <div class="subtitle"></div>
-                <div class="article">[[300, 250], [336, 280], [728, 90], [468, 60], [250, 250], [160, 600], [300, 600],[320, 50],[320, 100]]<br> 枠ID:197069</div>
+		     <div class="article">選択されたサイズ: <span id="selectedSize"></span><br> 枠ID: <span id="selectedId"></span></div>
             </div>
             <div class="rect">
             <!-- demo_SP_1st_300x250 -->
