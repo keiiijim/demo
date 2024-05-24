@@ -133,7 +133,15 @@
             }
         }
 
-        window.onload = Create_prebid;
+        window.onload = function() {
+            if (typeof googletag !== 'undefined' && googletag.apiReady) {
+                Create_prebid();
+            } else {
+                googletag = googletag || {};
+                googletag.cmd = googletag.cmd || [];
+                googletag.cmd.push(Create_prebid);
+            }
+        };
     </script>
 </head>
 <body>
