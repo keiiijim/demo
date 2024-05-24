@@ -9,13 +9,13 @@
     <script async src="../prebid/prebid7.7.0.js"></script>
     <script>
         /* アドレスの「?」以降の引数(パラメータ)を取得 */
-       function getParameterByName(name) {
-            const params = window.location.search.substring(1);
-            return params.get(name);
+      function getQueryParameter() {
+            const query = window.location.search.substring(1); // '?'を取り除く
+            return query;
         }
 
         function Create_prebid() {
-            const size = getParameterByName('size');
+            const size = getQueryParameter();
             console.log('Received size parameter:', size);
 
             const sizeMap = {
