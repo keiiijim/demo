@@ -9,14 +9,9 @@
     <script async src="../prebid/prebid7.7.0.js"></script>
     <script>
         /* アドレスの「?」以降の引数(パラメータ)を取得 */
-        function getParameterByName(name) {
-            const url = window.location.href;
-            name = name.replace(/[\[\]]/g, '\\$&');
-            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-            const results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+       function getParameterByName(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
         }
 
         function Create_prebid() {
