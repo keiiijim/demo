@@ -91,9 +91,7 @@
                             processResults();
                             if (currentIteration < MAX_ITERATIONS) {
                                 currentIteration++;
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 2000);  // 2秒待機してからページをリロード
+                                setTimeout(runPrebid, 2000);  // 2秒待機してから次のリクエスト
                             } else {
                                 displayResults();
                             }
@@ -141,6 +139,7 @@
                 };
 
                 results.push(result);
+                performance.clearResourceTimings();
             }
 
             function displayResults() {
