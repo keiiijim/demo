@@ -136,58 +136,68 @@ pbjs.setConfig({
                 </script>
             </div>
         </div>
-<div id="result">
-	<p>Hyper id :</p>
-	<p id="resulttext1"></p>
-	<br>
-	<p>responce code :</p>	
-	<p id="resulttext2"></p>
-</div>
-<script>
-setTimeout(function() {
-    var resources = performance.getEntriesByType("resource");
-    var hyperidValues = [];
-
-    // snowflakeの値をhyperidValuesとして取得
-    for (var i = 0; i < resources.length; i++) {
-        if (resources[i].name.startsWith('https://spadsync.com')) {
-            var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
-            if (match) {
-                hyperidValues.push(match[1]);
-            }
-        }
-    }
-
-    var resultParagraph1 = document.getElementById('resulttext1');
-    if (hyperidValues.length > 0) {
-        resultParagraph1.textContent = hyperidValues.join(', ');
-    } else {
-        resultParagraph1.textContent = 'null';
-    }
-
-    var resultParagraph2 = document.getElementById('resulttext2');
-    var found = false;
-
-    // https://d.socdm.com/adsv/v1?で始まるリソースの中でhyperidの値が含まれているかを確認
-    for (var i = 0; i < resources.length; i++) {
-        if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
-            for (var j = 0; j < hyperidValues.length; j++) {
-                if (resources[i].name.includes(hyperidValues[j])) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    resultParagraph2.textContent = found ? '200' : '204';
-
-}, 2000);  // 2秒待機してから実行
-</script>
-
-	
-        
+        <div id="result">
+	        <p>Hyper id :</p>
+	        <p id="resulttext1"></p>
+	        <br>
+	        <p>responce code :</p>	
+	        <p id="resulttext2"></p>
+            <br>
+            <p>Response time:</p>
+            <p id="resulttext3"></p>
         </div>
-    </body>
+        <script>
+            setTimeout(function() {
+                var resources = performance.getEntriesByType("resource");
+                var hyperidValues = [];
+                var responseTime = null;
 
+                // snowflakeの値をhyperidValuesとして取得
+                for (var i = 0; i < resources.length; i++) {
+                    if (resources[i].name.startsWith('https://spadsync.com')) {
+                        var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+                        if (match) {
+                            hyperidValues.push(match[1]);
+                        }
+
+                        if (resources[i].name.includes('/sync')) {
+                            responseTime = resources[i].responseEnd - resources[i].startTime;
+                        }
+                    }
+                }
+
+                var resultParagraph1 = document.getElementById('resulttext1');
+                if (hyperidValues.length > 0) {
+                    resultParagraph1.textContent = hyperidValues.join(', ');
+                } else {
+                    resultParagraph1.textContent = 'null';
+                }
+
+                var resultParagraph2 = document.getElementById('resulttext2');
+                var found = false;
+
+                // https://d.socdm.com/adsv/v1?で始まるリソースの中でhyperidの値が含まれているかを確認
+                for (var i = 0; i < resources.length; i++) {
+                    if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                        for (var j = 0; j < hyperidValues.length; j++) {
+                            if (resources[i].name.includes(hyperidValues[j])) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                resultParagraph2.textContent = found ? '200' : '204';
+
+                var resultParagraph3 = document.getElementById('resulttext3');
+                if (responseTime !== null) {
+                    resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
+                } else {
+                    resultParagraph3.textContent = 'null';
+                }
+
+            }, 2000);  // 2秒待機してから実行
+        </script>
+    </body>
 </html>
