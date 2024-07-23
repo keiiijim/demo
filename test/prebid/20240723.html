@@ -139,6 +139,9 @@
                 <br>
                 <p>Time to d.socdm.com:</p>
                 <p id="resulttext4"></p>
+                <br>
+                <p>Request start time to d.socdm.com:</p>
+                <p id="resulttext5"></p>
             </div>
             <script>
                 setTimeout(function() {
@@ -147,6 +150,7 @@
                     var responseTime = null;
                     var syncStartTime = null;
                     var socdmCallTime = null;
+                    var socdmRequestStartTime = null;
 
                     for (var i = 0; i < resources.length; i++) {
                         if (resources[i].name.startsWith('https://spadsync.com')) {
@@ -166,6 +170,7 @@
                         if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
                             if (syncStartTime !== null) {
                                 socdmCallTime = resources[i].startTime - syncStartTime;
+                                socdmRequestStartTime = resources[i].requestStart;
                                 break;
                             }
                         }
@@ -206,6 +211,13 @@
                         resultParagraph4.textContent = socdmCallTime.toFixed(2) + ' ms';
                     } else {
                         resultParagraph4.textContent = 'null';
+                    }
+
+                    var resultParagraph5 = document.getElementById('resulttext5');
+                    if (socdmRequestStartTime !== null) {
+                        resultParagraph5.textContent = socdmRequestStartTime.toFixed(2) + ' ms';
+                    } else {
+                        resultParagraph5.textContent = 'null';
                     }
 
                 }, 2000);  // 2秒待機してから実行
