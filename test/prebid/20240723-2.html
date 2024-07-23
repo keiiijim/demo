@@ -1,0 +1,190 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+        <script async src="prebid_local.js"></script>
+        <!-- Novatiq 204以外を200 扱いにしたPrebidModule搭載版 -->
+        <script>
+            var div_sizes = [[300, 250]];
+            var PREBID_TIMEOUT = 10000;
+            var FAILSAFE_TIMEOUT = 5000;
+            var MAX_ITERATIONS = 10;
+            var currentIteration = 0;
+            var results = [];
+
+            var adUnits = [
+                {
+                    code: '/18339668/test_demo/prebid_300x250',
+                    mediaTypes: {
+                        banner: {
+                            sizes: div_sizes
+                        }
+                    },
+                    bids: [{
+                        bidder: 'adg',
+                        params: {
+                            id: '181492'
+                        }
+                    },{
+                        bidder: 'appnexus',
+                        params: {
+                            placementId: 13144370
+                        }
+                    }]
+                }
+            ];
+
+            var googletag = googletag || {};
+            googletag.cmd = googletag.cmd || [];
+            googletag.cmd.push(function() {
+                googletag.pubads().disableInitialLoad();
+            });
+
+            var pbjs = pbjs || {};
+            pbjs.que = pbjs.que || [];
+
+            function runPrebid() {
+                pbjs.que.push(function() {
+                    pbjs.setConfig({
+                        userSync: {
+                            auctionDelay: 1000,
+                            userIds: [{
+                                name: 'criteo'
+                            }, {
+                                name: 'sharedId',
+                                storage: {
+                                    name: "_sharedID",
+                                    type: "cookie",
+                                    expires: 90
+                                }
+                            }, {
+                                name: 'id5Id',
+                                params: {
+                                    partner: 1142
+                                },
+                                storage: {
+                                    type: "html5",
+                                    name: "id5id",
+                                    expires: 90,
+                                    refreshInSeconds: 28800
+                                }
+                            },{
+                                name: 'novatiq',
+                                params: {
+                                    useSharedId: false,
+                                    useCallbacks: true,
+                                    urlParams: {
+                                        novatiqId: "snowflake",
+                                        useStandardUuid: true,
+                                        useSspId: false,
+                                        useSspHost: false
+                                    },
+                                }
+                            }]
+                        }
+                    });
+
+                    pbjs.addAdUnits(adUnits);
+
+                    pbjs.requestBids({
+                        bidsBackHandler: function() {
+                            processResults();
+                            if (currentIteration < MAX_ITERATIONS) {
+                                currentIteration++;
+                                setTimeout(runPrebid, 2000);  // 2秒待機してから次のリクエスト
+                            } else {
+                                displayResults();
+                            }
+                        },
+                        timeout: PREBID_TIMEOUT
+                    });
+                });
+            }
+
+            function processResults() {
+                var resources = performance.getEntriesByType("resource");
+                var hyperidValues = [];
+                var responseTime = null;
+                var syncStartTime = null;
+                var socdmCallTime = null;
+
+                for (var i = 0; i < resources.length; i++) {
+                    if (resources[i].name.startsWith('https://spadsync.com')) {
+                        var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+                        if (match) {
+                            hyperidValues.push(match[1]);
+                        }
+
+                        if (resources[i].name.includes('/sync')) {
+                            responseTime = resources[i].responseEnd - resources[i].startTime;
+                            syncStartTime = resources[i].startTime;
+                        }
+                    }
+                }
+
+                for (var i = 0; i < resources.length; i++) {
+                    if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                        if (syncStartTime !== null) {
+                            socdmCallTime = resources[i].startTime - syncStartTime;
+                            break;
+                        }
+                    }
+                }
+
+                var result = {
+                    hyperId: (hyperidValues.length > 0) ? hyperidValues.join(', ') : 'null',
+                    responseCode: (socdmCallTime !== null) ? '200' : '204',
+                    responseTime: (responseTime !== null) ? responseTime.toFixed(2) + ' ms' : 'null',
+                    socdmCallTime: (socdmCallTime !== null) ? socdmCallTime.toFixed(2) + ' ms' : 'null'
+                };
+
+                results.push(result);
+            }
+
+            function displayResults() {
+                var resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = '<h2>Results</h2>';
+                results.forEach(function(result, index) {
+                    resultDiv.innerHTML += '<p>Iteration ' + (index + 1) + ':</p>';
+                    resultDiv.innerHTML += '<p>Hyper id: ' + result.hyperId + '</p>';
+                    resultDiv.innerHTML += '<p>Response code: ' + result.responseCode + '</p>';
+                    resultDiv.innerHTML += '<p>Response time: ' + result.responseTime + '</p>';
+                    resultDiv.innerHTML += '<p>Time to d.socdm.com: ' + result.socdmCallTime + '</p>';
+                    resultDiv.innerHTML += '<br>';
+                });
+            }
+
+            googletag.cmd.push(function() {
+                googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div').addService(googletag.pubads());
+                googletag.pubads().enableSingleRequest();
+                googletag.enableServices();
+            });
+
+            setTimeout(function() {
+                runPrebid();
+            }, FAILSAFE_TIMEOUT);
+
+        </script>
+
+    </head>
+
+    <body>
+        <div style="height: 1000px;width: 100%;">
+            <h2>Prebid.js Example</h2>
+            <h5>Div 300x250 枠ID:181492 </h5>
+            <h5>Auction delay 1000ms </h5>
+            <div style="height: 300px;width: 250px;">
+                <div id='div'>
+                    <script type='text/javascript'>
+                        googletag.cmd.push(function() {
+                            googletag.display('div');
+                        });
+                    </script>
+                </div>
+            </div>
+            <div id="result">
+                <h2>Results</h2>
+            </div>
+        </div>
+    </body>
+</html>
