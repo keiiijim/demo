@@ -10,7 +10,7 @@
             var FAILSAFE_TIMEOUT = 5000;
             var MAX_ITERATIONS = 10;
             var currentIteration = 0;
-            var results = [];
+            var results = JSON.parse(localStorage.getItem('results')) || [];
 
             var adUnits = [
                 {
@@ -91,9 +91,13 @@
                             processResults();
                             if (currentIteration < MAX_ITERATIONS) {
                                 currentIteration++;
-                                setTimeout(runPrebid, 2000);  // 2秒待機してから次のリクエスト
+                                setTimeout(function() {
+                                    localStorage.setItem('results', JSON.stringify(results));
+                                    location.reload();
+                                }, 2000);  // 2秒待機してからページをリロード
                             } else {
                                 displayResults();
+                                localStorage.removeItem('results');
                             }
                         },
                         timeout: PREBID_TIMEOUT
