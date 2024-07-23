@@ -91,7 +91,9 @@
                             processResults();
                             if (currentIteration < MAX_ITERATIONS) {
                                 currentIteration++;
-                                setTimeout(runPrebid, 2000);  // 2秒待機してから次のリクエスト
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2000);  // 2秒待機してからページをリロード
                             } else {
                                 displayResults();
                             }
