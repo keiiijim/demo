@@ -226,6 +226,7 @@
                     var responseTime = null;
                     var syncStartTime = null;
                     var socdmCallTime = null;
+                    var date = new Date().toLocaleString();
 
                     for (var i = 0; i < resources.length; i++) {
                         if (resources[i].name.startsWith('https://spadsync.com')) {
@@ -286,6 +287,24 @@
                     } else {
                         resultParagraph4.textContent = 'null';
                     }
+
+                    // Add the current result with date
+                    var currentResult = {
+                        date: date,
+                        hyperId: resultParagraph1.textContent,
+                        responseCode: resultParagraph2.textContent,
+                        responseTime: resultParagraph3.textContent,
+                        socdmCallTime: resultParagraph4.textContent
+                    };
+
+                    var previousResults = localStorage.getItem('previousResults');
+                    if (previousResults) {
+                        previousResults = JSON.parse(previousResults);
+                    } else {
+                        previousResults = [];
+                    }
+                    previousResults.push(currentResult);
+                    localStorage.setItem('previousResults', JSON.stringify(previousResults));
 
                 }, 2000);  // 2秒待機してから実行
             </script>
