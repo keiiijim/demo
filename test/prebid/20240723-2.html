@@ -12,15 +12,17 @@
             var currentIteration = localStorage.getItem('currentIteration') ? parseInt(localStorage.getItem('currentIteration')) : 0;
             var results = JSON.parse(localStorage.getItem('results')) || [];
 
-            if (currentIteration >= MAX_ITERATIONS) {
-                displayResults();
-                localStorage.removeItem('results');
-                localStorage.removeItem('currentIteration');
-            } else {
-                currentIteration++;
-                localStorage.setItem('currentIteration', currentIteration);
-                runPrebid();
-            }
+            document.addEventListener("DOMContentLoaded", function() {
+                if (currentIteration >= MAX_ITERATIONS) {
+                    displayResults();
+                    localStorage.removeItem('results');
+                    localStorage.removeItem('currentIteration');
+                } else {
+                    currentIteration++;
+                    localStorage.setItem('currentIteration', currentIteration);
+                    runPrebid();
+                }
+            });
 
             function runPrebid() {
                 var adUnits = [
@@ -164,14 +166,18 @@
 
             function displayResults() {
                 var resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = '<h2>Results</h2>';
-                results.forEach(function(result, index) {
-                    resultDiv.innerHTML += '<h3>Iteration ' + (index + 1) + '</h3>';
-                    resultDiv.innerHTML += '<p>Hyper id: ' + result.hyperId + '</p>';
-                    resultDiv.innerHTML += '<p>Response code: ' + result.responseCode + '</p>';
-                    resultDiv.innerHTML += '<p>Response time: ' + result.responseTime + '</p>';
-                    resultDiv.innerHTML += '<p>Time to d.socdm.com: ' + result.socdmCallTime + '</p>';
-                });
+                if (resultDiv) {
+                    resultDiv.innerHTML = '<h2>Results</h2>';
+                    results.forEach(function(result, index) {
+                        var resultContainer = document.createElement('div');
+                        resultContainer.innerHTML = `<h3>Iteration ${index + 1}</h3>
+                            <p>Hyper id: ${result.hyperId}</p>
+                            <p>Response code: ${result.responseCode}</p>
+                            <p>Response time: ${result.responseTime}</p>
+                            <p>Time to d.socdm.com: ${result.socdmCallTime}</p>`;
+                        resultDiv.appendChild(resultContainer);
+                    });
+                }
             }
 
         </script>
