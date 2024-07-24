@@ -4,6 +4,16 @@
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
         <script async src="prebid7.7.0.js"></script>
         
+        <style>
+            .result-section {
+                margin-bottom: 20px;
+            }
+            .result-section p {
+                margin: 5px 0;
+                font-size: 14px;
+            }
+        </style>
+
         <script>
             var div_sizes = [[300, 250]];
             var PREBID_TIMEOUT = 10000;
@@ -127,18 +137,11 @@
                     </script>
                 </div>
             </div>
-            <div id="result">
-                <p>Hyper id :</p>
-                <p id="resulttext1"></p>
-                <br>
-                <p>responce code :</p>    
-                <p id="resulttext2"></p>
-                <br>
-                <p>Response time:</p>
-                <p id="resulttext3"></p>
-                <br>
-                <p>Time to d.socdm.com:</p>
-                <p id="resulttext4"></p>
+            <div id="result" class="result-section">
+                <p><strong>Hyper id:</strong> <span id="resulttext1"></span></p>
+                <p><strong>Response code:</strong> <span id="resulttext2"></span></p>
+                <p><strong>Response time:</strong> <span id="resulttext3"></span></p>
+                <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
             </div>
             <script>
                 setTimeout(function() {
