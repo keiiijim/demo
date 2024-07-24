@@ -141,7 +141,7 @@
             }
 
             function displayPreviousResults() {
-                var previousResults = localStorage.getItem('previousResults');
+                var previousResults = getUrlParameter('previousResults');
                 if (previousResults) {
                     previousResults = JSON.parse(previousResults);
                     var previousResultContainer = document.getElementById('previous-results');
@@ -160,34 +160,29 @@
                 }
             }
 
-            function addCurrentResult() {
+            function reloadPage() {
                 var date = new Date().toLocaleString();
-                var result = {
+                var currentResult = {
                     date: date,
                     hyperId: document.getElementById('resulttext1').textContent,
                     responseCode: document.getElementById('resulttext2').textContent,
                     responseTime: document.getElementById('resulttext3').textContent,
                     socdmCallTime: document.getElementById('resulttext4').textContent
                 };
-                
-                var previousResults = localStorage.getItem('previousResults');
+
+                var previousResults = getUrlParameter('previousResults');
                 if (previousResults) {
                     previousResults = JSON.parse(previousResults);
                 } else {
                     previousResults = [];
                 }
-                previousResults.push(result);
-                localStorage.setItem('previousResults', JSON.stringify(previousResults));
-            }
-
-            function reloadPage() {
-                addCurrentResult();
-                window.location.reload();
+                previousResults.push(currentResult);
+                var queryString = `?previousResults=${encodeURIComponent(JSON.stringify(previousResults))}`;
+                window.location.href = window.location.pathname + queryString;
             }
 
             function resetResults() {
-                localStorage.removeItem('previousResults');
-                window.location.reload();
+                window.location.href = window.location.pathname;
             }
 
             document.addEventListener("DOMContentLoaded", function() {
@@ -287,24 +282,6 @@
                     } else {
                         resultParagraph4.textContent = 'null';
                     }
-
-                    // Add the current result with date
-                    var currentResult = {
-                        date: date,
-                        hyperId: resultParagraph1.textContent,
-                        responseCode: resultParagraph2.textContent,
-                        responseTime: resultParagraph3.textContent,
-                        socdmCallTime: resultParagraph4.textContent
-                    };
-
-                    var previousResults = localStorage.getItem('previousResults');
-                    if (previousResults) {
-                        previousResults = JSON.parse(previousResults);
-                    } else {
-                        previousResults = [];
-                    }
-                    previousResults.push(currentResult);
-                    localStorage.setItem('previousResults', JSON.stringify(previousResults));
 
                 }, 2000);  // 2秒待機してから実行
             </script>
