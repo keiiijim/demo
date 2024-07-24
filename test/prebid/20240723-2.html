@@ -10,7 +10,7 @@
             var FAILSAFE_TIMEOUT = 5000;
             var MAX_ITERATIONS = 3;
             var currentIteration = 0;
-            var results = JSON.parse(localStorage.getItem('results')) || [];
+            var results = [];
 
             var adUnits = [
                 {
@@ -91,12 +91,8 @@
                             processResults();
                             if (currentIteration < MAX_ITERATIONS) {
                                 currentIteration++;
-                                setTimeout(function() {
-                                    localStorage.setItem('results', JSON.stringify(results));
-                                    location.reload();
-                                }, 2000);  // 2秒待機してからページをリロード
+                                setTimeout(runPrebid, 2000);  // 2秒待機してから次のリクエスト
                             } else {
-                                displayResults();
                                 localStorage.removeItem('results');
                             }
                         },
@@ -143,6 +139,7 @@
                 };
 
                 results.push(result);
+                displayResults();
                 performance.clearResourceTimings();
             }
 
