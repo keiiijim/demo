@@ -12,6 +12,12 @@
                 margin: 5px 0;
                 font-size: 14px;
             }
+            .reload-button {
+                margin-top: 20px;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
         </style>
 
         <script>
@@ -143,6 +149,7 @@
                 <p><strong>Response time:</strong> <span id="resulttext3"></span></p>
                 <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
             </div>
+            <button class="reload-button" onclick="location.reload();">Reload</button>
             <script>
                 setTimeout(function() {
                     var resources = performance.getEntriesByType("resource");
