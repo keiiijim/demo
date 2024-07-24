@@ -88,6 +88,7 @@
                 var responseTime = null;
                 var syncStartTime = null;
                 var socdmCallTime = null;
+                var spadsyncResponseTime = '-';
                 var date = new Date().toLocaleString();
 
                 document.getElementById('requesttime').textContent = date;
@@ -108,6 +109,12 @@
 
                 for (var i = 0; i < resources.length; i++) {
                     if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                        var spadsyncStatusCode = resources[i].name.match(/spadsync_statuscode=(\d+)/);
+                        var spadsyncResponseTimeMatch = resources[i].name.match(/spadsync_responsetime=(\d+)/);
+                        if (spadsyncStatusCode && spadsyncStatusCode[1] == '200' && spadsyncResponseTimeMatch) {
+                            spadsyncResponseTime = spadsyncResponseTimeMatch[1] + ' ms';
+                        }
+
                         if (syncStartTime !== null) {
                             socdmCallTime = resources[i].startTime - syncStartTime;
                             break;
@@ -139,11 +146,7 @@
                 resultParagraph2.textContent = found ? '200' : '204';
 
                 var resultParagraph3 = document.getElementById('resulttext3');
-                if (responseTime !== null) {
-                    resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
-                } else {
-                    resultParagraph3.textContent = 'null';
-                }
+                resultParagraph3.textContent = spadsyncResponseTime;
 
                 var resultParagraph4 = document.getElementById('resulttext4');
                 if (socdmCallTime !== null) {
