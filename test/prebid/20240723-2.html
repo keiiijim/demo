@@ -129,7 +129,8 @@
                 });
 
                 googletag.cmd.push(function() {
-                    googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div-gpt-ad').addService(googletag.pubads());
+                    var slot = googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div-gpt-ad')
+                        .addService(googletag.pubads());
                     googletag.pubads().enableSingleRequest();
                     googletag.enableServices();
                 });
