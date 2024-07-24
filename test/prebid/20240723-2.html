@@ -12,19 +12,32 @@
             var currentIteration = localStorage.getItem('currentIteration') ? parseInt(localStorage.getItem('currentIteration')) : 0;
             var results = JSON.parse(localStorage.getItem('results')) || [];
 
+            function displayResults() {
+                var resultDiv = document.getElementById('result');
+                if (resultDiv) {
+                    results.forEach(function(result, index) {
+                        var resultContainer = document.createElement('div');
+                        resultContainer.innerHTML = `<h3>Iteration ${index + 1}</h3>
+                            <p>Hyper id: ${result.hyperId}</p>
+                            <p>Response code: ${result.responseCode}</p>
+                            <p>Response time: ${result.responseTime}</p>
+                            <p>Time to d.socdm.com: ${result.socdmCallTime}</p>`;
+                        resultDiv.appendChild(resultContainer);
+                    });
+                }
+            }
+
             document.addEventListener("DOMContentLoaded", function() {
-                if (currentIteration >= MAX_ITERATIONS) {
-                    displayResults();
-                    localStorage.removeItem('results');
-                    localStorage.removeItem('currentIteration');
-                } else {
-                    currentIteration++;
-                    localStorage.setItem('currentIteration', currentIteration);
+                displayResults();
+                if (currentIteration < MAX_ITERATIONS) {
                     runPrebid();
                 }
             });
 
             function runPrebid() {
+                currentIteration++;
+                localStorage.setItem('currentIteration', currentIteration);
+
                 var adUnits = [
                     {
                         code: '/18339668/test_demo/prebid_300x250',
@@ -107,9 +120,8 @@
                                     location.reload();
                                 }, 2000);  // 2秒待機してからページをリロード
                             } else {
-                                displayResults();
-                                localStorage.removeItem('results');
                                 localStorage.removeItem('currentIteration');
+                                localStorage.removeItem('results');
                             }
                         },
                         timeout: PREBID_TIMEOUT
@@ -162,22 +174,6 @@
 
                 results.push(result);
                 performance.clearResourceTimings();
-            }
-
-            function displayResults() {
-                var resultDiv = document.getElementById('result');
-                if (resultDiv) {
-                    resultDiv.innerHTML = '<h2>Results</h2>';
-                    results.forEach(function(result, index) {
-                        var resultContainer = document.createElement('div');
-                        resultContainer.innerHTML = `<h3>Iteration ${index + 1}</h3>
-                            <p>Hyper id: ${result.hyperId}</p>
-                            <p>Response code: ${result.responseCode}</p>
-                            <p>Response time: ${result.responseTime}</p>
-                            <p>Time to d.socdm.com: ${result.socdmCallTime}</p>`;
-                        resultDiv.appendChild(resultContainer);
-                    });
-                }
             }
 
         </script>
