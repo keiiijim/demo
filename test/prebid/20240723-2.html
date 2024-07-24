@@ -24,122 +24,85 @@
             var div_sizes = [[300, 250]];
             var PREBID_TIMEOUT = 10000;
             var FAILSAFE_TIMEOUT = 5000;
-            var results = JSON.parse(localStorage.getItem('results')) || [];
 
-            function displayResults() {
-                var resultDiv = document.getElementById('result');
-                if (resultDiv) {
-                    results.forEach(function(result, index) {
-                        var resultContainer = document.createElement('div');
-                        resultContainer.className = 'result-section';
-                        resultContainer.innerHTML = `<h3>Iteration ${index + 1}</h3>
-                            <p><strong>Hyper id:</strong> ${result.hyperId}</p>
-                            <p><strong>Response code:</strong> ${result.responseCode}</p>
-                            <p><strong>Response time:</strong> ${result.responseTime}</p>
-                            <p><strong>Time to d.socdm.com:</strong> ${result.socdmCallTime}</p>`;
-                        resultDiv.appendChild(resultContainer);
-                    });
+            var adUnits = [
+                {
+                    code: '/18339668/test_demo/prebid_300x250',
+                    mediaTypes: {
+                        banner: {
+                            sizes: div_sizes
+                        }
+                    },
+                    bids: [{
+                        bidder: 'adg',
+                        params: {
+                            id: '181492'
+                        }
+                    },{
+                        bidder: 'appnexus',
+                        params: {
+                            placementId: 13144370
+                        }
+                    }]
                 }
-            }
+            ];
 
-            document.addEventListener("DOMContentLoaded", function() {
-                displayResults();
-                runPrebid();
+            var googletag = googletag || {};
+            googletag.cmd = googletag.cmd || [];
+            googletag.cmd.push(function() {
+                googletag.pubads().disableInitialLoad();
             });
 
-            function runPrebid() {
-                var adUnits = [
-                    {
-                        code: '/18339668/test_demo/prebid_300x250',
-                        mediaTypes: {
-                            banner: {
-                                sizes: div_sizes
+            var pbjs = pbjs || {};
+            pbjs.que = pbjs.que || [];
+
+            pbjs.que.push(function() {
+                pbjs.setConfig({
+                    userSync: {
+                        auctionDelay: 1000,
+                        userIds: [{
+                            name: 'criteo'
+                        }, {
+                            name: 'sharedId',
+                            storage: {
+                                name: "_sharedID",
+                                type: "cookie",
+                                expires: 90
                             }
-                        },
-                        bids: [{
-                            bidder: 'adg',
+                        }, {
+                            name: 'id5Id',
                             params: {
-                                id: '181492'
+                                partner: 1142
+                            },
+                            storage: {
+                                type: "html5",
+                                name: "id5id",
+                                expires: 90,
+                                refreshInSeconds: 28800
                             }
                         },{
-                            bidder: 'appnexus',
+                            name: 'novatiq',
                             params: {
-                                placementId: 13144370
+                                useSharedId: false,
+                                useCallbacks: true,
+                                urlParams: {
+                                    novatiqId: "snowflake",
+                                    useStandardUuid: true,
+                                    useSspId: false,
+                                    useSspHost: false
+                                },
                             }
                         }]
                     }
-                ];
-
-                var googletag = googletag || {};
-                googletag.cmd = googletag.cmd || [];
-                googletag.cmd.push(function() {
-                    googletag.pubads().disableInitialLoad();
                 });
 
-                var pbjs = pbjs || {};
-                pbjs.que = pbjs.que || [];
+                pbjs.addAdUnits(adUnits);
 
-                pbjs.que.push(function() {
-                    pbjs.setConfig({
-                        userSync: {
-                            auctionDelay: 1000,
-                            userIds: [{
-                                name: 'criteo'
-                            }, {
-                                name: 'sharedId',
-                                storage: {
-                                    name: "_sharedID",
-                                    type: "cookie",
-                                    expires: 90
-                                }
-                            }, {
-                                name: 'id5Id',
-                                params: {
-                                    partner: 1142
-                                },
-                                storage: {
-                                    type: "html5",
-                                    name: "id5id",
-                                    expires: 90,
-                                    refreshInSeconds: 28800
-                                }
-                            },{
-                                name: 'novatiq',
-                                params: {
-                                    useSharedId: false,
-                                    useCallbacks: true,
-                                    urlParams: {
-                                        novatiqId: "snowflake",
-                                        useStandardUuid: true,
-                                        useSspId: false,
-                                        useSspHost: false
-                                    },
-                                }
-                            }]
-                        }
-                    });
-
-                    pbjs.addAdUnits(adUnits);
-
-                    pbjs.requestBids({
-                        bidsBackHandler: function() {
-                            initAdserver();
-                            processResults();
-                        },
-                        timeout: PREBID_TIMEOUT
-                    });
+                pbjs.requestBids({
+                    bidsBackHandler: initAdserver,
+                    timeout: PREBID_TIMEOUT
                 });
-
-                googletag.cmd.push(function() {
-                    googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div-gpt-ad').addService(googletag.pubads());
-                    googletag.pubads().enableSingleRequest();
-                    googletag.enableServices();
-                });
-
-                setTimeout(function() {
-                    initAdserver();
-                }, FAILSAFE_TIMEOUT);
-            }
+            });
 
             function initAdserver() {
                 if (pbjs.initAdserverSet) return;
@@ -152,47 +115,15 @@
                 });
             }
 
-            function processResults() {
-                var resources = performance.getEntriesByType("resource");
-                var hyperidValues = [];
-                var responseTime = null;
-                var syncStartTime = null;
-                var socdmCallTime = null;
+            setTimeout(function() {
+                initAdserver();
+            }, FAILSAFE_TIMEOUT);
 
-                for (var i = 0; i < resources.length; i++) {
-                    if (resources[i].name.startsWith('https://spadsync.com')) {
-                        var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
-                        if (match) {
-                            hyperidValues.push(match[1]);
-                        }
-
-                        if (resources[i].name.includes('/sync')) {
-                            responseTime = resources[i].responseEnd - resources[i].startTime;
-                            syncStartTime = resources[i].startTime;
-                        }
-                    }
-                }
-
-                for (var i = 0; i < resources.length; i++) {
-                    if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
-                        if (syncStartTime !== null) {
-                            socdmCallTime = resources[i].startTime - syncStartTime;
-                            break;
-                        }
-                    }
-                }
-
-                var result = {
-                    hyperId: (hyperidValues.length > 0) ? hyperidValues.join(', ') : 'null',
-                    responseCode: (socdmCallTime !== null) ? '200' : '204',
-                    responseTime: (responseTime !== null) ? responseTime.toFixed(2) + ' ms' : 'null',
-                    socdmCallTime: (socdmCallTime !== null) ? socdmCallTime.toFixed(2) + ' ms' : 'null'
-                };
-
-                results.push(result);
-                localStorage.setItem('results', JSON.stringify(results));
-                displayResults();
-            }
+            googletag.cmd.push(function() {
+                googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div-gpt-ad').addService(googletag.pubads());
+                googletag.pubads().enableSingleRequest();
+                googletag.enableServices();
+            });
 
         </script>
 
@@ -200,7 +131,7 @@
 
     <body>
         <div style="height: 1000px;width: 100%;">
-            <h2>Prebid.js Example２</h2>
+            <h2>Prebid.js Example</h2>
             <h5>Div 300x250 枠ID:181492 </h5>
             <h5>Auction delay 1000ms </h5>
             <div style="height: 300px;width: 250px;">
@@ -212,10 +143,83 @@
                     </script>
                 </div>
             </div>
-            <div id="result">
-                <h2>Results</h2>
+            <div id="result" class="result-section">
+                <p><strong>Hyper id:</strong> <span id="resulttext1"></span></p>
+                <p><strong>Response code:</strong> <span id="resulttext2"></span></p>
+                <p><strong>Response time:</strong> <span id="resulttext3"></span></p>
+                <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
             </div>
             <button class="reload-button" onclick="location.reload();">Reload</button>
+            <script>
+                setTimeout(function() {
+                    var resources = performance.getEntriesByType("resource");
+                    var hyperidValues = [];
+                    var responseTime = null;
+                    var syncStartTime = null;
+                    var socdmCallTime = null;
+
+                    for (var i = 0; i < resources.length; i++) {
+                        if (resources[i].name.startsWith('https://spadsync.com')) {
+                            var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+                            if (match) {
+                                hyperidValues.push(match[1]);
+                            }
+
+                            if (resources[i].name.includes('/sync')) {
+                                responseTime = resources[i].responseEnd - resources[i].startTime;
+                                syncStartTime = resources[i].startTime;
+                            }
+                        }
+                    }
+
+                    for (var i = 0; i < resources.length; i++) {
+                        if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                            if (syncStartTime !== null) {
+                                socdmCallTime = resources[i].startTime - syncStartTime;
+                                break;
+                            }
+                        }
+                    }
+
+                    var resultParagraph1 = document.getElementById('resulttext1');
+                    if (hyperidValues.length > 0) {
+                        resultParagraph1.textContent = hyperidValues.join(', ');
+                    } else {
+                        resultParagraph1.textContent = 'null';
+                    }
+
+                    var resultParagraph2 = document.getElementById('resulttext2');
+                    var found = false;
+
+                    for (var i = 0; i < resources.length; i++) {
+                        if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                            for (var j = 0; j < hyperidValues.length; j++) {
+                                if (resources[i].name.includes(hyperidValues[j])) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    resultParagraph2.textContent = found ? '200' : '204';
+
+                    var resultParagraph3 = document.getElementById('resulttext3');
+                    if (responseTime !== null) {
+                        resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
+                    } else {
+                        resultParagraph3.textContent = 'null';
+                    }
+
+                    var resultParagraph4 = document.getElementById('resulttext4');
+                    if (socdmCallTime !== null) {
+                        resultParagraph4.textContent = socdmCallTime.toFixed(2) + ' ms';
+                    } else {
+                        resultParagraph4.textContent = 'null';
+                    }
+
+                }, 2000);  // 2秒待機してから実行
+            </script>
         </div>
     </body>
 </html>
