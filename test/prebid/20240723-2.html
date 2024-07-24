@@ -18,6 +18,14 @@
                 font-size: 16px;
                 cursor: pointer;
             }
+            .reset-button {
+                margin-top: 20px;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                background-color: red;
+                color: white;
+            }
         </style>
 
         <script>
@@ -132,34 +140,62 @@
                 return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
             }
 
-            function displayPreviousResult() {
-                var previousResult = {
-                    hyperId: getUrlParameter('hyperId'),
-                    responseCode: getUrlParameter('responseCode'),
-                    responseTime: getUrlParameter('responseTime'),
-                    socdmCallTime: getUrlParameter('socdmCallTime')
-                };
-
-                if (previousResult.hyperId || previousResult.responseCode || previousResult.responseTime || previousResult.socdmCallTime) {
-                    var previousResultDiv = document.getElementById('previous-result');
-                    previousResultDiv.innerHTML = `
-                        <p><strong>Previous Hyper id:</strong> ${previousResult.hyperId}</p>
-                        <p><strong>Previous Response code:</strong> ${previousResult.responseCode}</p>
-                        <p><strong>Previous Response time:</strong> ${previousResult.responseTime}</p>
-                        <p><strong>Previous Time to d.socdm.com:</strong> ${previousResult.socdmCallTime}</p>
-                    `;
+            function displayPreviousResults() {
+                var previousResults = localStorage.getItem('previousResults');
+                if (previousResults) {
+                    previousResults = JSON.parse(previousResults);
+                    var previousResultContainer = document.getElementById('previous-results');
+                    previousResults.forEach(function(result) {
+                        var resultDiv = document.createElement('div');
+                        resultDiv.className = 'result-section';
+                        resultDiv.innerHTML = `
+                            <p><strong>Hyper id:</strong> ${result.hyperId}</p>
+                            <p><strong>Response code:</strong> ${result.responseCode}</p>
+                            <p><strong>Response time:</strong> ${result.responseTime}</p>
+                            <p><strong>Time to d.socdm.com:</strong> ${result.socdmCallTime}</p>
+                        `;
+                        previousResultContainer.appendChild(resultDiv);
+                    });
                 }
             }
 
+            function addCurrentResult() {
+                var result = {
+                    hyperId: document.getElementById('resulttext1').textContent,
+                    responseCode: document.getElementById('resulttext2').textContent,
+                    responseTime: document.getElementById('resulttext3').textContent,
+                    socdmCallTime: document.getElementById('resulttext4').textContent
+                };
+                
+                var previousResults = localStorage.getItem('previousResults');
+                if (previousResults) {
+                    previousResults = JSON.parse(previousResults);
+                } else {
+                    previousResults = [];
+                }
+                previousResults.push(result);
+                localStorage.setItem('previousResults', JSON.stringify(previousResults));
+            }
+
+            function reloadPage() {
+                addCurrentResult();
+                window.location.reload();
+            }
+
+            function resetResults() {
+                localStorage.removeItem('previousResults');
+                window.location.reload();
+            }
+
             document.addEventListener("DOMContentLoaded", function() {
-                displayPreviousResult();
+                displayPreviousResults();
             });
         </script>
     </head>
 
     <body>
         <div style="height: 1000px;width: 100%;">
-            <h2>Prebid.js Example２</h2>
+            <h2>Prebid.js Example</h2>
             <h5>Div 300x250 枠ID:181492 </h5>
             <h5>Auction delay 1000ms </h5>
             <div style="height: 300px;width: 250px;">
@@ -171,7 +207,7 @@
                     </script>
                 </div>
             </div>
-            <div id="previous-result" class="result-section"></div>
+            <div id="previous-results" class="result-section"></div>
             <div id="result" class="result-section">
                 <p><strong>Hyper id:</strong> <span id="resulttext1"></span></p>
                 <p><strong>Response code:</strong> <span id="resulttext2"></span></p>
@@ -179,16 +215,8 @@
                 <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
             </div>
             <button class="reload-button" onclick="reloadPage()">Reload</button>
+            <button class="reset-button" onclick="resetResults()">Reset</button>
             <script>
-                function reloadPage() {
-                    var hyperId = document.getElementById('resulttext1').textContent;
-                    var responseCode = document.getElementById('resulttext2').textContent;
-                    var responseTime = document.getElementById('resulttext3').textContent;
-                    var socdmCallTime = document.getElementById('resulttext4').textContent;
-                    var queryString = `?hyperId=${encodeURIComponent(hyperId)}&responseCode=${encodeURIComponent(responseCode)}&responseTime=${encodeURIComponent(responseTime)}&socdmCallTime=${encodeURIComponent(socdmCallTime)}`;
-                    window.location.href = window.location.pathname + queryString;
-                }
-
                 setTimeout(function() {
                     var resources = performance.getEntriesByType("resource");
                     var hyperidValues = [];
