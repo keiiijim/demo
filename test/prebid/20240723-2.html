@@ -145,14 +145,16 @@
 
             function displayResults() {
                 var resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = '<h2>Results</h2>';
                 results.forEach(function(result, index) {
-                    resultDiv.innerHTML += '<p>Iteration ' + (index + 1) + ':</p>';
-                    resultDiv.innerHTML += '<p>Hyper id: ' + result.hyperId + '</p>';
-                    resultDiv.innerHTML += '<p>Response code: ' + result.responseCode + '</p>';
-                    resultDiv.innerHTML += '<p>Response time: ' + result.responseTime + '</p>';
-                    resultDiv.innerHTML += '<p>Time to d.socdm.com: ' + result.socdmCallTime + '</p>';
-                    resultDiv.innerHTML += '<br>';
+                    if (resultDiv.querySelector(`#result_${index}`)) return;
+                    var resultContainer = document.createElement('div');
+                    resultContainer.id = `result_${index}`;
+                    resultContainer.innerHTML = `<h3>Iteration ${index + 1}</h3>
+                        <p>Hyper id: ${result.hyperId}</p>
+                        <p>Response code: ${result.responseCode}</p>
+                        <p>Response time: ${result.responseTime}</p>
+                        <p>Time to d.socdm.com: ${result.socdmCallTime}</p>`;
+                    resultDiv.appendChild(resultContainer);
                 });
             }
 
