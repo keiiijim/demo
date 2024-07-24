@@ -151,63 +151,10 @@
                 }
             }
 
-            function processResults() {
-                var resources = performance.getEntriesByType("resource");
-                var hyperidValues = [];
-                var responseTime = null;
-                var syncStartTime = null;
-                var socdmCallTime = null;
-
-                for (var i = 0; i < resources.length; i++) {
-                    if (resources[i].name.startsWith('https://spadsync.com')) {
-                        var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
-                        if (match) {
-                            hyperidValues.push(match[1]);
-                        }
-
-                        if (resources[i].name.includes('/sync')) {
-                            responseTime = resources[i].responseEnd - resources[i].startTime;
-                            syncStartTime = resources[i].startTime;
-                        }
-                    }
-                }
-
-                for (var i = 0; i < resources.length; i++) {
-                    if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
-                        if (syncStartTime !== null) {
-                            socdmCallTime = resources[i].startTime - syncStartTime;
-                            break;
-                        }
-                    }
-                }
-
-                var currentResult = {
-                    hyperId: (hyperidValues.length > 0) ? hyperidValues.join(', ') : 'null',
-                    responseCode: (socdmCallTime !== null) ? '200' : '204',
-                    responseTime: (responseTime !== null) ? responseTime.toFixed(2) + ' ms' : 'null',
-                    socdmCallTime: (socdmCallTime !== null) ? socdmCallTime.toFixed(2) + ' ms' : 'null'
-                };
-
-                var resultContainer = document.getElementById('result');
-                resultContainer.innerHTML = `<p><strong>Hyper id:</strong> ${currentResult.hyperId}</p>
-                    <p><strong>Response code:</strong> ${currentResult.responseCode}</p>
-                    <p><strong>Response time:</strong> ${currentResult.responseTime}</p>
-                    <p><strong>Time to d.socdm.com:</strong> ${currentResult.socdmCallTime}</p>`;
-
-                var reloadButton = document.querySelector('.reload-button');
-                reloadButton.onclick = function() {
-                    var queryString = `?hyperId=${encodeURIComponent(currentResult.hyperId)}&responseCode=${encodeURIComponent(currentResult.responseCode)}&responseTime=${encodeURIComponent(currentResult.responseTime)}&socdmCallTime=${encodeURIComponent(currentResult.socdmCallTime)}`;
-                    window.location.href = window.location.pathname + queryString;
-                };
-            }
-
             document.addEventListener("DOMContentLoaded", function() {
                 displayPreviousResult();
-                runPrebid();
-                setTimeout(processResults, 2000);
             });
         </script>
-
     </head>
 
     <body>
@@ -225,8 +172,92 @@
                 </div>
             </div>
             <div id="previous-result" class="result-section"></div>
-            <div id="result" class="result-section"></div>
-            <button class="reload-button">Reload</button>
+            <div id="result" class="result-section">
+                <p><strong>Hyper id:</strong> <span id="resulttext1"></span></p>
+                <p><strong>Response code:</strong> <span id="resulttext2"></span></p>
+                <p><strong>Response time:</strong> <span id="resulttext3"></span></p>
+                <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
+            </div>
+            <button class="reload-button" onclick="reloadPage()">Reload</button>
+            <script>
+                function reloadPage() {
+                    var hyperId = document.getElementById('resulttext1').textContent;
+                    var responseCode = document.getElementById('resulttext2').textContent;
+                    var responseTime = document.getElementById('resulttext3').textContent;
+                    var socdmCallTime = document.getElementById('resulttext4').textContent;
+                    var queryString = `?hyperId=${encodeURIComponent(hyperId)}&responseCode=${encodeURIComponent(responseCode)}&responseTime=${encodeURIComponent(responseTime)}&socdmCallTime=${encodeURIComponent(socdmCallTime)}`;
+                    window.location.href = window.location.pathname + queryString;
+                }
+
+                setTimeout(function() {
+                    var resources = performance.getEntriesByType("resource");
+                    var hyperidValues = [];
+                    var responseTime = null;
+                    var syncStartTime = null;
+                    var socdmCallTime = null;
+
+                    for (var i = 0; i < resources.length; i++) {
+                        if (resources[i].name.startsWith('https://spadsync.com')) {
+                            var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+                            if (match) {
+                                hyperidValues.push(match[1]);
+                            }
+
+                            if (resources[i].name.includes('/sync')) {
+                                responseTime = resources[i].responseEnd - resources[i].startTime;
+                                syncStartTime = resources[i].startTime;
+                            }
+                        }
+                    }
+
+                    for (var i = 0; i < resources.length; i++) {
+                        if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                            if (syncStartTime !== null) {
+                                socdmCallTime = resources[i].startTime - syncStartTime;
+                                break;
+                            }
+                        }
+                    }
+
+                    var resultParagraph1 = document.getElementById('resulttext1');
+                    if (hyperidValues.length > 0) {
+                        resultParagraph1.textContent = hyperidValues.join(', ');
+                    } else {
+                        resultParagraph1.textContent = 'null';
+                    }
+
+                    var resultParagraph2 = document.getElementById('resulttext2');
+                    var found = false;
+
+                    for (var i = 0; i < resources.length; i++) {
+                        if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                            for (var j = 0; j < hyperidValues.length; j++) {
+                                if (resources[i].name.includes(hyperidValues[j])) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    resultParagraph2.textContent = found ? '200' : '204';
+
+                    var resultParagraph3 = document.getElementById('resulttext3');
+                    if (responseTime !== null) {
+                        resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
+                    } else {
+                        resultParagraph3.textContent = 'null';
+                    }
+
+                    var resultParagraph4 = document.getElementById('resulttext4');
+                    if (socdmCallTime !== null) {
+                        resultParagraph4.textContent = socdmCallTime.toFixed(2) + ' ms';
+                    } else {
+                        resultParagraph4.textContent = 'null';
+                    }
+
+                }, 2000);  // 2秒待機してから実行
+            </script>
         </div>
     </body>
 </html>
