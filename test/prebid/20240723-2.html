@@ -149,6 +149,7 @@
                         var resultDiv = document.createElement('div');
                         resultDiv.className = 'result-section';
                         resultDiv.innerHTML = `
+                            <p><strong>Date:</strong> ${result.date}</p>
                             <p><strong>Hyper id:</strong> ${result.hyperId}</p>
                             <p><strong>Response code:</strong> ${result.responseCode}</p>
                             <p><strong>Response time:</strong> ${result.responseTime}</p>
@@ -160,7 +161,9 @@
             }
 
             function addCurrentResult() {
+                var date = new Date().toLocaleString();
                 var result = {
+                    date: date,
                     hyperId: document.getElementById('resulttext1').textContent,
                     responseCode: document.getElementById('resulttext2').textContent,
                     responseTime: document.getElementById('resulttext3').textContent,
