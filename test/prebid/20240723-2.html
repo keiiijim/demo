@@ -207,6 +207,7 @@
             </div>
             <div id="previous-results" class="result-section"></div>
             <div id="result" class="result-section">
+                <p><strong>Request time:</strong> <span id="requesttime"></span></p>
                 <p><strong>Hyper id:</strong> <span id="resulttext1"></span></p>
                 <p><strong>Response code:</strong> <span id="resulttext2"></span></p>
                 <p><strong>Response time:</strong> <span id="resulttext3"></span></p>
@@ -222,6 +223,8 @@
                     var syncStartTime = null;
                     var socdmCallTime = null;
                     var date = new Date().toLocaleString();
+
+                    document.getElementById('requesttime').textContent = date;
 
                     for (var i = 0; i < resources.length; i++) {
                         if (resources[i].name.startsWith('https://spadsync.com')) {
