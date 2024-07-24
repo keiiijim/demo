@@ -47,6 +47,7 @@
                             <p><strong>Response code:</strong> ${result.responseCode}</p>
                             <p><strong>Spadsync Response time:</strong> ${result.responseTime}</p>
                             <p><strong>Time to d.socdm.com:</strong> ${result.socdmCallTime}</p>
+                            <p><strong>socdm.com Spadsync Response time:</strong> ${result.socdmSpadsyncResponseTime}</p>
                         `;
                         previousResultContainer.appendChild(resultDiv);
                     });
@@ -60,7 +61,8 @@
                     hyperId: document.getElementById('resulttext1').textContent,
                     responseCode: document.getElementById('resulttext2').textContent,
                     responseTime: document.getElementById('resulttext3').textContent,
-                    socdmCallTime: document.getElementById('resulttext4').textContent
+                    socdmCallTime: document.getElementById('resulttext4').textContent,
+                    socdmSpadsyncResponseTime: document.getElementById('resulttext5').textContent
                 };
 
                 var previousResults = getUrlParameter('previousResults');
@@ -88,7 +90,7 @@
                 var responseTime = null;
                 var syncStartTime = null;
                 var socdmCallTime = null;
-                var spadsyncResponseTime = '-';
+                var socdmSpadsyncResponseTime = '-';
                 var date = new Date().toLocaleString();
 
                 document.getElementById('requesttime').textContent = date;
@@ -112,7 +114,7 @@
                         var spadsyncStatusCode = resources[i].name.match(/spadsync_statuscode=(\d+)/);
                         var spadsyncResponseTimeMatch = resources[i].name.match(/spadsync_responsetime=(\d+)/);
                         if (spadsyncStatusCode && spadsyncStatusCode[1] == '200' && spadsyncResponseTimeMatch) {
-                            spadsyncResponseTime = spadsyncResponseTimeMatch[1] + ' ms';
+                            socdmSpadsyncResponseTime = spadsyncResponseTimeMatch[1] + ' ms';
                         }
 
                         if (syncStartTime !== null) {
@@ -146,7 +148,11 @@
                 resultParagraph2.textContent = found ? '200' : '204';
 
                 var resultParagraph3 = document.getElementById('resulttext3');
-                resultParagraph3.textContent = spadsyncResponseTime;
+                if (responseTime !== null) {
+                    resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
+                } else {
+                    resultParagraph3.textContent = 'null';
+                }
 
                 var resultParagraph4 = document.getElementById('resulttext4');
                 if (socdmCallTime !== null) {
@@ -154,6 +160,9 @@
                 } else {
                     resultParagraph4.textContent = 'null';
                 }
+
+                var resultParagraph5 = document.getElementById('resulttext5');
+                resultParagraph5.textContent = socdmSpadsyncResponseTime;
             }
 
             setTimeout(calculateMetrics, 2000);  // 2秒待機してから実行
@@ -175,6 +184,7 @@
                 <p><strong>Response code:</strong> <span id="resulttext2"></span></p>
                 <p><strong>Spadsync Response time:</strong> <span id="resulttext3"></span></p>
                 <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
+                <p><strong>socdm.com Spadsync Response time:</strong> <span id="resulttext5"></span></p>
             </div>
             <button class="reload-button" onclick="reloadPage()">Reload</button>
             <button class="reset-button" onclick="resetResults()">Reset</button>
