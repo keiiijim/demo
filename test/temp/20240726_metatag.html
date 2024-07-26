@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="part,コスメ,スースー,冷感">
+    <title>Keyword Example</title>
+    <script>
+        var ads = [{
+            adid: '999999', // 広告枠ID
+            targetid: '999999', // 広告枠のコンテナ(divタグ)のID
+            adType: 'RECT', // SP(320x50), LARGE(320x100), TABLET(728x90), RECT(300x250)
+            elementid: 'adg-div', // 広告を設置するdivのID
+            displayid: '1' // 1:inline 9:overlay
+        }];
+
+        // Metaタグからキーワードを取得する関数
+        function getMetaKeywords() {
+            const metaTags = document.getElementsByTagName('meta');
+            for (let i = 0; i < metaTags.length; i++) {
+                if (metaTags[i].getAttribute('name') === 'keywords') {
+                    return metaTags[i].getAttribute('content');
+                }
+            }
+            return '';
+        }
+
+        // ADGスクリプトタグのsrcにキーワードパラメータを追加する関数
+        function addKeywordsToSrc(adgSrc) {
+            const keywords = getMetaKeywords();
+            if (keywords) {
+                const keywordArray = keywords.split(',');
+                const keywordParams = keywordArray.map((keyword, index) => `label_keyword${index + 1}=${encodeURIComponent(keyword.trim())}`).join('&');
+                adgSrc += `&${keywordParams}`;
+            }
+            return adgSrc;
+        }
+
+        function sendAdserverRequest() {
+            ads.forEach(function(ad) {
+                try {
+                    // scriptタグを生成
+                    var adgSrc =
+                        'https://i.socdm.com/sdk/js/adg-script-loader.js' +
+                        '?id=' + ad.adid +
+                        '&targetID=adg_' + ad.targetid +
+                        '&adType=' + ad.adType +
+                        '&displayid=' + ad.displayid +
+                        '&async=true&flexibleOL=true&autoPadding=true&tagver=2.0.0';
+
+                    // キーワードを追加
+                    adgSrc = addKeywordsToSrc(adgSrc);
+
+                    // scriptタグを挿入
+                    var adgscript = document.createElement('script');
+                    adgscript.src = adgSrc;
+                    document.getElementById(ad.elementid).appendChild(adgscript);
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+        }
+
+        // DOMContentLoadedイベントを使用して、ページのロード後にスクリプトを実行
+        document.addEventListener('DOMContentLoaded', function() {
+            sendAdserverRequest();
+        });
+    </script>
+</head>
+<body>
+    <!-- 広告を配置する場所にdiv要素を追加 -->
+    <div id="adg-div"></div>
+    <!-- <div id='adg-div2'></div> -->
+</body>
+</html>
