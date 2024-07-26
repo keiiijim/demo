@@ -26,7 +26,7 @@
 
         // Breadcrumbからカテゴリを取得する関数
         function getBreadcrumbCategory() {
-            const breadcrumb = document.querySelector('.breadcrumbs li:nth-child(2) span[itemprop="name"]');
+            const breadcrumb = document.querySelector('.breadcrumbs li span[itemprop="name"]');
             return breadcrumb ? breadcrumb.textContent : '';
         }
 
@@ -77,6 +77,17 @@
     </script>
 </head>
 <body>
+    <!-- パンくずリストのサンプル -->
+    <ul class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li class="breadcrumb" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/topics/category/cosme/" itemprop="item">
+                <span itemprop="name">美容・コスメ</span>
+            </a>
+            <meta itemprop="position" content="2">
+            <span class="icon-next"></span>
+        </li>
+    </ul>
+
     <!-- 広告を配置する場所にdiv要素を追加 -->
     <div id="adg-div"></div>
     <!-- <div id='adg-div2'></div> -->
