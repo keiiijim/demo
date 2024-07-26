@@ -6,8 +6,8 @@
     <title>Keyword Example</title>
     <script>
         var ads = [{
-            adid: '75496', // 広告枠ID
-            targetid: '75496', // 広告枠のコンテナ(divタグ)のID
+            adid: '999999', // 広告枠ID
+            targetid: '999999', // 広告枠のコンテナ(divタグ)のID
             adType: 'RECT', // SP(320x50), LARGE(320x100), TABLET(728x90), RECT(300x250)
             elementid: 'adg-div', // 広告を設置するdivのID
             displayid: '1' // 1:inline 9:overlay
@@ -24,13 +24,21 @@
             return '';
         }
 
-        // ADGスクリプトタグのsrcにキーワードパラメータを追加する関数
-        function addKeywordsToSrc(adgSrc) {
+        // Breadcrumbからカテゴリを取得する関数
+        function getBreadcrumbCategory() {
+            const breadcrumb = document.querySelector('.breadcrumbs li:nth-child(2) span[itemprop="name"]');
+            return breadcrumb ? breadcrumb.textContent : '';
+        }
+
+        // ADGスクリプトタグのsrcにキーワードとカテゴリパラメータを追加する関数
+        function addParamsToSrc(adgSrc) {
             const keywords = getMetaKeywords();
             if (keywords) {
-                const keywordArray = keywords.split(',');
-                const keywordParams = keywordArray.map((keyword, index) => `label_keyword${index + 1}=${encodeURIComponent(keyword.trim())}`).join('&');
-                adgSrc += `&${keywordParams}`;
+                adgSrc += `&label_keyword=${encodeURIComponent(keywords)}`;
+            }
+            const category = getBreadcrumbCategory();
+            if (category) {
+                adgSrc += `&label_category=${encodeURIComponent(category)}`;
             }
             return adgSrc;
         }
@@ -47,8 +55,8 @@
                         '&displayid=' + ad.displayid +
                         '&async=true&flexibleOL=true&autoPadding=true&tagver=2.0.0';
 
-                    // キーワードを追加
-                    adgSrc = addKeywordsToSrc(adgSrc);
+                    // キーワードとカテゴリを追加
+                    adgSrc = addParamsToSrc(adgSrc);
 
                     // scriptタグを挿入
                     var adgscript = document.createElement('script');
