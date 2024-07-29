@@ -188,7 +188,20 @@
                 resultParagraph5.textContent = socdmSpadsyncResponseTime;
             }
 
-            setTimeout(calculateMetrics, 2000);  // 2秒待機してから実行
+            function loadIFrame() {
+                var iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = window.location.href + `&cacheBuster=${Date.now()}`;
+                document.body.appendChild(iframe);
+                iframe.onload = function() {
+                    setTimeout(function() {
+                        calculateMetrics();
+                        document.body.removeChild(iframe);
+                    }, 2000); // 2秒待機してから実行
+                };
+            }
+
+            setTimeout(loadIFrame, 1000);  // 1秒待機してから実行
         </script>
     </head>
 
