@@ -201,6 +201,16 @@
                 };
             }
 
+            function reloadPageWithCacheBuster() {
+                var iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = window.location.href + `&cacheBuster=${Date.now()}`;
+                document.body.appendChild(iframe);
+                iframe.onload = function() {
+                    window.location.reload();
+                };
+            }
+
             setTimeout(loadIFrame, 1000);  // 1秒待機してから実行
         </script>
     </head>
@@ -222,7 +232,7 @@
                 <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
                 <p><strong>socdm.com Spadsync Response time:</strong> <span id="resulttext5"></span></p>
             </div>
-            <button class="reload-button" onclick="reloadPage()">Reload</button>
+            <button class="reload-button" onclick="reloadPageWithCacheBuster()">Reload</button>
             <button class="reset-button" onclick="resetResults()">Reset</button>
             <button class="download-button" onclick="downloadResults()">Download Results</button>
         </div>
