@@ -1,0 +1,218 @@
+<html>
+    <head>
+      <link rel="dns-prefetch" href="//spadsync.com">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>
+            .result-section {
+                margin-bottom: 20px;
+            }
+            .result-section p {
+                margin: 5px 0;
+                font-size: 14px;
+            }
+            .reload-button, .reset-button, .download-button {
+                margin-top: 20px;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .reset-button {
+                background-color: red;
+                color: white;
+            }
+            .download-button {
+                background-color: green;
+                color: white;
+            }
+        </style>
+
+        <script>
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            function displayPreviousResults() {
+                var previousResults = getUrlParameter('previousResults');
+                if (previousResults) {
+                    previousResults = JSON.parse(previousResults);
+                    var previousResultContainer = document.getElementById('previous-results');
+                    previousResults.forEach(function(result) {
+                        var resultDiv = document.createElement('div');
+                        resultDiv.className = 'result-section';
+                        resultDiv.innerHTML = `
+                            <p><strong>Date:</strong> ${result.date}</p>
+                            <p><strong>Hyper id:</strong> ${result.hyperId}</p>
+                            <p><strong>Response code:</strong> ${result.responseCode}</p>
+                            <p><strong>Spadsync Response time:</strong> ${result.responseTime}</p>
+                            <p><strong>Time to d.socdm.com:</strong> ${result.socdmCallTime}</p>
+                            <p><strong>socdm.com Spadsync Response time:</strong> ${result.socdmSpadsyncResponseTime}</p>
+                        `;
+                        previousResultContainer.appendChild(resultDiv);
+                    });
+                }
+            }
+
+            function reloadPage() {
+                var date = new Date().toLocaleString();
+                var currentResult = {
+                    date: date,
+                    hyperId: document.getElementById('resulttext1').textContent,
+                    responseCode: document.getElementById('resulttext2').textContent,
+                    responseTime: document.getElementById('resulttext3').textContent,
+                    socdmCallTime: document.getElementById('resulttext4').textContent,
+                    socdmSpadsyncResponseTime: document.getElementById('resulttext5').textContent
+                };
+
+                var previousResults = getUrlParameter('previousResults');
+                if (previousResults) {
+                    previousResults = JSON.parse(previousResults);
+                } else {
+                    previousResults = [];
+                }
+                previousResults.push(currentResult);
+                var queryString = `?previousResults=${encodeURIComponent(JSON.stringify(previousResults))}`;
+                window.location.href = window.location.pathname + queryString;
+            }
+
+            function resetResults() {
+                window.location.href = window.location.pathname;
+            }
+
+            function downloadResults() {
+                var previousResults = getUrlParameter('previousResults');
+                if (previousResults) {
+                    previousResults = JSON.parse(previousResults);
+                    var csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "Date,Hyper id,Response code,Spadsync Response time,Time to d.socdm.com,socdm.com Spadsync Response time\n";
+
+                    previousResults.forEach(function(result) {
+                        var row = `${result.date},${result.hyperId},${result.responseCode},${result.responseTime},${result.socdmCallTime},${result.socdmSpadsyncResponseTime}`;
+                        csvContent += row + "\n";
+                    });
+
+                    var encodedUri = encodeURI(csvContent);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "test_results.csv");
+                    document.body.appendChild(link); // Required for FF
+
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                displayPreviousResults();
+            });
+
+            function calculateMetrics() {
+                var resources = performance.getEntriesByType("resource");
+                var hyperidValues = [];
+                var responseTime = null;
+                var syncStartTime = null;
+                var socdmCallTime = null;
+                var socdmSpadsyncResponseTime = '-';
+                var date = new Date().toLocaleString();
+
+                document.getElementById('requesttime').textContent = date;
+
+                for (var i = 0; i < resources.length; i++) {
+                    if (resources[i].name.startsWith('https://spadsync.com')) {
+                        var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+                        if (match) {
+                            hyperidValues.push(match[1]);
+                        }
+
+                        if (resources[i].name.includes('/sync')) {
+                            responseTime = resources[i].responseEnd - resources[i].startTime;
+                            syncStartTime = resources[i].startTime;
+                        }
+                    }
+                }
+
+                for (var i = 0; i < resources.length; i++) {
+                    if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                        var spadsyncStatusCode = resources[i].name.match(/spadsync_statuscode=(\d+)/);
+                        var spadsyncResponseTimeMatch = resources[i].name.match(/spadsync_responsetime=(\d+)/);
+                        if (spadsyncStatusCode && spadsyncStatusCode[1] == '200' && spadsyncResponseTimeMatch) {
+                            socdmSpadsyncResponseTime = spadsyncResponseTimeMatch[1] + ' ms';
+                        }
+
+                        if (syncStartTime !== null) {
+                            socdmCallTime = resources[i].startTime - syncStartTime;
+                            break;
+                        }
+                    }
+                }
+
+                var resultParagraph1 = document.getElementById('resulttext1');
+                if (hyperidValues.length > 0) {
+                    resultParagraph1.textContent = hyperidValues.join(', ');
+                } else {
+                    resultParagraph1.textContent = 'null';
+                }
+
+                var resultParagraph2 = document.getElementById('resulttext2');
+                var found = false;
+
+                for (var i = 0; i < resources.length; i++) {
+                    if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                        for (var j = 0; j < hyperidValues.length; j++) {
+                            if (resources[i].name.includes(hyperidValues[j])) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                resultParagraph2.textContent = found ? '200' : '204';
+
+                var resultParagraph3 = document.getElementById('resulttext3');
+                if (responseTime !== null) {
+                    resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
+                } else {
+                    resultParagraph3.textContent = 'null';
+                }
+
+                var resultParagraph4 = document.getElementById('resulttext4');
+                if (socdmCallTime !== null) {
+                    resultParagraph4.textContent = socdmCallTime.toFixed(2) + ' ms';
+                } else {
+                    resultParagraph4.textContent = 'null';
+                }
+
+                var resultParagraph5 = document.getElementById('resulttext5');
+                resultParagraph5.textContent = socdmSpadsyncResponseTime;
+            }
+
+            setTimeout(calculateMetrics, 2000);  // 2秒待機してから実行
+        </script>
+    </head>
+
+    <body>
+        <div style="height: 1000px;width: 100%;">
+            <h2>Adgeneration Example</h2>
+            <h5>Div 300x250 枠ID:181493 </h5>
+            <div style="height: 300px;width: 250px;">
+                <div id='adg_181493'></div>
+                <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=181493&targetID=adg_181493&displayid=1&adType=RECT&async=true&tagver=2.0.0"></script>
+            </div>
+            <div id="previous-results" class="result-section"></div>
+            <div id="result" class="result-section">
+                <p><strong>Request time:</strong> <span id="requesttime"></span></p>
+                <p><strong>Hyper id:</strong> <span id="resulttext1"></span></p>
+                <p><strong>Response code:</strong> <span id="resulttext2"></span></p>
+                <p><strong>Spadsync Response time:</strong> <span id="resulttext3"></span></p>
+                <p><strong>Time to d.socdm.com:</strong> <span id="resulttext4"></span></p>
+                <p><strong>socdm.com Spadsync Response time:</strong> <span id="resulttext5"></span></p>
+            </div>
+            <button class="reload-button" onclick="reloadPage()">Reload</button>
+            <button class="reset-button" onclick="resetResults()">Reset</button>
+            <button class="download-button" onclick="downloadResults()">Download Results</button>
+        </div>
+    </body>
+</html>
