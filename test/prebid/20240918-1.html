@@ -33,237 +33,243 @@
         }
     </style>
 
-    <script>
-        var div_sizes = [[300, 250]];
-        var PREBID_TIMEOUT = 10000;
-        var FAILSAFE_TIMEOUT = 5000;
-        var reloadCount = 0;
-        var maxReloads = 3;
+   <script>
+    var div_sizes = [[300, 250]];
+    var PREBID_TIMEOUT = 10000;
+    var FAILSAFE_TIMEOUT = 5000;
+    var maxReloads = 3;
 
-        var adUnits = [
-            {
-                code: '/18339668/test_demo/prebid_300x250',
-                mediaTypes: {
-                    banner: {
-                        sizes: div_sizes
-                    }
-                },
-                bids: [{
-                    bidder: 'adg',
+    var adUnits = [
+        {
+            code: '/18339668/test_demo/prebid_300x250',
+            mediaTypes: {
+                banner: {
+                    sizes: div_sizes
+                }
+            },
+            bids: [{
+                bidder: 'adg',
+                params: {
+                    id: '181492'
+                }
+            },{
+                bidder: 'appnexus',
+                params: {
+                    placementId: 13144370
+                }
+            }]
+        }
+    ];
+
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+    googletag.cmd.push(function() {
+        googletag.pubads().disableInitialLoad();
+    });
+
+    var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+
+    pbjs.que.push(function() {
+        pbjs.setConfig({
+            userSync: {
+                auctionDelay: 50,
+                userIds: [{
+                    name: 'novatiq',
                     params: {
-                        id: '181492'
-                    }
-                },{
-                    bidder: 'appnexus',
-                    params: {
-                        placementId: 13144370
+                        useSharedId: false,
+                        useCallbacks: true,
+                        urlParams: {
+                            novatiqId: "snowflake",
+                            useStandardUuid: true,
+                            useSspId: false,
+                            useSspHost: false
+                        },
                     }
                 }]
             }
-        ];
+        });
 
-        var googletag = googletag || {};
-        googletag.cmd = googletag.cmd || [];
+        pbjs.addAdUnits(adUnits);
+
+        pbjs.requestBids({
+            bidsBackHandler: initAdserver,
+            timeout: PREBID_TIMEOUT
+        });
+    });
+
+    function initAdserver() {
+        if (pbjs.initAdserverSet) return;
+        pbjs.initAdserverSet = true;
         googletag.cmd.push(function() {
-            googletag.pubads().disableInitialLoad();
-        });
-
-        var pbjs = pbjs || {};
-        pbjs.que = pbjs.que || [];
-
-        pbjs.que.push(function() {
-            pbjs.setConfig({
-                userSync: {
-                    auctionDelay: 50,
-                    userIds: [{
-                        name: 'novatiq',
-                        params: {
-                            useSharedId: false,
-                            useCallbacks: true,
-                            urlParams: {
-                                novatiqId: "snowflake",
-                                useStandardUuid: true,
-                                useSspId: false,
-                                useSspHost: false
-                            },
-                        }
-                    }]
-                }
-            });
-
-            pbjs.addAdUnits(adUnits);
-
-            pbjs.requestBids({
-                bidsBackHandler: initAdserver,
-                timeout: PREBID_TIMEOUT
+            pbjs.que.push(function() {
+                pbjs.setTargetingForGPTAsync();
+                googletag.pubads().refresh();
             });
         });
+    }
 
-        function initAdserver() {
-            if (pbjs.initAdserverSet) return;
-            pbjs.initAdserverSet = true;
-            googletag.cmd.push(function() {
-                pbjs.que.push(function() {
-                    pbjs.setTargetingForGPTAsync();
-                    googletag.pubads().refresh();
-                });
+    setTimeout(function() {
+        initAdserver();
+    }, FAILSAFE_TIMEOUT);
+
+    googletag.cmd.push(function() {
+        googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div-gpt-ad').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+    });
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    function displayPreviousResults() {
+        var previousResults = getUrlParameter('previousResults');
+        if (previousResults) {
+            previousResults = JSON.parse(previousResults);
+            var previousResultContainer = document.getElementById('previous-results');
+            previousResultContainer.innerHTML = '';  // 前の結果をクリア
+            previousResults.forEach(function(result) {
+                var resultDiv = document.createElement('div');
+                resultDiv.className = 'result-section';
+                resultDiv.innerHTML = `
+                    <p><strong>Date:</strong> ${result.date}</p>
+                    <p><strong>Hyper id:</strong> ${result.hyperId}</p>
+                    <p><strong>Response code:</strong> ${result.responseCode}</p>
+                    <p><strong>Spadsync Response time:</strong> ${result.responseTime}</p>
+                `;
+                previousResultContainer.appendChild(resultDiv);
             });
         }
+    }
 
-        setTimeout(function() {
-            initAdserver();
-        }, FAILSAFE_TIMEOUT);
+    function reloadPage() {
+        var date = new Date().toLocaleString();
+        var currentResult = {
+            date: date,
+            hyperId: document.getElementById('resulttext1').textContent,
+            responseCode: document.getElementById('resulttext2').textContent,
+            responseTime: document.getElementById('resulttext3').textContent
+        };
 
-        googletag.cmd.push(function() {
-            googletag.defineSlot('/18339668/test_demo/prebid_300x250', div_sizes, 'div-gpt-ad').addService(googletag.pubads());
-            googletag.pubads().enableSingleRequest();
-            googletag.enableServices();
-        });
-
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        var previousResults = getUrlParameter('previousResults');
+        if (previousResults) {
+            previousResults = JSON.parse(previousResults);
+        } else {
+            previousResults = [];
         }
+        previousResults.push(currentResult);
+        var queryString = `?previousResults=${encodeURIComponent(JSON.stringify(previousResults))}`;
+        window.location.href = window.location.pathname + queryString;
+    }
 
-        function displayPreviousResults() {
-            var previousResults = getUrlParameter('previousResults');
-            if (previousResults) {
-                previousResults = JSON.parse(previousResults);
-                var previousResultContainer = document.getElementById('previous-results');
-                previousResultContainer.innerHTML = '';  // 前の結果をクリア
-                previousResults.forEach(function(result) {
-                    var resultDiv = document.createElement('div');
-                    resultDiv.className = 'result-section';
-                    resultDiv.innerHTML = `
-                        <p><strong>Date:</strong> ${result.date}</p>
-                        <p><strong>Hyper id:</strong> ${result.hyperId}</p>
-                        <p><strong>Response code:</strong> ${result.responseCode}</p>
-                        <p><strong>Spadsync Response time:</strong> ${result.responseTime}</p>
-                    `;
-                    previousResultContainer.appendChild(resultDiv);
-                });
-            }
+    function resetResults() {
+        window.location.href = window.location.pathname;
+    }
+
+    function downloadResults() {
+        var previousResults = getUrlParameter('previousResults');
+        if (previousResults) {
+            previousResults = JSON.parse(previousResults);
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Date,Hyper id,Response code,Spadsync Response time\n";
+
+            previousResults.forEach(function(result) {
+                var row = `${result.date},${result.hyperId},${result.responseCode},${result.responseTime}`;
+                csvContent += row + "\n";
+            });
+
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "test_results.csv");
+            document.body.appendChild(link); // Required for FF
+
+            link.click();
+            document.body.removeChild(link);
         }
+    }
 
-        function reloadPage() {
-            var date = new Date().toLocaleString();
-            var currentResult = {
-                date: date,
-                hyperId: document.getElementById('resulttext1').textContent,
-                responseCode: document.getElementById('resulttext2').textContent,
-                responseTime: document.getElementById('resulttext3').textContent
-            };
-
-            var previousResults = getUrlParameter('previousResults');
-            if (previousResults) {
-                previousResults = JSON.parse(previousResults);
-            } else {
-                previousResults = [];
-            }
-            previousResults.push(currentResult);
-            var queryString = `?previousResults=${encodeURIComponent(JSON.stringify(previousResults))}`;
-            window.location.href = window.location.pathname + queryString;
+    // 3回自動リロードする関数
+    function autoReload() {
+        var currentReloadCount = parseInt(getUrlParameter('reloadCount')) || 0;
+        if (currentReloadCount < maxReloads) {
+            currentReloadCount++;
+            var queryString = `?reloadCount=${currentReloadCount}&previousResults=${getUrlParameter('previousResults')}`;
+            setTimeout(function() {
+                window.location.href = window.location.pathname + queryString;
+            }, 2000);  // 2秒待機してリロード
         }
+    }
 
-        function resetResults() {
-            window.location.href = window.location.pathname;
-        }
-
-        function downloadResults() {
-            var previousResults = getUrlParameter('previousResults');
-            if (previousResults) {
-                previousResults = JSON.parse(previousResults);
-                var csvContent = "data:text/csv;charset=utf-8,";
-                csvContent += "Date,Hyper id,Response code,Spadsync Response time\n";
-
-                previousResults.forEach(function(result) {
-                    var row = `${result.date},${result.hyperId},${result.responseCode},${result.responseTime}`;
-                    csvContent += row + "\n";
-                });
-
-                var encodedUri = encodeURI(csvContent);
-                var link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "test_results.csv");
-                document.body.appendChild(link); // Required for FF
-
-                link.click();
-                document.body.removeChild(link);
-            }
-        }
-
-        // 3回自動リロードする関数
-        function autoReload() {
-            if (reloadCount < maxReloads) {
-                reloadCount++;
-                setTimeout(function() {
-                    reloadPage();
-                    autoReload();  // 次のリロードを開始
-                }, 2000);  // 2秒待機してリロード
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            displayPreviousResults();
+    document.addEventListener("DOMContentLoaded", function() {
+        displayPreviousResults();
+        var currentReloadCount = parseInt(getUrlParameter('reloadCount')) || 0;
+        if (currentReloadCount < maxReloads) {
+            autoReload();  // 自動リロードが設定されていたら実行
+        } else {
             setTimeout(calculateMetrics, 2000);  // 2秒後にメトリクスを計算
-        });
+        }
+    });
 
-        function calculateMetrics() {
-            var resources = performance.getEntriesByType("resource");
-            var hyperidValues = [];
-            var responseTime = null;
-            var syncStartTime = null;
-            var date = new Date().toLocaleString();
+    function calculateMetrics() {
+        var resources = performance.getEntriesByType("resource");
+        var hyperidValues = [];
+        var responseTime = null;
+        var syncStartTime = null;
+        var date = new Date().toLocaleString();
 
-            document.getElementById('requesttime').textContent = date;
+        document.getElementById('requesttime').textContent = date;
 
-            for (var i = 0; i < resources.length; i++) {
-                if (resources[i].name.startsWith('https://spadsync.com')) {
-                    var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
-                    if (match) {
-                        hyperidValues.push(match[1]);
-                    }
-
-                    if (resources[i].name.includes('/sync')) {
-                        responseTime = resources[i].responseEnd - resources[i].startTime;
-                        syncStartTime = resources[i].startTime;
-                    }
+        for (var i = 0; i < resources.length; i++) {
+            if (resources[i].name.startsWith('https://spadsync.com')) {
+                var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+                if (match) {
+                    hyperidValues.push(match[1]);
                 }
-            }
 
-            var resultParagraph1 = document.getElementById('resulttext1');
-            if (hyperidValues.length > 0) {
-                resultParagraph1.textContent = hyperidValues.join(', ');
-            } else {
-                resultParagraph1.textContent = 'null';
-            }
-
-            var resultParagraph2 = document.getElementById('resulttext2');
-            var found = false;
-
-            for (var i = 0; i < resources.length; i++) {
-                if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
-                    for (var j = 0; j < hyperidValues.length; j++) {
-                        if (resources[i].name.includes(hyperidValues[j])) {
-                            found = true;
-                            break;
-                        }
-                    }
+                if (resources[i].name.includes('/sync')) {
+                    responseTime = resources[i].responseEnd - resources[i].startTime;
+                    syncStartTime = resources[i].startTime;
                 }
-            }
-
-            resultParagraph2.textContent = found ? '200' : '204';
-
-            var resultParagraph3 = document.getElementById('resulttext3');
-            if (responseTime !== null) {
-                resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
-            } else {
-                resultParagraph3.textContent = 'null';
             }
         }
-    </script>
+
+        var resultParagraph1 = document.getElementById('resulttext1');
+        if (hyperidValues.length > 0) {
+            resultParagraph1.textContent = hyperidValues.join(', ');
+        } else {
+            resultParagraph1.textContent = 'null';
+        }
+
+        var resultParagraph2 = document.getElementById('resulttext2');
+        var found = false;
+
+        for (var i = 0; i < resources.length; i++) {
+            if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+                for (var j = 0; j < hyperidValues.length; j++) {
+                    if (resources[i].name.includes(hyperidValues[j])) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        resultParagraph2.textContent = found ? '200' : '204';
+
+        var resultParagraph3 = document.getElementById('resulttext3');
+        if (responseTime !== null) {
+            resultParagraph3.textContent = responseTime.toFixed(2) + ' ms';
+        } else {
+            resultParagraph3.textContent = 'null';
+        }
+    }
+</script>
+
 </head>
 
    <body>
