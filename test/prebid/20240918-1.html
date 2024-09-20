@@ -117,17 +117,13 @@
         googletag.enableServices();
     });
 
-    function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
+    // 新規リクエストのタイムスタンプを初期化する変数
+    var requestTime = localStorage.getItem('requestTime') || new Date().toLocaleString(); 
+    localStorage.setItem('requestTime', requestTime); // ページロード時にリクエストタイムを一度保存
 
     function saveResultToURL() {
-        var date = new Date().toLocaleString();
         var currentResult = {
-            date: date,
+            date: requestTime,  // ここでリクエストが行われた時間を保存する
             hyperId: document.getElementById('resulttext1').textContent,
             responseCode: document.getElementById('resulttext2').textContent,
             responseTime: document.getElementById('resulttext3').textContent
@@ -151,6 +147,7 @@
 
     function resetResults() {
         window.location.href = window.location.pathname;
+        localStorage.removeItem('requestTime'); // リクエストタイムもリセット
     }
 
     function downloadResults() {
@@ -179,6 +176,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         displayPreviousResults();
+        document.getElementById('requesttime').textContent = requestTime;  // 保存されたリクエストタイムを表示
         setTimeout(calculateMetrics, 2000);  // 2秒後にメトリクスを計算
     });
 
@@ -207,9 +205,6 @@
         var hyperidValues = [];
         var responseTime = null;
         var syncStartTime = null;
-        var date = new Date().toLocaleString();
-
-        document.getElementById('requesttime').textContent = date;
 
         for (var i = 0; i < resources.length; i++) {
             if (resources[i].name.startsWith('https://spadsync.com')) {
@@ -256,9 +251,6 @@
         }
     }
 </script>
-
-
-
 
 </head>
 
