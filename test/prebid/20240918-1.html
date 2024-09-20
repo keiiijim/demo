@@ -32,7 +32,6 @@
             color: white;
         }
     </style>
-
 <script>
     var div_sizes = [[300, 250]];
     var PREBID_TIMEOUT = 10000;
@@ -125,27 +124,7 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    function displayPreviousResults() {
-        var previousResults = getUrlParameter('previousResults');
-        if (previousResults) {
-            previousResults = JSON.parse(previousResults);
-            var previousResultContainer = document.getElementById('previous-results');
-            previousResultContainer.innerHTML = '';  // 前の結果をクリア
-            previousResults.forEach(function(result) {
-                var resultDiv = document.createElement('div');
-                resultDiv.className = 'result-section';
-                resultDiv.innerHTML = `
-                    <p><strong>Date:</strong> ${result.date}</p>
-                    <p><strong>Hyper id:</strong> ${result.hyperId}</p>
-                    <p><strong>Response code:</strong> ${result.responseCode}</p>
-                    <p><strong>Spadsync Response time:</strong> ${result.responseTime}</p>
-                `;
-                previousResultContainer.appendChild(resultDiv);
-            });
-        }
-    }
-
-    function reloadPage() {
+    function saveResultToURL() {
         var date = new Date().toLocaleString();
         var currentResult = {
             date: date,
@@ -162,7 +141,12 @@
         }
         previousResults.push(currentResult);
         var queryString = `?previousResults=${encodeURIComponent(JSON.stringify(previousResults))}`;
-        window.location.href = window.location.pathname + queryString;
+        window.history.replaceState(null, null, window.location.pathname + queryString);
+    }
+
+    function reloadPage() {
+        saveResultToURL();
+        location.reload();
     }
 
     function resetResults() {
@@ -170,6 +154,7 @@
     }
 
     function downloadResults() {
+        saveResultToURL();  // 常に最新の結果を保存してからダウンロード処理
         var previousResults = getUrlParameter('previousResults');
         if (previousResults) {
             previousResults = JSON.parse(previousResults);
@@ -196,6 +181,26 @@
         displayPreviousResults();
         setTimeout(calculateMetrics, 2000);  // 2秒後にメトリクスを計算
     });
+
+    function displayPreviousResults() {
+        var previousResults = getUrlParameter('previousResults');
+        if (previousResults) {
+            previousResults = JSON.parse(previousResults);
+            var previousResultContainer = document.getElementById('previous-results');
+            previousResultContainer.innerHTML = '';  // 前の結果をクリア
+            previousResults.forEach(function(result) {
+                var resultDiv = document.createElement('div');
+                resultDiv.className = 'result-section';
+                resultDiv.innerHTML = `
+                    <p><strong>Date:</strong> ${result.date}</p>
+                    <p><strong>Hyper id:</strong> ${result.hyperId}</p>
+                    <p><strong>Response code:</strong> ${result.responseCode}</p>
+                    <p><strong>Spadsync Response time:</strong> ${result.responseTime}</p>
+                `;
+                previousResultContainer.appendChild(resultDiv);
+            });
+        }
+    }
 
     function calculateMetrics() {
         var resources = performance.getEntriesByType("resource");
@@ -251,6 +256,7 @@
         }
     }
 </script>
+
 
 
 
