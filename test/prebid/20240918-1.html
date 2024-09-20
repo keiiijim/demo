@@ -5,34 +5,7 @@
     <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
     <script async src="prebid7.7.0.js"></script>
     
-    <style>
-        .result-section {
-            margin-bottom: 20px;
-        }
-        .result-section p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .reload-button, .reset-button, .download-button, .auto-reload-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .reset-button {
-            background-color: red;
-            color: white;
-        }
-        .download-button {
-            background-color: green;
-            color: white;
-        }
-        .auto-reload-button {
-            background-color: blue;
-            color: white;
-        }
-    </style>
-<script>
+   <script>
     var div_sizes = [[300, 250]];
     var PREBID_TIMEOUT = 10000;
     var FAILSAFE_TIMEOUT = 5000;
@@ -116,6 +89,14 @@
         googletag.pubads().enableSingleRequest();
         googletag.enableServices();
     });
+
+    // URLからパラメータを取得する関数
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
 
     // 新規リクエストのタイムスタンプを初期化する変数
     var requestTime = localStorage.getItem('requestTime') || new Date().toLocaleString(); 
@@ -251,6 +232,7 @@
         }
     }
 </script>
+
 
 </head>
 
