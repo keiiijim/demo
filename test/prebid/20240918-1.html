@@ -33,11 +33,10 @@
         }
     </style>
 
- <script>
+<script>
     var div_sizes = [[300, 250]];
     var PREBID_TIMEOUT = 10000;
     var FAILSAFE_TIMEOUT = 5000;
-    var maxReloads = 3;
 
     var adUnits = [
         {
@@ -193,26 +192,9 @@
         }
     }
 
-    // 3回自動リロードする関数
-    function autoReload() {
-        var currentReloadCount = parseInt(getUrlParameter('reloadCount')) || 0;
-        if (currentReloadCount < maxReloads) {
-            currentReloadCount++;
-            var queryString = `?reloadCount=${currentReloadCount}&previousResults=${getUrlParameter('previousResults')}`;
-            setTimeout(function() {
-                window.location.href = window.location.pathname + queryString;
-            }, 2000);  // 2秒待機してリロード
-        }
-    }
-
     document.addEventListener("DOMContentLoaded", function() {
         displayPreviousResults();
-        var currentReloadCount = parseInt(getUrlParameter('reloadCount')) || 0;
-        if (currentReloadCount < maxReloads) {
-            autoReload();  // 自動リロードが設定されていたら実行
-        } else {
-            setTimeout(calculateMetrics, 2000);  // 2秒後にメトリクスを計算
-        }
+        setTimeout(calculateMetrics, 2000);  // 2秒後にメトリクスを計算
     });
 
     function calculateMetrics() {
@@ -271,6 +253,7 @@
 </script>
 
 
+
 </head>
 
    <body>
@@ -297,7 +280,6 @@
         <button class="reload-button" onclick="reloadPage()">Reload</button>
         <button class="reset-button" onclick="resetResults()">Reset</button>
         <button class="download-button" onclick="downloadResults()">Download Results</button>
-        <button class="auto-reload-button" onclick="autoReload()">Auto Reload 3 Times</button> <!-- 3回自動リロードボタン -->
     </div>
 </body>
 </html>
