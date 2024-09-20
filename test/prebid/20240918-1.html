@@ -1,5 +1,6 @@
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
     <script async src="prebid7.7.0.js"></script>
@@ -131,6 +132,7 @@
             if (previousResults) {
                 previousResults = JSON.parse(previousResults);
                 var previousResultContainer = document.getElementById('previous-results');
+                previousResultContainer.innerHTML = '';  // 前の結果をクリア
                 previousResults.forEach(function(result) {
                     var resultDiv = document.createElement('div');
                     resultDiv.className = 'result-section';
