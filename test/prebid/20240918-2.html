@@ -129,23 +129,27 @@
     var requestTime = new Date().toLocaleString(); 
 
     function saveResultToURL() {
-        var currentResult = {
-            date: requestTime,  // 新しいリクエスト時間を保存
-            hyperId: document.getElementById('resulttext1').textContent,
-            responseCode: document.getElementById('resulttext2').textContent,
-            responseTime: document.getElementById('resulttext3').textContent
-        };
+    // 表示されているリクエストタイムを使用して requestTime を更新
+    requestTime = document.getElementById('requesttime').textContent; // 修正
 
-        var previousResults = getUrlParameter('previousResults');
-        if (previousResults) {
-            previousResults = JSON.parse(previousResults);
-        } else {
-            previousResults = [];
-        }
-        previousResults.push(currentResult);
-        var queryString = `?previousResults=${encodeURIComponent(JSON.stringify(previousResults))}`;
-        window.history.replaceState(null, null, window.location.pathname + queryString);
+    var currentResult = {
+        date: requestTime,  // 画面に表示されているリクエスト時間を使用
+        hyperId: document.getElementById('resulttext1').textContent,
+        responseCode: document.getElementById('resulttext2').textContent,
+        responseTime: document.getElementById('resulttext3').textContent
+    };
+
+    var previousResults = getUrlParameter('previousResults');
+    if (previousResults) {
+        previousResults = JSON.parse(previousResults);
+    } else {
+        previousResults = [];
     }
+    previousResults.push(currentResult);
+    var queryString = `?previousResults=${encodeURIComponent(JSON.stringify(previousResults))}`;
+    window.history.replaceState(null, null, window.location.pathname + queryString);
+    }
+
 
     function reloadPage() {
         saveResultToURL();  // 結果をURLに保存
