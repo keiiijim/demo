@@ -99,7 +99,21 @@ pbjs.setConfig({
             });
 
         </script>
+ <script>
+    // ページ読み込み時にUser IDsを取得して表示する関数
+    function displayUserIds() {
+      // pbjs.getUserIds()からの結果を取得
+      const userIds = pbjs.getUserIds();
 
+      // JSON形式で整形し、HTML要素に挿入
+      document.getElementById("userIds").textContent = JSON.stringify(userIds, null, 2);
+    }
+
+    // Prebidが完全にロードされたらUser IDsを表示
+    pbjs.que.push(function() {
+      displayUserIds();
+    });
+  </script>
     </head>
 
     <body>
@@ -115,7 +129,8 @@ pbjs.setConfig({
                 </script>
             </div>
         </div>
-
+<h1>Prebid User IDs</h1>
+  <pre id="userIds">Loading User IDs...</pre>
         
         </div>
     </body>
