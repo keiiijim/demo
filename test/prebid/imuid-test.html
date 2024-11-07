@@ -3,7 +3,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
     
-       　<script async src="prebid7.54.3.js"></script>
+       　<script async src="prebid9.18.0.js"></script>
 
         <script>
             var div_sizes = [[300, 250]];
@@ -48,6 +48,19 @@ pbjs.setConfig({
 				name: 'imuid',
 				params: {
 					cid: 5126
+				}
+			},
+				 {
+				name: 'novatiq',
+				params: {
+					useSharedId: false,
+					useCallbacks: true,
+					urlParams: {
+						novatiqId: "snowflake",
+						useStandardUuid: true,
+						useSspId: false,
+						useSspHost: false
+					},
 				}
 			}]
 		}
