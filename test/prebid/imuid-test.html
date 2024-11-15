@@ -6,6 +6,18 @@
        　<script async src="prebid9.18.0.js"></script>
 
         <script>
+
+		function getUrlParameter(name) {
+    var url = window.location.href;
+    name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+    var results = regex.exec(url);
+    return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+var dynamicId = getUrlParameter('id') || '204631'; // デフォルト値を設定
+
+		
             var div_sizes = [[300, 250]];
             
             var PREBID_TIMEOUT = 10000;
@@ -22,7 +34,7 @@
                     bids: [{
                         bidder: 'adg',
                         params: {
-                            id: '204631'
+                            id: dynamicId
                         }
                     }]
                 }
