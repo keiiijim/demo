@@ -145,6 +145,20 @@ pbjs.setConfig({
   <pre id="userIds">Loading User IDs...</pre>
         
         </div>
+	    <script type="text/javascript">
+        // URLパラメータを取得する関数
+        function getUrlParameter(name) {
+            var url = window.location.href;
+            name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+            var results = regex.exec(url);
+            return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        // 枠IDを取得し、動的に挿入
+        var slotId = getUrlParameter('id') || 'デフォルト枠ID';
+        document.getElementById('slot-id').textContent += slotId; // 枠IDを表示
+    </script>
     </body>
 
 </html>
