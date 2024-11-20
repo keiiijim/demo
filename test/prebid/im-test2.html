@@ -3,12 +3,10 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
     
-       　<script async src="prebid9.1.0.js"></script>
-
+       　<script async src="prebid7.7.0.js"></script>
+<!-- v7実装　-->
+      
         <script>
-
-
-		
             var div_sizes = [[300, 250]];
             
             var PREBID_TIMEOUT = 10000;
@@ -25,7 +23,7 @@
                     bids: [{
                         bidder: 'adg',
                         params: {
-                            id: 204631
+                            id: '204631'
                         }
                     }]
                 }
@@ -47,13 +45,27 @@
 pbjs.setConfig({
 		userSync: {
 			auctionDelay: 500,
-			userIds: [ {
-				name: 'imuid',
-				params: {
-					cid: 5126
+			userIds: [{
+				name: 'criteo'
+			}, {
+				name: 'sharedId',
+				storage: {
+					name: "_sharedID",
+					type: "cookie",
+					expires: 90
 				}
-			},
-				 {
+			}, {
+				name: 'id5Id',
+				params: {
+					partner: 1142
+				},
+				storage: {
+					type: "html5",
+					name: "id5id",
+					expires: 90,
+					refreshInSeconds: 28800
+				}
+			},{
 				name: 'novatiq',
 				params: {
 					useSharedId: false,
@@ -64,6 +76,11 @@ pbjs.setConfig({
 						useSspId: false,
 						useSspHost: false
 					},
+				}
+			},{
+				name: 'imuid',
+				params: {
+					cid: 5126
 				}
 			}]
 		}
@@ -102,27 +119,14 @@ pbjs.setConfig({
             });
 
         </script>
- <script>
-    // ページ読み込み時にUser IDsを取得して表示する関数
-    function displayUserIds() {
-      // pbjs.getUserIds()からの結果を取得
-      const userIds = pbjs.getUserIds();
 
-      // JSON形式で整形し、HTML要素に挿入
-      document.getElementById("userIds").textContent = JSON.stringify(userIds, null, 2);
-    }
-
-    // Prebidが完全にロードされたらUser IDsを表示
-    pbjs.que.push(function() {
-      displayUserIds();
-    });
-  </script>
     </head>
 
     <body>
         <div style="height: 1000px;width: 100%;">
         <h2>Prebid.js Example</h2>
-         <h5 id="slot-id">Div 300x250 枠ID:204631</h5>
+        <h5>Div 300x250 枠ID:181492 </h5>
+	<h5>Auction delay 200ms </h5>
         <div style="height: 300px;width: 250px;">
             <div id='div'>
                 <script type='text/javascript'>
@@ -132,11 +136,58 @@ pbjs.setConfig({
                 </script>
             </div>
         </div>
-<h1>Prebid User IDs</h1>
-  <pre id="userIds">Loading User IDs...</pre>
+<div id="result">
+	<p>Hyper id :</p>
+	<p id="resulttext1"></p>
+	<br>
+	<p>responce code :</p>	
+	<p id="resulttext2"></p>
+</div>
+<script>
+setTimeout(function() {
+    var resources = performance.getEntriesByType("resource");
+    var hyperidValues = [];
+
+    // snowflakeの値をhyperidValuesとして取得
+    for (var i = 0; i < resources.length; i++) {
+        if (resources[i].name.startsWith('https://spadsync.com')) {
+            var match = resources[i].name.match(/snowflake=([a-zA-Z0-9\-]+)/);
+            if (match) {
+                hyperidValues.push(match[1]);
+            }
+        }
+    }
+
+    var resultParagraph1 = document.getElementById('resulttext1');
+    if (hyperidValues.length > 0) {
+        resultParagraph1.textContent = hyperidValues.join(', ');
+    } else {
+        resultParagraph1.textContent = 'null';
+    }
+
+    var resultParagraph2 = document.getElementById('resulttext2');
+    var found = false;
+
+    // https://d.socdm.com/adsv/v1?で始まるリソースの中でhyperidの値が含まれているかを確認
+    for (var i = 0; i < resources.length; i++) {
+        if (resources[i].name.startsWith('https://d.socdm.com/adsv/v1?')) {
+            for (var j = 0; j < hyperidValues.length; j++) {
+                if (resources[i].name.includes(hyperidValues[j])) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    resultParagraph2.textContent = found ? '200' : '204';
+
+}, 2000);  // 2秒待機してから実行
+</script>
+
+	
         
         </div>
-	 
     </body>
 
 </html>
