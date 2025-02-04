@@ -42,111 +42,106 @@
             pbjs.que = pbjs.que || [];
 
             pbjs.que.push(function() {
-                pbjs.setConfig({
-    realTimeData: {
-        auctionDelay: 1000,
-        dataProviders: [
-            {
-                name: "liveintent",
-                waitForIt: true
-            }
-        ]
-    }
-                },{
-                    ortb2:{
-                        user:{
-                            ext:{
-                                data:{
-                                    CxSegments:[{0:"18hqp4t9xe8kl",1:"18icvbvthwvdc",2:"a9y8uu5qxsdo"}]
-                                }
-                            },
-                            data: [{
-                                name: "dataprovider.com", 
-                                ext: { segtax: 4 },
-                                segment: [
-                                    { id: "1" }
-                                ]
-                            }]
-                        },
-                        site:{
-                            ext:{
-                                data:[{k_Category:"null",k_Pricemenu:"null",k_Top_Category:"top"}]
-                            }
-                        }
-                    },
-                    userSync: {
-                        auctionDelay: 1000,
-                        userIds: [{
-            name: 'justId',
-            params: {
-                mode: 'COMBINED',
-                url: 'https://id.nsaudience.pl/getId.js'
-            }
-        },{
-        name: "utiqId",
-      },{
-                            name: 'criteo'
-                        }, {
-                            name: 'sharedId',
-                            storage: {
-                                name: "_sharedID",
-                                type: "cookie",
-                                expires: 90
-                            }
-                        }, {
-                            name: 'id5Id',
-                            params: {
-                                partner: 1142
-                            },
-                            storage: {
-                                type: "html5",
-                                name: "id5id",
-                                expires: 90,
-                                refreshInSeconds: 28800
-                            }
-                        },{
-                            name: 'novatiq',
-                            params: {
-                                useSharedId: false,
-                                useCallbacks: true,
-                                urlParams: {
-                                    novatiqId: "snowflake",
-                                    useStandardUuid: true,
-                                    useSspId: false,
-                                    useSspHost: false
-                                },
-                            }
-                        },
-                                 {
-    name: "intentIqId",
-    params: {
-        partner: 1485675855,  // iiQから発行されるIDを追記ください
-        timeoutInMillis: 500,
-        browserBlackList: "chrome" // 3P Cookieが有効な”chrome”を除外指定します。
-    },
-    storage: {
-        type: "html5",
-        name: "intentIqId", 
-        expires: 0,
-        refreshInSeconds: 0
-    }
-}
-                        
-]
+    pbjs.setConfig({
+        realTimeData: {
+            auctionDelay: 1000,
+            dataProviders: [
+                {
+                    name: "liveintent",
+                    waitForIt: true
+                }
+            ]
+        },
+        ortb2: {
+            user: {
+                ext: {
+                    data: {
+                        CxSegments: ["18hqp4t9xe8kl", "18icvbvthwvdc", "a9y8uu5qxsdo"]
                     }
-                });
-                pbjs.enableAnalytics({
-                provider: 'iiqAnalytics'
-            });
+                },
+                data: [{
+                    name: "dataprovider.com", 
+                    ext: { segtax: 4 },
+                    segment: [{ id: "1" }]
+                }]
+            },
+            site: {
+                ext: {
+                    data: {k_Category: "null", k_Pricemenu: "null", k_Top_Category: "top"}
+                }
+            }
+        },
+        userSync: {
+            auctionDelay: 1000,
+            userIds: [{
+                name: 'justId',
+                params: {
+                    mode: 'COMBINED',
+                    url: 'https://id.nsaudience.pl/getId.js'
+                }
+            },{
+                name: "utiqId"
+            },{
+                name: 'criteo'
+            }, {
+                name: 'sharedId',
+                storage: {
+                    name: "_sharedID",
+                    type: "cookie",
+                    expires: 90
+                }
+            }, {
+                name: 'id5Id',
+                params: {
+                    partner: 1142
+                },
+                storage: {
+                    type: "html5",
+                    name: "id5id",
+                    expires: 90,
+                    refreshInSeconds: 28800
+                }
+            },{
+                name: 'novatiq',
+                params: {
+                    useSharedId: false,
+                    useCallbacks: true,
+                    urlParams: {
+                        novatiqId: "snowflake",
+                        useStandardUuid: true,
+                        useSspId: false,
+                        useSspHost: false
+                    }
+                }
+            },{
+                name: "intentIqId",
+                params: {
+                    partner: 1485675855,
+                    timeoutInMillis: 500,
+                    browserBlackList: ["chrome"]
+                },
+                storage: {
+                    type: "html5",
+                    name: "intentIqId",
+                    expires: 0,
+                    refreshInSeconds: 0
+                }
+            }]
+        }
+    });
 
+    pbjs.enableAnalytics({
+        provider: 'iiqAnalytics'
+    });
 
-                pbjs.addAdUnits(adUnits);
+    pbjs.addAdUnits(adUnits);
 
-                pbjs.requestBids({
-                    bidsBackHandler: initAdserver,
-                    timeout: PREBID_TIMEOUT
-                });
-            });
+    pbjs.requestBids({
+        bidsBackHandler: initAdserver,
+        timeout: PREBID_TIMEOUT
+    });
+});
+
 
             function initAdserver() {
                 if (pbjs.initAdserverSet) return;
