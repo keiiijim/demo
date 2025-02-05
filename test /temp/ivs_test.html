@@ -77,7 +77,7 @@
         }
 
         function sendAnswer(answer) {
-            const apiUrl = 'https://script.google.com/a/macros/supership.jp/s/AKfycbxUh24qJBNcyfLtmvzZjH_dGpeOjh_y6Y2u1rYcz0R1iVXQQmpMBE0CVA0ND1iyYak7ng/exec';  // GASのAPIエンドポイントを正しく設定してください
+            const apiUrl = 'https://script.google.com/a/macros/supership.jp/s/AKfycbxUh24qJBNcyfLtmvzZjH_dGpeOjh_y6Y2u1rYcz0R1iVXQQmpMBE0CVA0ND1iyYak7ng/exec';
             const data = {
                 UserID: generateUUID(),
                 PageId: '1111',
@@ -87,13 +87,17 @@
             };
 
             fetch(`${apiUrl}?${new URLSearchParams(data)}`, {
-                method: 'GET'
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.text();
+                return response.json();
             })
             .then(result => {
                 console.log('Success:', result);
