@@ -88,10 +88,7 @@
 
             fetch(`${apiUrl}?${new URLSearchParams(data)}`, {
                 method: 'GET',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                mode: 'cors'
             })
             .then(response => {
                 if (!response.ok) {
