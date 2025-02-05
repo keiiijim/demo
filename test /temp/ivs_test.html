@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インバナーボタン送信</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .banner-container {
+            width: 300px;
+            height: 250px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+        }
+        .survey-content {
+            text-align: center;
+            padding: 20px;
+        }
+        .survey-content h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .answer-button {
+            display: block;
+            padding: 8px 15px;
+            margin: 5px auto;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 80%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .answer-button:hover {
+            background-color: #0056b3;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 16px;
+            line-height: 25px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container" id="surveyBanner">
+        <button class="close-btn" onclick="closeBanner()">&times;</button>
+        <div class="survey-content" id="surveyContent">
+            <h2>質問: あなたの選択は？</h2>
+            <button class="answer-button" onclick="sendAnswer('選択1')">選択1</button>
+            <button class="answer-button" onclick="sendAnswer('選択2')">選択2</button>
+            <button class="answer-button" onclick="sendAnswer('選択3')">選択3</button>
+            <button class="answer-button" onclick="sendAnswer('選択4')">選択4</button>
+        </div>
+    </div>
+
+    <script>
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function sendAnswer(answer) {
+            const apiUrl = 'https://script.google.com/a/macros/supership.jp/s/AKfycbzLk6EPnUaX5Ify-m-bJ_jwuZ-ZDbYHXJtSXfUhTxKhwdnHFFTfXlbxkPjphIwnBalH8g/exec';  // ここにGASのAPIエンドポイントを設定
+            const data = {
+                UserID: generateUUID(),
+                PageId: '1111',
+                Question: 'question1',
+                Answer: answer,
+                MAID: 'SOCが入る'
+            };
+
+            fetch(apiUrl + '?' + new URLSearchParams(data), {
+                method: 'GET'
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log('Success:', result);
+                showThankYou();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function showThankYou() {
+            const surveyContent = document.getElementById('surveyContent');
+            surveyContent.innerHTML = `
+                <h2>ご協力ありがとうございました！</h2>
+            `;
+        }
+
+        function closeBanner() {
+            document.getElementById('surveyBanner').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
