@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Generation 資料ダウンロード - ワイヤーフレーム</title>
+    <style>
+        /* 基本スタイル */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        /* ヘッダー */
+        header {
+            background-color: #e0e0e0;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header .logo {
+            font-weight: bold;
+            font-size: 24px;
+            color: #333;
+        }
+        header .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        header nav ul li {
+            margin-left: 20px;
+        }
+        header nav ul li a {
+            text-decoration: none;
+            color: #555;
+            padding: 5px 0;
+        }
+        .login-button {
+            background-color: transparent;
+            color: #555;
+            padding: 8px 15px;
+            text-decoration: none;
+            border: 1px solid #999;
+            border-radius: 3px;
+            font-weight: bold;
+            display: inline-block;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .download-button {
+            background-color: #666;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* 各セクション共通スタイル */
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+        section h1, section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        section p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* メインビジュアル */
+        .hero {
+            background-color: #f0f0f0;
+            min-height: 500px;
+            padding: 80px 20px;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero .hero-content {
+            position: relative;
+            z-index: 2;
+            color: black;
+            text-align: center;
+            text-shadow: none;
+        }
+        .hero .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #d0d0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border: 1px dashed #999;
+            z-index: 1;
+        }
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        .hero .sub-catch {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .hero .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .hero .download-button {
+            margin-bottom: 0;
+            font-size: 18px;
+            padding: 12px 25px;
+        }
+        .hero .cta-button-secondary {
+            background-color: transparent;
+            color: #555;
+            padding: 12px 25px;
+            text-decoration: none;
+            border: 1px solid #999;
+            border-radius: 3px;
+            font-weight: bold;
+            display: inline-block;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 18px;
+        }
+
+        /* 課題提起セクション */
+        .challenges .challenge-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .challenges .challenge-item {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+            background-color: #fff;
+            text-align: left;
+        }
+        .challenges .challenge-item h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .challenges .challenge-item p {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        /* Ad Generationとは？セクションの詳細な横並びスタイル */
+        .what-is-adg .intro-text {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .feature-block {
+            display: flex;
+            align-items: center;
+            padding: 40px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        .feature-block:last-of-type {
+            border-bottom: none;
+        }
+        .feature-block .feature-image,
+        .feature-block .feature-description {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: left;
+        }
+        .feature-block .feature-image {
+            height: 200px;
+            background-color: #d0d0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border: 1px dashed #999;
+        }
+        .feature-block h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .feature-block .sub-heading {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .feature-block p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .feature-block .note {
+            font-size: 13px;
+            color: #777;
+            margin-top: 10px;
+        }
+        .feature-block.reverse {
+            flex-direction: row-reverse;
+        }
+        /* SSP内のロゴ一覧スタイル */
+        .partnership-logos {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+        .partnership-logos h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .partnership-logos .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            justify-content: center;
+        }
+        .partnership-logos .logo-item {
+            height: 40px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Ad Generationが選ばれる理由セクションの2x2グリッドスタイル */
+        .why-choose-adg .reason-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+            text-align: left;
+        }
+        .why-choose-adg .reason-item {
+            background-color: #fff;
+            padding: 25px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+        .why-choose-adg .reason-item h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 1.3;
+        }
+        .why-choose-adg .reason-item p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 0;
+        }
+        .why-choose-adg .reason-item:nth-child(4) {
+            grid-column: auto;
+            margin-top: 0;
+        }
+        .why-choose-adg .reason-item:nth-child(2) p {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* NEWSセクションのスタイル */
+        .news-section {
+            padding-bottom: 80px;
+            text-align: center;
+        }
+        .news-header {
+            border-bottom: 3px solid #ccc;
+            display: inline-block;
+            margin-bottom: 60px;
+            padding-bottom: 5px;
+            font-size: 24px;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+            text-align: left;
+        }
+        .news-item {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .news-item .news-thumbnail {
+            width: 100%;
+            height: 150px;
+            background-color: #d0d0d0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .news-item .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        .news-item h3 {
+            font-size: 16px;
+            line-height: 1.4;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .news-item p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+
+        /* CTAセクション */
+        .cta-section {
+            background-color: #eee;
+            padding: 80px 20px;
+            border-top: 1px solid #ccc;
+        }
+        .cta-section h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .cta-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .cta-section .download-button {
+            background-color: #666;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 0;
+            font-weight: bold;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 18px;
+        }
+
+        /* フッター */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        /* レスポンシブ対応の簡易化 */
+        @media (min-width: 769px) {
+            .hero .cta-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+        @media (max-width: 1024px) {
+            .why-choose-adg .reason-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .why-choose-adg .reason-item:nth-child(4) {
+                grid-column: auto;
+                margin-top: 0;
+            }
+            .news-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            header .header-right {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            header nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+            header nav ul li {
+                margin: 0;
+                margin-bottom: 5px;
+                width: 100%;
+                text-align: left;
+            }
+            .login-button, .download-button {
+                width: 100%;
+                text-align: center;
+            }
+            .challenges .challenge-item {
+                width: calc(100% - 20px);
+            }
+            .feature-block {
+                flex-direction: column;
+            }
+            .feature-block.reverse {
+                flex-direction: column;
+            }
+            .feature-block .feature-description {
+                text-align: center;
+            }
+            .feature-block .feature-image {
+                margin-bottom: 20px;
+                width: 100%;
+            }
+            .why-choose-adg .reason-grid {
+                grid-template-columns: 1fr;
+            }
+            .why-choose-adg .reason-item:nth-child(4) {
+                grid-column: auto;
+                margin-top: 0;
+            }
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            section h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">Ad Generation</div>
+            <div class="header-right">
+                <nav>
+                    <ul>
+                        <li><a href="#">Ad Generationとは？</a></li>
+                        <li><a href="#">課題解決</a></li>
+                        <li><a href="#">3つのコア機能</a></li>
+                        <li><a href="#">導入事例</a></li>
+                        <li><a href="#">選ばれる理由</a></li>
+                        <li><a href="#">お問い合わせ</a></li>
+                    </ul>
+                </nav>
+                <a href="#" class="login-button">ログイン</a>
+                <a href="#" class="download-button">資料ダウンロード</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>パブリッシャーの「こうしたい」をカタチに。<br>メディアのミライを共に創る成長支援プラットフォーム。</h1>
+                    <p class="sub-catch">メディアの成長フェーズに合わせた最適なソリューションとサポートで、メディアビジネスの持続的な 成長を伴走支援します。</p>
+                    <div class="cta-buttons">
+                        <a href="#" class="download-button">詳細資料をダウンロードする（無料）</a>
+                        <a href="#" class="cta-button-secondary">アカウント開設はこちら</a>
+                    </div>
+                </div>
+                <div class="image-placeholder">
+                    <p style="color: #333; font-size: 16px;"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="challenges container">
+            <h2>このような課題をお持ちではありませんか？</h2>
+            <div class="challenge-list">
+                <div class="challenge-item">
+                    <h3>収益面の課題</h3>
+                    <p>広告で収益を得たいけど、どうやったら良いか分からない</p>
+                    <p>もっと広告収益を上げたい</p>
+                    <p>ユーザビリティと広告収益を両立したい</p>
+                </div>
+                <div class="challenge-item">
+                    <h3>データ活用の課題</h3>
+                    <p>データを広告配信に使うための方法が分からない</p>
+                    <p>データの収益化ができていない</p>
+                    <p>データを使った独自の広告商品を作りたい</p>
+                </div>
+                <div class="challenge-item">
+                    <h3>運用・戦略の課題</h3>
+                    <p>運用型広告以外でも広告収益を得たい</p>
+                    <p>リソース不足で商品企画や販売まで手が回らなかったり組織体制が無い</p>
+                    <p>変化の速い広告業界で信頼できる相談相手がいない</p>
+                </div>
+            </div>
+            <div style="margin-top: 50px;">
+                <p>Ad Generationのサービス概要や主要な機能について、無料の資料でご確認いただけます。</p>
+                <a href="#" class="download-button">資料をダウンロードする</a>
+            </div>
+        </section>
+
+        <section class="what-is-adg container">
+            <h2>Ad Generationとは？<br>メディアの未来を拓くオールインワン・プラットフォーム</h2>
+            <p class="intro-text">Ad Generationは、広告収益とメディア価値を最大化するオールインワン・プラットフォームです。SSPとして運用型広告による収益基盤を強化し、メディアの1st Partyデータとアドサーバーを活用して新たな広告商品を共に開発します。メディアの成長フェーズに合わせた最適なソリューションと手厚いサポートで、メディアビジネスの持続的な成長を伴走支援します。</p>
+
+            <div class="feature-block">
+                <div class="feature-image">イメージ画像</div>
+                <div class="feature-description">
+                    <h3>Function1: SSP</h3>
+                    <p class="sub-heading">安定した広告収益基盤：自動最適化で収益の安定と最大化を実現</p>
+                    <p>Ad Generation（アドジェネ）では、国内外の主要なDSP・アドネットワークと連携。全ての広告ソースが公平に入札する「ユニファイドオークション」や、比率調整・Waterfall型などの柔軟な制御で、バナー・ネイティブ・動画リワード広告に対応可能です。また、パブリッシャー自身が契約したデマンド事業者をカスタムメディエーションとして統合管理できるため、自社に最適な収益構造を実現できます。</p>
+
+                    <div class="partnership-logos">
+                        <h4>パートナーシップ</h4>
+                        <div class="logo-grid">
+                            <div class="logo-item">DSPロゴ1</div>
+                            <div class="logo-item">DSPロゴ2</div>
+                            <div class="logo-item">DSPロゴ3</div>
+                            <div class="logo-item">DSPロゴ4</div>
+                            <div class="logo-item">DSPロゴ5</div>
+                            <div class="logo-item">DSPロゴ6</div>
+                            <div class="logo-item">DSPロゴ7</div>
+                            <div class="logo-item">DSPロゴ8</div>
+                            <div class="logo-item">DSPロゴ9</div>
+                            <div class="logo-item">DSPロゴ10</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-block reverse">
+                <div class="feature-image">イメージ画像</div>
+                <div class="feature-description">
+                    <h3>Function2: アドサーバー</h3>
+                    <p class="sub-heading">メディア価値の最大化：すべての広告在庫を1つの管理画面で</p>
+                    <p>Ad Generationは、純広告・運用型広告・自社広告をひとつの管理画面で一元管理。優先順位や目標配信量、曜日や時間帯・OS・地域などのターゲティングも柔軟に設定可能です。「収益性を重視した自動配信」と「メディア独自の戦略に基づいた手動配信」の両立ができ、在庫の有効活用と収益最適化を実現します。</p>
+                </div>
+            </div>
+
+            <div class="feature-block">
+                <div class="feature-image">イメージ画像</div>
+                <div class="feature-description">
+                    <h3>Function3: ファーストパーティーデータ活用</h3>
+                    <p class="sub-heading">メディア独自の価値創出：1st Partyデータの収益化</p>
+                    <p>会員属性や行動履歴といったメディアが保有する1st Partyデータを活用し、独自の広告商品や精度の高いターゲティング配信を実現します。さらにSupershipが保有する高精度なデータと連携し、プレミアムPMPでの高単価案件獲得や、外部出稿への活用にも利用できます。</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 50px;">
+                <p>各機能の詳細、強みは資料でご確認ください。</p>
+                <a href="#" class="download-button">資料をダウンロードする</a>
+            </div>
+        </section>
+
+       <section class="why-choose-adg container">
+            <h2>Ad Generationが選ばれる理由</h2>
+            <div class="reason-grid">
+                <div class="reason-item">
+                    <h3>アプリビジネスへの深い理解と実績</h3>
+                    <p>ゲーム、マンガ、ツール系など多様なジャンルに対応。アプリ特有のマネタイズ課題を熟知し、SDK実装から収益化まで専門チームがサポートします。</p>
+                </div>
+                <div class="reason-item">
+                    <h3>信頼できるブランドセーフティ</h3>
+                    <p>JICDAQ認証取得（ブランドセーフティ・無効トラフィック対策）。アドベリフィケーションベンダーとの連携や、目視チェックによる個別対応も実施しています。</p>
+                </div>
+                <div class="reason-item">
+                    <h3>国内事情に精通した手厚いサポート体制</h3>
+                    <p>営業・運用・エンジニアの三位一体サポート。日本語での迅速な対応と、定期的な振り返り・改善提案で、安心してご利用いただけます。</p>
+                </div>
+                <div class="reason-item">
+                    <h3>10年以上の実績とテクノロジー</h3>
+                    <p>安定したプラットフォーム運営と継続的な機能改善。大手メディアからの信頼を獲得し、長期的なパートナーシップを構築しています。</p>
+                </div>
+            </div>
+            <div style="margin-top: 50px;">
+                <p>より詳しい導入事例やサポート体制は、ぜひ資料をご覧ください。</p>
+                <a href="#" class="download-button">資料をダウンロードする</a>
+            </div>
+        </section>
+
+        <section class="news-section">
+            <div class="container">
+                <h2 class="news-header">NEWS (プレスリリース・お知らせ）</h2>
+                <div class="news-grid">
+                    <div class="news-item">
+                        <div class="news-thumbnail">画像</div>
+                        <div class="news-content">
+                            <div class="meta-info">
+                                <span class="category">プレスリリース</span>
+                                <span class="date">YYYY.MM.DD</span>
+                            </div>
+                            <h3>タイトルテキストテキストテキストテキストテキスト</h3>
+                            <p>本文テキストテキストテキストテキストテキストテキストテキスト</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-thumbnail">画像</div>
+                        <div class="news-content">
+                            <div class="meta-info">
+                                <span class="category">プレスリリース</span>
+                                <span class="date">YYYY.MM.DD</span>
+                            </div>
+                            <h3>タイトルテキストテキストテキストテキストテキスト</h3>
+                            <p>本文テキストテキストテキストテキストテキストテキストテキスト</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-thumbnail">画像</div>
+                        <div class="news-content">
+                            <div class="meta-info">
+                                <span class="category">資料ダウンロード</span>
+                                <span class="date">YYYY.MM.DD</span>
+                            </div>
+                            <h3>タイトルテキストテキストテキストテキストテキスト</h3>
+                            <p>本文テキストテキストテキストテキストテキストテキストテキスト</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-thumbnail">画像</div>
+                        <div class="news-content">
+                            <div class="meta-info">
+                                <span class="category">資料ダウンロード</span>
+                                <span class="date">YYYY.MM.DD</span>
+                            </div>
+                            <h3>タイトルテキストテキストテキストテキストテキスト</h3>
+                            <p>本文テキストテキストテキストテキストテキストテキストテキスト</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-thumbnail">画像</div>
+                        <div class="news-content">
+                            <div class="meta-info">
+                                <span class="category">プレスリリース</span>
+                                <span class="date">YYYY.MM.DD</span>
+                            </div>
+                            <h3>タイトルテキストテキストテキストテキストテキスト</h3>
+                            <p>本文テキストテキストテキストテキストテキストテキストテキスト</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-thumbnail">画像</div>
+                        <div class="news-content">
+                            <div class="meta-info">
+                                <span class="category">プレスリリース</span>
+                                <span class="date">YYYY.MM.DD</span>
+                            </div>
+                            <h3>タイトルテキストテキストテキストテキストテキスト</h3>
+                            <p>本文テキストテキストテキストテキストテキストテキストテキスト</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>メディアの収益化と成長を加速させるAd Generation</h2>
+                <p>Ad Generationがどのように貴社のメディアビジネスに貢献できるか、詳細な機能や導入事例、サポート体制についてまとめた資料を無料でダウンロードいただけます。</p>
+                <a href="#" class="download-button">Ad Generation 紹介資料をダウンロードする（無料）</a>
+                <p style="margin-top: 20px;"><a href="#">お問い合わせはこちら</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p style="text-align: center; padding: 20px 0; color: #fff; background-color: #333;">フッター</p>
+    </footer>
+
+</body>
+</html>
