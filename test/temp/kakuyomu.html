@@ -13,6 +13,24 @@
 -->
 <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=203302&targetID=adg_203302&displayid=3&adType=RECT&async=true&tagver=2.0.0"></script>
 
+  <script>
+new MutationObserver((muts) => {
+  muts.forEach(m => {
+    if (m.type === "attributes" && m.attributeName === "style") {
+      const el = m.target;
+      if (el.id === "adg_203302" && /transform/.test(el.style.cssText)) {
+        console.trace("transform set:", el.style.cssText);
+        debugger;
+      }
+    }
+  });
+}).observe(document.documentElement, {
+  attributes: true,
+  subtree: true,
+  attributeFilter: ["style"]
+});
+</script>
+
 
 
 </body>
