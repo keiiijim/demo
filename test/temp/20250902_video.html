@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>広告タグ確認ページ（SP・縦長）</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      line-height: 1.6;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+    }
+    section {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .dummy {
+      height: 600px;
+      background: linear-gradient(to bottom, #eee, #ddd);
+      margin: 20px 0;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+    }
+    .ad-slot {
+      margin: 30px auto;
+      width: 320px;
+      height: 100px;
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+    footer {
+      margin: 50px 0;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>広告タグ確認ページ（SP・縦長）</header>
+
+  <section>
+    <div class="dummy">ダミーコンテンツ①<br>（スクロールテスト用）</div>
+
+    <div class="ad-slot" id="adg-slot-1">
+     <!--
+商用テスト媒体 動画枠利用テスト 226431
+-->
+<script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+
+   </div>
+
+    <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール）</div>
+
+    <div class="ad-slot" id="adg-slot-2">
+     <!--
+商用テスト媒体 動画枠利用テスト 226431
+-->
+<script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_2&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+
+ </div>
+
+    <div class="dummy">ダミーコンテンツ③<br>（下までスクロール）</div>
+  </section>
+
+  <footer>© 確認用テストページ</footer>
+</body>
+</html>
