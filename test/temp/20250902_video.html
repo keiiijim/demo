@@ -28,10 +28,9 @@
       color: #555;
     }
     .ad-slot {
-      margin: 30px auto;
-      width: 320px;
-      height: 180px;
-      border: 1px dashed #ccc;
+      margin: 10px auto;
+//      width: 320px;
+  //    height: 180px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -44,16 +43,10 @@
       left: 0;
       width: 100%;
       max-width: 100%;
-      height: auto;          /* 高さは広告タグ内の比率に依存 */
+      height: auto; 
       z-index: 9999;
-      background: #000;      /* 動画外の余白を黒背景に */
     }
-    /* iframe があれば横幅100%に強制 */
-    .ad-slot-overlay iframe {
-      width: 100% !important;
-      height: auto !important;
-      aspect-ratio: 16/9;    /* 強制的に16:9比率にする場合 */
-    }
+
   </style>
 </head>
 <body>
