@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（SP）</title>
+  <title>広告タグ確認ページ（SP・オーバーレイ）</title>
   <style>
     body {
       font-family: sans-serif;
@@ -12,19 +12,10 @@
       background: #f9f9f9;
       line-height: 1.6;
     }
-    header {
-      background: #333;
-      color: #fff;
-      padding: 10px;
-      font-size: 18px;
-      text-align: center;
-      /* ← sticky を削除 */
-    }
     section {
       padding: 20px;
       max-width: 600px;
       margin: auto;
-      margin-top: 220px; /* ← 上部の固定広告分の余白を確保 */
     }
     .dummy {
       height: 600px;
@@ -46,46 +37,52 @@
       justify-content: center;
       background: #fff;
     }
-    /* ← 最上部オーバーレイ広告 */
-    .ad-slot-fixed-top {
+    /* 見た目用のオーバーレイ */
+    .ad-slot-overlay {
       position: fixed;
       top: 0;
       left: 50%;
       transform: translateX(-50%);
       z-index: 9999;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       background: #fff;
-    }
-    footer {
-      margin: 50px 0;
-      text-align: center;
-      font-size: 12px;
-      color: #888;
+      width: 320px;
+      height: 180px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
   </style>
 </head>
 <body>
-  <!-- 最上部に常駐する広告 -->
-  <div class="ad-slot ad-slot-fixed-top" id="adg-slot-1">
-    <!-- 商用テスト媒体 動画枠利用テスト 226431 -->
-    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-  </div>
 
-  <header>広告タグ確認ページ（SP・縦長）</header>
+  <!-- 判定用（通常配置、スクロールに従う） -->
+  <div class="ad-slot" id="adg-slot-judge">
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_judge&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+  </div>
 
   <section>
     <div class="dummy">ダミーコンテンツ①<br>（スクロールテスト用）</div>
-
-    <div class="ad-slot" id="adg-slot-2">
-      <!-- 商用テスト媒体 動画枠利用テスト 226431 -->
-      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_2&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-    </div>
-
     <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール用）</div>
-
     <div class="dummy">ダミーコンテンツ③<br>（さらにスクロール用）</div>
   </section>
 
-  <footer>footer 確認用テストページ</footer>
+  <script>
+    window.addEventListener('load', () => {
+      // 判定用タグのDOMをコピーしてオーバーレイ化
+      const judge = document.getElementById('adg-slot-judge');
+      const clone = judge.cloneNode(true);
+      clone.id = "adg-slot-fixed";
+      clone.classList.add("ad-slot-overlay");
+
+      // targetID をユニークに書き換え（競合回避）
+      const script = clone.querySelector("script");
+      if (script) {
+        let src = script.getAttribute("src");
+        src = src.replace("adg_216075_judge", "adg_216075_fixed");
+        script.setAttribute("src", src);
+      }
+
+      document.body.appendChild(clone);
+    });
+  </script>
+
 </body>
 </html>
