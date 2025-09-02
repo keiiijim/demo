@@ -37,25 +37,33 @@
       justify-content: center;
       background: #fff;
     }
-    /* 見た目用のオーバーレイ広告 */
+    /* 見た目用のオーバーレイ広告（横幅100%） */
     .ad-slot-overlay {
       position: fixed;
       top: 0;
+      left: 0;
+      width: 100%;
+      max-width: 100%;
+      height: auto;          /* 高さは広告タグ内の比率に依存 */
       z-index: 9999;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      background: #fff;
+      background: #000;      /* 動画外の余白を黒背景に */
+    }
+    /* iframe があれば横幅100%に強制 */
+    .ad-slot-overlay iframe {
+      width: 100% !important;
+      height: auto !important;
+      aspect-ratio: 16/9;    /* 強制的に16:9比率にする場合 */
     }
   </style>
 </head>
 <body>
 
-  <!-- プレースホルダー（判定用の透明DIV） -->
+  <!-- 判定用プレースホルダー（透明） -->
   <div class="ad-slot" style="opacity:0; pointer-events:none;">
-    <!-- 本来の広告タグをここに埋め込む -->
     <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_ph&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
   </div>
 
-  <!-- 見た目用オーバーレイ広告（同じIDを使うと競合するので targetID は別名にする） -->
+  <!-- 見た目用オーバーレイ広告（横幅100%） -->
   <div class="ad-slot ad-slot-overlay" id="adg-slot-1">
     <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
   </div>
