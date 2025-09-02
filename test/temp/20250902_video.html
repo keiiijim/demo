@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（SP・オーバーレイ）</title>
+  <title>広告タグ確認ページ（SP）</title>
   <style>
     body {
       font-family: sans-serif;
@@ -12,10 +12,19 @@
       background: #f9f9f9;
       line-height: 1.6;
     }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      /* ← sticky を削除 */
+    }
     section {
       padding: 20px;
       max-width: 600px;
       margin: auto;
+      margin-top: 220px; /* ← 上部の固定広告分の余白を確保 */
     }
     .dummy {
       height: 600px;
@@ -37,8 +46,8 @@
       justify-content: center;
       background: #fff;
     }
-    /* 見た目用のオーバーレイ広告 */
-    .ad-slot-overlay {
+    /* ← 最上部オーバーレイ広告 */
+    .ad-slot-fixed-top {
       position: fixed;
       top: 0;
       left: 50%;
@@ -47,26 +56,36 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       background: #fff;
     }
+    footer {
+      margin: 50px 0;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+    }
   </style>
 </head>
 <body>
-
-  <!-- プレースホルダー（判定用の透明DIV） -->
-  <div class="ad-slot" style="opacity:0; pointer-events:none;">
-    <!-- 本来の広告タグをここに埋め込む -->
-    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_ph&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-  </div>
-
-  <!-- 見た目用オーバーレイ広告（同じIDを使うと競合するので targetID は別名にする） -->
-  <div class="ad-slot ad-slot-overlay" id="adg-slot-1">
+  <!-- 最上部に常駐する広告 -->
+  <div class="ad-slot ad-slot-fixed-top" id="adg-slot-1">
+    <!-- 商用テスト媒体 動画枠利用テスト 226431 -->
     <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
   </div>
 
+  <header>広告タグ確認ページ（SP・縦長）</header>
+
   <section>
-    <div class="dummy">ダミーコンテンツ①</div>
-    <div class="dummy">ダミーコンテンツ②</div>
-    <div class="dummy">ダミーコンテンツ③</div>
+    <div class="dummy">ダミーコンテンツ①<br>（スクロールテスト用）</div>
+
+    <div class="ad-slot" id="adg-slot-2">
+      <!-- 商用テスト媒体 動画枠利用テスト 226431 -->
+      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_2&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+    </div>
+
+    <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール用）</div>
+
+    <div class="dummy">ダミーコンテンツ③<br>（さらにスクロール用）</div>
   </section>
 
+  <footer>footer 確認用テストページ</footer>
 </body>
 </html>
