@@ -37,52 +37,36 @@
       justify-content: center;
       background: #fff;
     }
-    /* 見た目用のオーバーレイ */
+    /* 見た目用のオーバーレイ広告 */
     .ad-slot-overlay {
       position: fixed;
       top: 0;
       left: 50%;
       transform: translateX(-50%);
       z-index: 9999;
-      background: #fff;
-      width: 320px;
-      height: 180px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      background: #fff;
     }
   </style>
 </head>
 <body>
 
-  <!-- 判定用（通常配置、スクロールに従う） -->
-  <div class="ad-slot" id="adg-slot-judge">
-    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_judge&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+  <!-- プレースホルダー（判定用の透明DIV） -->
+  <div class="ad-slot" style="opacity:0; pointer-events:none;">
+    <!-- 本来の広告タグをここに埋め込む -->
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_ph&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+  </div>
+
+  <!-- 見た目用オーバーレイ広告（同じIDを使うと競合するので targetID は別名にする） -->
+  <div class="ad-slot ad-slot-overlay" id="adg-slot-1">
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
   </div>
 
   <section>
-    <div class="dummy">ダミーコンテンツ①<br>（スクロールテスト用）</div>
-    <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール用）</div>
-    <div class="dummy">ダミーコンテンツ③<br>（さらにスクロール用）</div>
+    <div class="dummy">ダミーコンテンツ①</div>
+    <div class="dummy">ダミーコンテンツ②</div>
+    <div class="dummy">ダミーコンテンツ③</div>
   </section>
-
-  <script>
-    window.addEventListener('load', () => {
-      // 判定用タグのDOMをコピーしてオーバーレイ化
-      const judge = document.getElementById('adg-slot-judge');
-      const clone = judge.cloneNode(true);
-      clone.id = "adg-slot-fixed";
-      clone.classList.add("ad-slot-overlay");
-
-      // targetID をユニークに書き換え（競合回避）
-      const script = clone.querySelector("script");
-      if (script) {
-        let src = script.getAttribute("src");
-        src = src.replace("adg_216075_judge", "adg_216075_fixed");
-        script.setAttribute("src", src);
-      }
-
-      document.body.appendChild(clone);
-    });
-  </script>
 
 </body>
 </html>
