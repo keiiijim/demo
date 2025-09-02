@@ -18,13 +18,13 @@
       padding: 10px;
       font-size: 18px;
       text-align: center;
-      position: sticky;
-      top: 0;
+      /* ← sticky を削除 */
     }
     section {
       padding: 20px;
       max-width: 600px;
       margin: auto;
+      margin-top: 220px; /* ← 上部の固定広告分の余白を確保 */
     }
     .dummy {
       height: 600px;
@@ -46,14 +46,15 @@
       justify-content: center;
       background: #fff;
     }
-    /* ← オーバーレイ広告用 */
-    .ad-slot-fixed {
+    /* ← 最上部オーバーレイ広告 */
+    .ad-slot-fixed-top {
       position: fixed;
-      bottom: 0;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
       z-index: 9999;
-      box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      background: #fff;
     }
     footer {
       margin: 50px 0;
@@ -64,23 +65,23 @@
   </style>
 </head>
 <body>
+  <!-- 最上部に常駐する広告 -->
+  <div class="ad-slot ad-slot-fixed-top" id="adg-slot-1">
+    <!-- 商用テスト媒体 動画枠利用テスト 226431 -->
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+  </div>
+
   <header>広告タグ確認ページ（SP・縦長）</header>
 
   <section>
     <div class="dummy">ダミーコンテンツ①<br>（スクロールテスト用）</div>
 
-    <!-- オーバーレイで残る広告 -->
-    <div class="ad-slot ad-slot-fixed" id="adg-slot-1">
-      <!-- 商用テスト媒体 動画枠利用テスト 226431 -->
-      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-    </div>
-
-    <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール用）</div>
-
     <div class="ad-slot" id="adg-slot-2">
       <!-- 商用テスト媒体 動画枠利用テスト 226431 -->
       <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_2&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
     </div>
+
+    <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール用）</div>
 
     <div class="dummy">ダミーコンテンツ③<br>（さらにスクロール用）</div>
   </section>
