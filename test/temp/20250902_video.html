@@ -27,36 +27,62 @@
       justify-content: center;
       color: #555;
     }
-
-    footer {
-      margin: 50px 0;
-      text-align: center;
-      font-size: 12px;
-      color: #888;
+    .ad-slot {
+      margin: 30px auto;
+      width: 320px;
+      height: 180px;
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+    /* 見た目用のオーバーレイ */
+    .ad-slot-overlay {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      background: #fff;
+      width: 320px;
+      height: 180px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
   </style>
 </head>
 <body>
 
-  <!-- オーバーレイ広告（常時インビュー扱い） -->
-  <div class="ad-slot-overlay" id="adg-slot-ol">
-<!--
-商用テスト媒体 動画枠利用テスト 226431
--->
-<!--
-媒体側で広告表示を自動拡大している場合は、アドジェネタグ内の '&flexibleOL=true' は外してください
--->
-<script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=9&adType=VIDEO&async=true&tagver=2.0.0&flexibleOL=true&autoPadding=true"></script>
-
-
+  <!-- 判定用（通常配置、スクロールに従う） -->
+  <div class="ad-slot" id="adg-slot-judge">
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075_judge&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
   </div>
 
   <section>
     <div class="dummy">ダミーコンテンツ①<br>（スクロールテスト用）</div>
-    <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール）</div>
-    <div class="dummy">ダミーコンテンツ③<br>（さらにスクロール）</div>
+    <div class="dummy">ダミーコンテンツ②<br>（さらにスクロール用）</div>
+    <div class="dummy">ダミーコンテンツ③<br>（さらにスクロール用）</div>
   </section>
 
-  <footer>footer 確認用テストページ</footer>
+  <script>
+    window.addEventListener('load', () => {
+      // 判定用タグのDOMをコピーしてオーバーレイ化
+      const judge = document.getElementById('adg-slot-judge');
+      const clone = judge.cloneNode(true);
+      clone.id = "adg-slot-fixed";
+      clone.classList.add("ad-slot-overlay");
+
+      // targetID をユニークに書き換え（競合回避）
+      const script = clone.querySelector("script");
+      if (script) {
+        let src = script.getAttribute("src");
+        src = src.replace("adg_216075_judge", "adg_216075_fixed");
+        script.setAttribute("src", src);
+      }
+
+      document.body.appendChild(clone);
+    });
+  </script>
+
 </body>
 </html>
