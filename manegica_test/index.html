@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>広告テストページ</title>
+  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+  <script async src="https://acdn.adnxs.com/prebid/not-for-prod/1/prebid.js"></script>
+</head>
+<body>
+  <h1>広告テスト</h1>
+
+  <!-- 広告枠 -->
+  <div id="ad-slot-1" style="width:300px; height:250px; margin:auto; background:#eee;">
+    Loading ad...
+  </div>
+
+  <script>
+    var adUnits = [{
+      code: 'ad-slot-1',
+      mediaTypes: {
+        banner: {
+          sizes: [[300, 250], [320, 50]]
+        }
+      },
+      bids: [
+        {
+          bidder: 'adg',   // ← Prebid Adapter名
+          params: {
+            id: 12345,     // ← ADG側のplacement IDなど
+          }
+        }
+      ]
+    }];
+
+    pbjs.que = pbjs.que || [];
+    pbjs.que.push(function() {
+      pbjs.addAdUnits(adUnits);
+      pbjs.requestBids({
+        bidsBackHandler: sendAdserverRequest
+      });
+    });
+
+    function sendAdserverRequest() {
+      googletag.cmd.push(function() {
+        pbjs.setTargetingForGPTAsync();
+        googletag.pubads().refresh();
+      });
+    }
+
+    googletag.cmd = googletag.cmd || [];
+    googletag.cmd.push(function() {
+      googletag.defineSlot('/1234567/test_adunit', [300, 250], 'ad-slot-1')
+               .addService(googletag.pubads());
+      googletag.enableServices();
+    });
+  </script>
+</body>
+</html>
