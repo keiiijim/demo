@@ -23,14 +23,24 @@
           sizes: [[300, 250], [320, 50]]
         }
       },
-      bids: [
-        {
-          bidder: 'adg',   // ← Prebid Adapter名
-          params: {
-            id: 12345,     // ← ADG側のplacement IDなど
-          }
-        }
-      ]
+     bids: [
+    {
+      bidder: 'adgeneration',
+      params: { id: '58278' }
+    },
+    {
+      bidder: 'openx',
+      params: { unit: '540249544', delDomain: 'se-demo-d.openx.net' }
+    },
+    {
+      bidder: 'equativ',
+      params: { placementId: 13144370 }
+    },
+    {
+      bidder: 'medianet',
+      params: { cid: '8CUX0H51C', crid: '123456' }
+    }
+  ]
     }];
 
     pbjs.que = pbjs.que || [];
