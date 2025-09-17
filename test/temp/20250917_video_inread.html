@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>広告タグ確認ページ（SP・オーバーレイ）</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      line-height: 1.6;
+    }
+    section {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .dummy {
+      height: 600px;
+      background: linear-gradient(to bottom, #eee, #ddd);
+      margin: 20px 0;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+    }
+    .ad-slot {
+  //    margin: 10px auto;
+//      width: 320px;
+  //    height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+    /* 見た目用のオーバーレイ広告（横幅100%） */
+    .ad-slot-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      max-width: 100%;
+      height: auto; 
+      max-width: 480px;
+      z-index: 9999;
+    }
+
+  </style>
+</head>
+<body>
+
+
+
+  <!-- 見た目用オーバーレイ広告（横幅100%） -->
+  <div class="ad-slot ad-slot-overlay" id="adg-slot-1">
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+  </div>
+
+  <section>
+    <div class="dummy"style="margin-top: 230px;">ダミーコンテンツ①</div>
+    <div class="dummy">ダミーコンテンツ②</div>
+    <div class="dummy">ダミーコンテンツ③</div>
+  </section>
+
+</body>
+</html>
