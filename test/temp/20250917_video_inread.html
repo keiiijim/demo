@@ -76,17 +76,19 @@
   </section>
 
   <script>
-    // クローズボタン動作
-    document.querySelector('#adg-inread .close-btn').addEventListener('click', () => {
-      document.getElementById('adg-inread').style.display = 'none';
+    // クローズボタン → 広告DOMを削除
+    document.getElementById('adg-close').addEventListener('click', () => {
+      const ad = document.getElementById('adg-inread');
+      if (ad) ad.remove();
     });
 
-    // 再生完了後 → 3秒後に自動で閉じる（VASTの complete イベントを擬似的に監視）
+    // 再生完了（event=complete）受信 → 3秒後に削除
     window.addEventListener("message", (event) => {
       if (typeof event.data === "string" && event.data.includes("event=complete")) {
         setTimeout(() => {
-          document.getElementById('adg-inread').style.display = 'none';
-        }, 30000);
+          const ad = document.getElementById('adg-inread');
+          if (ad) ad.remove();
+        }, 3000);
       }
     });
   </script>
