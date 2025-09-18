@@ -5,28 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>広告タグ確認ページ（SP・インリード＋クローズボタン）</title>
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-      line-height: 1.6;
-    }
-    section {
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-    .dummy {
-      height: 400px;
-      background: linear-gradient(to bottom, #eee, #ddd);
-      margin: 20px 0;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #555;
-    }
     #adg-inread {
       position: relative;
       width: 100%;
@@ -49,41 +27,39 @@
       font-size: 15px;
       line-height: 18px;
       cursor: pointer;
-      z-index: 9999; /* iframeより上 */
+      z-index: 9999;
       padding: 0;
     }
   </style>
 </head>
 <body>
 
-  <section>
-    <div class="dummy">ダミーコンテンツ①</div>
-    <div class="dummy">ダミーコンテンツ②</div>
+  <div style="height:400px; background:#ddd; text-align:center;">ダミー①</div>
 
-    <!-- インリード広告コンテナ -->
-    <div id="adg-inread">
-      <!-- ここに広告が展開される -->
-      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-    </div>
+  <!-- インリード広告コンテナ -->
+  <div id="adg-inread"></div>
 
-    <div class="dummy">ダミーコンテンツ③</div>
-    <div class="dummy">ダミーコンテンツ④</div>
-  </section>
+  <div style="height:400px; background:#eee; text-align:center;">ダミー②</div>
+
+  <!-- 必須: id, targetID を正しく指定（改行しない！） -->
+  <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
 
   <script>
-    // 広告描画が完了したらクローズボタンを追加
+    // 広告描画後にボタンを追加
     window.addEventListener('load', () => {
       const container = document.getElementById('adg-inread');
-      const btn = document.createElement('button');
-      btn.className = 'close-btn';
-      btn.textContent = '×';
-      btn.addEventListener('click', () => {
-        container.style.display = 'none';
-      });
-      container.appendChild(btn);
+      if (container) {
+        const btn = document.createElement('button');
+        btn.className = 'close-btn';
+        btn.textContent = '×';
+        btn.addEventListener('click', () => {
+          container.style.display = 'none';
+        });
+        container.appendChild(btn);
+      }
     });
 
-    // 再生完了後 → 3秒後に自動で閉じる
+    // 再生完了後に3秒で閉じる
     window.addEventListener("message", (event) => {
       if (typeof event.data === "string" && event.data.includes("event=complete")) {
         setTimeout(() => {
