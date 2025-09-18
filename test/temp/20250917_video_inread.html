@@ -5,28 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>広告タグ確認ページ（SP・インリード＋クローズボタン）</title>
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-      line-height: 1.6;
-    }
-    section {
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-    .dummy {
-      height: 400px;
-      background: linear-gradient(to bottom, #eee, #ddd);
-      margin: 20px 0;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #555;
-    }
     #adg-inread {
       position: relative;
       width: 100%;
@@ -51,53 +29,54 @@
       cursor: pointer;
       z-index: 9999;
       padding: 0;
-      display: none; /* 最初は非表示、再生開始後に表示 */
+      display: none; /* 最初は非表示 */
     }
   </style>
 </head>
 <body>
 
-  <section>
-    <div class="dummy">ダミーコンテンツ①</div>
-    <div class="dummy">ダミーコンテンツ②</div>
+  <div style="height:400px; background:#ddd; text-align:center;">ダミー①</div>
 
-    <!-- インリード広告コンテナ -->
-    <div id="adg-inread">
-      <div id="adg_inread"></div>
-      <!-- ADGタグ -->
-      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-      <!-- クローズボタン -->
-      <button class="close-btn">×</button>
-    </div>
+  <!-- インリード広告のコンテナ -->
+  <div id="adg-inread">
+    <div id="adg_inread"></div>
+  </div>
 
-    <div class="dummy">ダミーコンテンツ③</div>
-    <div class="dummy">ダミーコンテンツ④</div>
-  </section>
+  <div style="height:400px; background:#eee; text-align:center;">ダミー②</div>
+  <div style="height:400px; background:#ccc; text-align:center;">ダミー③</div>
+  <div style="height:400px; background:#bbb; text-align:center;">ダミー④</div>
+
+  <!-- ADGタグ -->
+  <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
 
   <script>
     const container = document.getElementById('adg-inread');
-    const btn = container.querySelector('.close-btn');
 
-    // 手動クローズ
+    // クローズボタンをあとから追加
+    const btn = document.createElement('button');
+    btn.className = 'close-btn';
+    btn.textContent = '×';
     btn.addEventListener('click', () => {
       container.style.display = 'none';
     });
+    container.appendChild(btn);
 
     // ADG iframe からのイベントを監視
     window.addEventListener("message", (event) => {
-      if (typeof event.data === "string") {
-        // 再生開始イベント → 3秒後にボタンを表示
-        if (event.data.includes("event=start")) {
-          setTimeout(() => {
-            btn.style.display = 'block';
-          }, 3000);
-        }
-        // 再生完了イベント → 3秒後に広告ごと閉じる
-        if (event.data.includes("event=complete")) {
-          setTimeout(() => {
-            container.style.display = 'none';
-          }, 3000);
-        }
+      const data = typeof event.data === "string" ? event.data : JSON.stringify(event.data);
+
+      // 再生開始 → 3秒後にボタンを表示
+      if (data.includes("event=start")) {
+        setTimeout(() => {
+          btn.style.display = 'block';
+        }, 3000);
+      }
+
+      // 再生完了 → 3秒後に広告ごと非表示
+      if (data.includes("event=complete")) {
+        setTimeout(() => {
+          container.style.display = 'none';
+        }, 3000);
       }
     });
   </script>
