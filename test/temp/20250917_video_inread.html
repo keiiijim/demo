@@ -27,6 +27,36 @@
       justify-content: center;
       color: #555;
     }
+    /* インリード広告コンテナ */
+    #adg-inread {
+      position: relative;
+      width: 100%;
+      max-width: 480px; /* PCでの最大幅 */
+      margin: 40px auto;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    /* クローズボタン（小型化） */
+    #adg-inread button.close-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 15px;
+      line-height: 18px;
+      cursor: pointer;
+      z-index: 99999;
+      padding: 0;
+    }
   </style>
 </head>
 <body>
@@ -35,65 +65,31 @@
     <div class="dummy">ダミーコンテンツ①</div>
     <div class="dummy">ダミーコンテンツ②</div>
 
-    <!-- ▼ インリード広告タグ（媒体はこの1タグを貼るだけ） -->
-    <script>
-    (function(){
-      // === コンテナ生成 ===
-      var div = document.createElement('div');
-      div.id = "adg-inread";
-      div.style.position = "relative";
-      div.style.width = "100%";
-      div.style.maxWidth = "480px";
-      div.style.margin = "40px auto";
-      div.style.background = "#fff";
-      div.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
-      div.style.display = "flex";
-      div.style.alignItems = "center";
-      div.style.justifyContent = "center";
-
-      // === クローズボタン ===
-      var btn = document.createElement('button');
-      btn.innerText = "×";
-      btn.style.position = "absolute";
-      btn.style.top = "5px";
-      btn.style.right = "5px";
-      btn.style.background = "rgba(0,0,0,0.6)";
-      btn.style.color = "#fff";
-      btn.style.border = "none";
-      btn.style.borderRadius = "50%";
-      btn.style.width = "30px";
-      btn.style.height = "30px";
-      btn.style.fontSize = "18px";
-      btn.style.cursor = "pointer";
-      btn.onclick = function(){
-        div.remove();
-      };
-      div.appendChild(btn);
-
-      // === 挿入位置 ===
-      var current = document.currentScript;
-      current.parentNode.insertBefore(div, current.nextSibling);
-
-      // === ADGスクリプト ===
-      var s = document.createElement('script');
-      s.src = "//i.socdm.com/sdk/js/adg-script-loader.js?" +
-              "id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0";
-      s.async = true;
-      div.appendChild(s);
-
-      // === 自動クローズ（仮：15秒再生 + 3秒待ち） ===
-      setTimeout(function(){
-        if (div && div.parentNode) {
-          div.remove();
-        }
-      }, 18000); // 18秒後に削除
-    })();
-    </script>
-    <!-- ▲ インリード広告タグ -->
+    <!-- インリード広告（記事の途中に挿入） -->
+    <div id="adg-inread">
+      <button class="close-btn">×</button>
+      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+    </div>
 
     <div class="dummy">ダミーコンテンツ③</div>
     <div class="dummy">ダミーコンテンツ④</div>
   </section>
+
+  <script>
+    // クローズボタン動作
+    document.querySelector('#adg-inread .close-btn').addEventListener('click', () => {
+      document.getElementById('adg-inread').style.display = 'none';
+    });
+
+    // 再生完了後 → 3秒後に自動で閉じる（VASTの complete イベントを擬似的に監視）
+    window.addEventListener("message", (event) => {
+      if (typeof event.data === "string" && event.data.includes("event=complete")) {
+        setTimeout(() => {
+          document.getElementById('adg-inread').style.display = 'none';
+        }, 3000);
+      }
+    });
+  </script>
 
 </body>
 </html>
