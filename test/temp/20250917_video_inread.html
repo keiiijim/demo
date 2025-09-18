@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（SP・オーバーレイ）</title>
+  <title>広告タグ確認ページ（SP・インリード）</title>
   <style>
     body {
       font-family: sans-serif;
@@ -28,39 +28,34 @@
       color: #555;
     }
     .ad-slot {
-  //    margin: 10px auto;
-//      width: 320px;
-  //    height: 180px;
+      margin: 30px auto;
+      width: 100%;
+      max-width: 480px; /* スマホは100%、PCでは最大幅制御 */
+      height: auto;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    /* 見た目用のオーバーレイ広告（横幅100%） */
-    .ad-slot-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      max-width: 100%;
-      height: auto; 
-      max-width: 480px;
-      z-index: 9999;
-    }
-
   </style>
 </head>
 <body>
 
-
-
-  <!-- 見た目用オーバーレイ広告（横幅100%） -->
-  <div class="ad-slot ad-slot-overlay" id="adg-slot-1">
-    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-  </div>
-
   <section>
-    <div class="dummy"style="margin-top: 230px;">ダミーコンテンツ①</div>
+    <div class="dummy">ダミーコンテンツ①</div>
+
+    <!-- インリード広告（記事の途中に挿入） -->
+    <div class="ad-slot" id="adg-slot-inread">
+      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?
+        id=216075
+        &targetID=adg_inread
+        &displayid=1
+        &adType=VIDEO
+        &async=true
+        &tagver=2.0.0"></script>
+    </div>
+
     <div class="dummy">ダミーコンテンツ②</div>
     <div class="dummy">ダミーコンテンツ③</div>
   </section>
