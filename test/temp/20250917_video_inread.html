@@ -29,6 +29,7 @@
       cursor: pointer;
       z-index: 9999;
       padding: 0;
+      display: none; /* 最初は非表示 */
     }
   </style>
 </head>
@@ -37,34 +38,40 @@
   <div style="height:400px; background:#ddd; text-align:center;">ダミー①</div>
 
   <!-- インリード広告コンテナ -->
-  <div id="adg-inread"></div>
+  <div id="adg-inread">
+    <div id="adg_inread"></div>
+    <!-- 広告タグ -->
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+    <!-- クローズボタン -->
+    <button class="close-btn">×</button>
+  </div>
 
   <div style="height:400px; background:#eee; text-align:center;">ダミー②</div>
 
-  <!-- 必須: id, targetID を正しく指定（改行しない！） -->
-  <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
-
   <script>
-    // 広告描画後にボタンを追加
-    window.addEventListener('load', () => {
-      const container = document.getElementById('adg-inread');
-      if (container) {
-        const btn = document.createElement('button');
-        btn.className = 'close-btn';
-        btn.textContent = '×';
-        btn.addEventListener('click', () => {
-          container.style.display = 'none';
-        });
-        container.appendChild(btn);
-      }
+    const container = document.getElementById('adg-inread');
+    const btn = container.querySelector('.close-btn');
+
+    // 手動クローズ
+    btn.addEventListener('click', () => {
+      container.style.display = 'none';
     });
 
-    // 再生完了後に3秒で閉じる
+    // ADG iframe からのイベントを監視
     window.addEventListener("message", (event) => {
-      if (typeof event.data === "string" && event.data.includes("event=complete")) {
-        setTimeout(() => {
-          document.getElementById('adg-inread').style.display = 'none';
-        }, 3000);
+      if (typeof event.data === "string") {
+        // 再生開始 → 3秒後にボタンを表示
+        if (event.data.includes("event=start")) {
+          setTimeout(() => {
+            btn.style.display = 'block';
+          }, 3000);
+        }
+        // 再生完了 → 3秒後に自動で閉じる
+        if (event.data.includes("event=complete")) {
+          setTimeout(() => {
+            container.style.display = 'none';
+          }, 3000);
+        }
       }
     });
   </script>
