@@ -28,14 +28,29 @@
       color: #555;
     }
     .ad-slot {
+      position: relative; /* クローズボタンを重ねるため */
       width: 100%;
-      max-width: 480px; /* スマホは100%、PCでは最大幅制御 */
-      height: auto;
+      max-width: 480px;
+      margin: 40px auto;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+      line-height: 28px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -45,14 +60,28 @@
     <div class="dummy">ダミーコンテンツ①</div>
     <div class="dummy">ダミーコンテンツ②</div>
 
-    <!-- インリード広告（記事の途中に挿入） -->
+    <!-- インリード広告 -->
     <div class="ad-slot" id="adg-slot-inread">
-    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+      <button class="close-btn" onclick="closeAd()">×</button>
+      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_216075&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
     </div>
 
     <div class="dummy">ダミーコンテンツ③</div>
     <div class="dummy">ダミーコンテンツ④</div>
   </section>
+
+  <script>
+    function closeAd() {
+      const ad = document.getElementById('adg-slot-inread');
+      if (ad) ad.style.display = 'none';
+    }
+
+    // 仮: 再生開始から15秒後に自動クローズ
+    // 本来は再生完了イベントを取るべき
+    setTimeout(() => {
+      closeAd();
+    }, 15000 + 3000); // 15秒再生 + 3秒待ってクローズ
+  </script>
 
 </body>
 </html>
