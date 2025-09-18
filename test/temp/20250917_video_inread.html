@@ -27,9 +27,6 @@
       justify-content: center;
       color: #555;
     }
-    #adg-close {
-      display: none; /* 最初は非表示 */
-    }
   </style>
 </head>
 <body>
@@ -38,9 +35,8 @@
     <div class="dummy">ダミーコンテンツ①</div>
     <div class="dummy">ダミーコンテンツ②</div>
 
-    <!-- ▼ インリード広告枠（ADGタグそのまま） -->
-    <div id="adg-inread">
-      <button id="adg-close">×</button>
+    <!-- ▼ インリード広告枠 -->
+    <div id="adg_inread">
       <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
     </div>
     <!-- ▲ インリード広告 -->
@@ -50,29 +46,34 @@
   </section>
 
   <script>
-    const closeBtn = document.getElementById('adg-close');
-
-    // クローズボタン押下 → 広告DOMを削除
-    closeBtn.addEventListener('click', () => {
-      const ad = document.getElementById('adg-inread');
-      if (ad) ad.remove();
-    });
-
     // VASTイベント監視
     window.addEventListener("message", (event) => {
       if (typeof event.data === "string") {
-        // 再生開始イベントを検知
+        // 動画再生開始を検知
         if (event.data.includes("event=start")) {
           setTimeout(() => {
-            closeBtn.style.display = "inline-block"; // 15秒後に表示
-          }, 5000);
+            // クローズボタンを動的に追加
+            if (!document.getElementById("adg-close")) {
+              const btn = document.createElement("button");
+              btn.id = "adg-close";
+              btn.innerText = "×";
+              btn.style.cssText = "position:absolute;top:5px;right:5px;z-index:9999;";
+              document.getElementById("adg_inread").appendChild(btn);
+
+              // クリックで広告DOMごと削除
+              btn.addEventListener("click", () => {
+                document.getElementById("adg_inread").remove();
+              });
+            }
+          }, 5000); // 再生開始から5秒後に出す
         }
-        // 再生完了イベントを検知
+
+        // 再生完了を検知
         if (event.data.includes("event=complete")) {
           setTimeout(() => {
-            const ad = document.getElementById('adg-inread');
+            const ad = document.getElementById("adg_inread");
             if (ad) ad.remove();
-          }, 10000);
+          }, 3000);
         }
       }
     });
