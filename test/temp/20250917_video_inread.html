@@ -49,7 +49,7 @@
       font-size: 15px;
       line-height: 18px;
       cursor: pointer;
-      z-index: 9999;
+      z-index: 9999; /* iframeより上 */
       padding: 0;
     }
   </style>
@@ -60,11 +60,10 @@
     <div class="dummy">ダミーコンテンツ①</div>
     <div class="dummy">ダミーコンテンツ②</div>
 
-    <!-- インリード広告 -->
+    <!-- インリード広告コンテナ -->
     <div id="adg-inread">
-      <!-- ADGタグ（iframeはここに展開される） -->
-      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?
-        id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
+      <!-- ここに広告が展開される -->
+      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216075&targetID=adg_inread&displayid=1&adType=VIDEO&async=true&tagver=2.0.0"></script>
     </div>
 
     <div class="dummy">ダミーコンテンツ③</div>
@@ -72,7 +71,7 @@
   </section>
 
   <script>
-    // 広告描画が終わった後にボタンを追加
+    // 広告描画が完了したらクローズボタンを追加
     window.addEventListener('load', () => {
       const container = document.getElementById('adg-inread');
       const btn = document.createElement('button');
