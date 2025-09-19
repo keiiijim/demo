@@ -4,37 +4,30 @@
 <meta charset="utf-8">
 <title>Prebid + ADG DenseJPY Demo</title>
 
-<!-- 1️⃣ GPT（Google Publisher Tag）ライブラリ -->
-<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
 
-<!-- 2️⃣ Prebid.js（必要モジュールをビルドしたものを利用）-->
+<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
 <script async src="vender/prebid.js"></script>
 
 <script>
-/* =========================================
-   広告ユニット定義
-   ========================================= */
 var adUnits = [
   {
-    code: '/94253236/prebid_all',  // GAM Ad Unit Code (1つ目)
-    mediaTypes: { banner: { sizes: [[300, 250]] } },
+    code: '/22282329737/manegica-blog_sp/spbadge_rec1',
+    mediaTypes: { banner: { sizes: [[300,250],[336,280],[320,180],[320,100]] } },
     bids: [
       { bidder: 'adgeneration', params: { id: '216190' } }
     ]
   },
   {
-    code: 'manegica-blog_sp/sp_overlay', // GAM Ad Unit Code (2つ目)
-    mediaTypes: { banner: { sizes: [[300, 250]] } },
+    code: '/22282329737/manegica-blog_sp/sp_overlay',
+    mediaTypes: { banner: { sizes: [[320,50],[320,100]] } },
     bids: [
       { bidder: 'adgeneration', params: { id: '216191' } }
     ]
   }
 ];
 
-/* =========================================
-   Prebid 設定
-   ========================================= */
-var PREBID_TIMEOUT = 1000; // ミリ秒：タイムアウト（適宜調整）
+
+var PREBID_TIMEOUT = 3000; 
 var googletag = window.googletag || {};
 googletag.cmd = googletag.cmd || [];
 var pbjs = window.pbjs || {};
@@ -42,14 +35,12 @@ pbjs.que = pbjs.que || [];
 
 pbjs.que.push(function() {
   pbjs.setConfig({
-    // --- 通貨設定（為替自動取得） ---
     currency: {
-      adServerCurrency: 'JPY',  // GAM へは常に日本円で送る
+      adServerCurrency: 'JPY',
       conversionRateFile: 'https://cdn.jsdelivr.net/gh/prebid/currency-file@1/latest.json',
-      defaultRates: { USD: { JPY: 150 } } // フォールバックレート
+      defaultRates: { USD: { JPY: 150 } } 
     },
 
-    // --- Dense 相当（円ベース）価格バケット ---
     priceGranularity: {
       buckets: [
         { precision: 0, min: 0,    max: 300,  increment: 1   },   // 1円刻み
@@ -60,13 +51,10 @@ pbjs.que.push(function() {
     }
   });
 
-  // Prebid に広告ユニットを登録
   pbjs.addAdUnits(adUnits);
 
-  // 入札開始
   pbjs.requestBids({
     bidsBackHandler: function() {
-      // 入札終了後、GPT にターゲティング情報を設定
       pbjs.setTargetingForGPTAsync();
       googletag.pubads().refresh();
     },
@@ -74,17 +62,13 @@ pbjs.que.push(function() {
   });
 });
 
-/* =========================================
-   GPT 設定
-   ========================================= */
+
 googletag.cmd.push(function() {
-  // 広告スロットの定義（GAM 側の Ad Unit Code と一致させる）
-  googletag.defineSlot('/94253236/prebid_all', [[300,250]], 'div-gpt-ad-1')
+  googletag.defineSlot('/22282329737/manegica-blog_sp/spbadge_rec1', [[300,250],[336,280],[320,180],[320,100]], 'div-gpt-ad-1')
            .addService(googletag.pubads());
-  googletag.defineSlot('manegica-blog_sp/sp_overlay', [[300,250]], 'div-gpt-ad-2')
+  googletag.defineSlot('/22282329737/manegica-blog_sp/sp_overlay',  [[320,50],[320,100]], 'div-gpt-ad-2')
            .addService(googletag.pubads());
 
-  // Prebid のターゲティングを使う設定
   googletag.pubads().disableInitialLoad();
   googletag.enableServices();
 });
@@ -92,14 +76,24 @@ googletag.cmd.push(function() {
 </head>
 
 <body>
-<!-- 3️⃣ 広告を表示するプレースホルダ -->
-<div id="div-gpt-ad-1" style="width:300px; height:250px; margin:20px auto;">
+<div id="div-gpt-ad-1" style='min-width: 300px; min-height: 100px;'>
   <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-1'); });</script>
 </div>
 
-<div id="div-gpt-ad-2" style="width:300px; height:250px; margin:20px auto;">
-  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-2'); });</script>
-</div>
 
+
+<div id="overlay-container" style="
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%;
+  z-index: 9999;
+  text-align: center; 
+  background: transparent;
+">
+<div id="div-gpt-ad-2" style="display:inline-block;">
+    <script>googletag.cmd.push(function() {
+      googletag.display('div-gpt-ad-2');
+    });</script>
+  </div>
+</div>
 </body>
-</html>
