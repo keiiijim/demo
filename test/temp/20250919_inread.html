@@ -58,5 +58,51 @@
     <div class="dummy">ダミーコンテンツ④</div>
   </section>
 
+  <script>
+function showCloseButton() {
+  const adg = document.getElementById("adg-inread");
+  if (!adg) return;
+
+  let btn = document.getElementById("close-btn");
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.id = "close-btn";
+    btn.textContent = "×";
+    Object.assign(btn.style, {
+      position: "absolute",
+      top: "5px",
+      right: "5px",
+      zIndex: 9999,
+      background: "rgba(0,0,0,0.6)",
+      color: "#fff",
+      border: "none",
+      borderRadius: "50%",
+      width: "28px",
+      height: "28px",
+      fontSize: "16px",
+      cursor: "pointer",
+      lineHeight: "28px",
+      textAlign: "center"
+    });
+    btn.addEventListener("click", () => {
+      adg.remove();
+    });
+    adg.style.position = "relative"; // ボタンの基準位置にする
+    adg.appendChild(btn);
+  }
+}
+
+// VAST start を検知して3秒後にボタン表示
+const observer = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    if (entry.name.includes("event=start")) {
+      console.log("VAST start 検知:", entry.name);
+      setTimeout(showCloseButton, 3000);
+    }
+  }
+});
+observer.observe({ type: "resource", buffered: true });
+</script>
+  
 </body>
 </html>
