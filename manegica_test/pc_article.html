@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Prebid + ADG DenseJPY Demo</title>
+
+
+<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+<script async src="vender/prebid.js"></script>
+
+<script>
+var adUnits = [
+  {
+    code: '/22282329737/manegica-blog_pc/badge_long',
+    mediaTypes: { banner: { sizes: [[728,90]] } },
+    bids: [
+      { bidder: 'adgeneration', params: { id: '216185' } }
+    ]
+  },
+  {
+    code: '/22282329737/manegica-blog_pc/badge_in-article',
+    mediaTypes: { banner: { sizes: [[620, 250], [728, 90], [300, 250]] } },
+    bids: [
+      { bidder: 'adgeneration', params: { id: '216186' } }
+    ]
+  },
+  {
+    code: '/22282329737/manegica-blog_pc/badge_rec1',
+    mediaTypes: { banner: { sizes: [[300,250]] } },
+    bids: [
+      { bidder: 'adgeneration', params: { id: '216187' } }
+    ]
+  },
+  {
+    code: '/22282329737/manegica-blog_pc/badge_rec2',
+    mediaTypes: { banner: { sizes: [[300,250]] } },
+    bids: [
+      { bidder: 'adgeneration', params: { id: '216189' } }
+    ]
+  },
+  {
+    code: '/22282329737/manegica-blog_pc/pc_overlay',
+    mediaTypes: { banner: { sizes: [[728,90],[970,90]] } },
+    bids: [
+      { bidder: 'adgeneration', params: { id: '216188' } }
+    ]
+  }
+];
+
+
+var PREBID_TIMEOUT = 3000; 
+var googletag = window.googletag || {};
+googletag.cmd = googletag.cmd || [];
+var pbjs = window.pbjs || {};
+pbjs.que = pbjs.que || [];
+
+pbjs.que.push(function() {
+  pbjs.setConfig({
+    currency: {
+      adServerCurrency: 'JPY',
+      conversionRateFile: 'https://cdn.jsdelivr.net/gh/prebid/currency-file@1/latest.json',
+      defaultRates: { USD: { JPY: 150 } } 
+    },
+
+    priceGranularity: {
+      buckets: [
+        { precision: 0, min: 0,    max: 300,  increment: 1   },   // 1円刻み
+        { precision: 0, min: 300,  max: 800,  increment: 5   },   // 5円刻み
+        { precision: 0, min: 800,  max: 2000, increment: 50  },   // 50円刻み
+        { precision: 0, min: 2000, max: 999999, increment: 2000 } // 2000円超まとめ
+      ]
+    }
+  });
+
+  pbjs.addAdUnits(adUnits);
+
+  pbjs.requestBids({
+    bidsBackHandler: function() {
+      pbjs.setTargetingForGPTAsync();
+      googletag.pubads().refresh();
+    },
+    timeout: PREBID_TIMEOUT
+  });
+});
+
+
+googletag.cmd.push(function() {
+  googletag.defineSlot('/22282329737/manegica-blog_pc/badge_long', [[728,90]], 'div-gpt-ad-1')
+           .addService(googletag.pubads());
+  googletag.defineSlot('/22282329737/manegica-blog_pc/badge_in-article',  [[620, 250], [728, 90], [300, 250]], 'div-gpt-ad-2')
+           .addService(googletag.pubads());
+  googletag.defineSlot('/22282329737/manegica-blog_pc/badge_rec1', [[300,250]], 'div-gpt-ad-3')
+           .addService(googletag.pubads());
+  googletag.defineSlot('/22282329737/manegica-blog_pc/badge_rec2', [[300,250]], 'div-gpt-ad-4')
+           .addService(googletag.pubads());
+  googletag.defineSlot('/22282329737/manegica-blog_pc/pc_overlay', [[728,90],[970,90]], 'div-gpt-ad-5')
+           .addService(googletag.pubads());
+  googletag.pubads().disableInitialLoad();
+  googletag.enableServices();
+});
+</script>
+</head>
+
+<body>
+
+<div id="div-gpt-ad-1" style='min-width: 728px; min-height: 90px;'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-1'); });</script>
+</div>
+
+<div id="div-gpt-ad-2" style='min-width: 300px; min-height: 90px;'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-2'); });</script>
+</div>
+
+<div id="div-gpt-ad-3" style='min-width: 300px; min-height: 250px;'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-3'); });</script>
+</div>
+
+<div id="div-gpt-ad-4" style='min-width: 300px; min-height: 250px;'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-4'); });</script>
+</div>
+
+<div id="div-gpt-ad-5" style='min-width: 728px; min-height: 90px;'>
+  <script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-5'); });</script>
+</div>
+</body>
