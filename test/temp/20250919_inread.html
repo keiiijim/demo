@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>広告タグ確認ページ（SP・インリード＋クローズボタン）</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      line-height: 1.6;
+    }
+    section {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .dummy {
+      height: 400px;
+      background: linear-gradient(to bottom, #eee, #ddd);
+      margin: 20px 0;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+    }
+    #adg-inread {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 40px auto;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <section>
+    <div class="dummy">ダミーコンテンツ①</div>
+    <div class="dummy">ダミーコンテンツ②</div>
+
+    <!-- インリード広告 -->
+    <div id="adg-inread">
+<!--
+商用テスト媒体 test_video_inread 226730
+-->
+<script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216379&targetID=adg_216379&displayid=3&adType=INREAD_GENERAL&async=true&tagver=2.0.0"></script>
+
+
+    </div>
+
+    <div class="dummy">ダミーコンテンツ③</div>
+    <div class="dummy">ダミーコンテンツ④</div>
+  </section>
+
+</body>
+</html>
