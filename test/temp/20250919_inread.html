@@ -40,65 +40,38 @@
   <script src="./inspector.js"></script>
 
 
-  <script>
-(function() {
-  const SHOW_DELAY_MS = 3000; // 表示までの待ち時間（ms）
+ <script>
+function createApvCloseBtn() {
+  const btn = document.createElement("a");
+  btn.className = "apv-btn-close";
+  btn.style.cssText = `
+    margin:0;padding:0;border:none;background-color:transparent;
+    position:absolute;display:block;top:0;right:0;z-index:9999;
+    width:30px;height:30px;cursor:pointer;
+  `;
+  btn.innerHTML =
+    "<img src='https://cdn.apvdr.com/ui/3.1/close-button@2x.png' " +
+    "style='margin:0;padding:0;border:none;background-color:transparent;" +
+    "position:absolute;top:5px;right:5px;width:20px;height:20px;'>";
+  btn.onclick = () => {
+    const wrapper = btn.closest("div");
+    if (wrapper) wrapper.style.display = "none"; // 閉じる動作
+  };
+  return btn;
+}
 
-  // ボタンDOMを生成（AppVador純正と同じ構造）
-  function createApvCloseBtn() {
-    const a = document.createElement("a");
-    a.className = "apv-btn-close";
-    Object.assign(a.style, {
-      margin: "0px",
-      padding: "0px",
-      border: "none",
-      backgroundColor: "transparent",
-      position: "absolute",
-      display: "block",
-      top: "0px",
-      right: "0px",
-      zIndex: "9999",
-      width: "30px",
-      height: "30px",
-      cursor: "pointer"
-    });
+// AppVadorがiframeを作り終わった頃に監視してボタンを入れる
+setTimeout(() => {
+  document.querySelectorAll("iframe.apv-wrapper").forEach(w => {
+    const parent = w.parentElement;
+    if (parent && !parent.querySelector(".apv-btn-close")) {
+      parent.appendChild(createApvCloseBtn());
+      console.log("[hack] closeボタンを挿入しました:", parent);
+    }
+  });
+}, 3000); // ← ここで遅延時間を調整（3000ms=3秒）
+</script>
 
-    const img = document.createElement("img");
-    img.src = "https://cdn.apvdr.com/ui/3.1/close-button@2x.png";
-    Object.assign(img.style, {
-      margin: "0px",
-      padding: "0px",
-      border: "none",
-      backgroundColor: "transparent",
-      position: "absolute",
-      top: "5px",
-      right: "5px",
-      width: "20px",
-      height: "20px"
-    });
-
-    a.appendChild(img);
-
-    a.addEventListener("click", () => {
-      const adContainer = a.closest("div[id*='apvad']");
-      if (adContainer) {
-        adContainer.style.transition = "opacity .4s ease, height .4s ease";
-        adContainer.style.opacity = "0";
-        adContainer.style.height = "0";
-        setTimeout(() => adContainer.remove(), 450);
-      }
-    });
-
-    return a;
-  }
-
-  function injectCloseButton() {
-    // AppVadorが作る広告枠を探す
-    const adContainers = document.querySelectorAll("div[id*='apvad-']");
-    adContainers.forEach(container => {
-      if (!container.querySelector(".apv-btn-close")) {
-        const btn = createApvCloseBtn();
-        containe
 
 
           
