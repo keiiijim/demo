@@ -43,7 +43,8 @@
 
 
   <script>
-(function() {
+
+    (function() {
   console.log("[hack] Close button watcher active");
 
   function tryInsert() {
@@ -56,7 +57,6 @@
     const parent = wrapper.parentElement;
     if (!parent || parent.querySelector(".apv-btn-close")) return;
 
-    // Closeボタン作成
     const closeBtn = document.createElement("a");
     closeBtn.className = "apv-btn-close";
     closeBtn.style.cssText = `
@@ -69,33 +69,33 @@
         style="margin:0;padding:0;border:none;background:transparent;
                position:absolute;top:5px;right:5px;width:20px;height:20px;">`;
 
-    // クリック時
     closeBtn.addEventListener("click", () => {
-      // ステップ1: opacity + 背景色も透明化
-      parent.style.transition = "opacity 0.6s ease, background-color 0.6s ease";
-      parent.style.opacity = "0";
-      parent.style.backgroundColor = "transparent";
+      const container = parent; // iframe の親
 
-      // 完全に透明になったら高さ・余白を閉じる
+      // iframeも含めて全体を透明化
+      container.style.transition = "opacity 0.6s ease";
+      container.style.opacity = "0";
+
+      // 子要素の背景色も透明にする
+      container.style.background = "transparent";
+      wrapper.style.background = "transparent";
+
+      // 完全透明になったら高さを閉じる
       setTimeout(() => {
-        parent.style.transition = "height 0.4s ease, margin 0.4s ease";
-        parent.style.height = "0px";
-        parent.style.margin = "0px";
-        setTimeout(() => parent.remove(), 500);
+        container.style.transition = "height 0.4s ease, margin 0.4s ease";
+        container.style.height = "0px";
+        container.style.margin = "0px";
+        setTimeout(() => container.remove(), 500);
       }, 650);
     });
 
     parent.style.position = "relative";
-    // ★ 広告背景を透明にしておく（白にならないように）
-    parent.style.backgroundColor = "transparent";
+    parent.style.background = "transparent"; // 初期から透明
+    wrapper.style.background = "transparent"; // iframeの枠も透明
 
     parent.appendChild(closeBtn);
     console.log("[hack] Close button inserted");
   }
-
-  // 6秒後に監視開始
-  setTimeout(tryInsert, 6000);
-})();
 
     
 </script>
