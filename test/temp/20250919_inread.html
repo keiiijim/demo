@@ -38,6 +38,70 @@
     }
   </style>
   <script src="./inspector.js"></script>
+
+
+  <script>
+(function() {
+  const SHOW_DELAY_MS = 3000; // 表示までの待ち時間（ms）
+
+  // ボタンDOMを生成（AppVador純正と同じ構造）
+  function createApvCloseBtn() {
+    const a = document.createElement("a");
+    a.className = "apv-btn-close";
+    Object.assign(a.style, {
+      margin: "0px",
+      padding: "0px",
+      border: "none",
+      backgroundColor: "transparent",
+      position: "absolute",
+      display: "block",
+      top: "0px",
+      right: "0px",
+      zIndex: "9999",
+      width: "30px",
+      height: "30px",
+      cursor: "pointer"
+    });
+
+    const img = document.createElement("img");
+    img.src = "https://cdn.apvdr.com/ui/3.1/close-button@2x.png";
+    Object.assign(img.style, {
+      margin: "0px",
+      padding: "0px",
+      border: "none",
+      backgroundColor: "transparent",
+      position: "absolute",
+      top: "5px",
+      right: "5px",
+      width: "20px",
+      height: "20px"
+    });
+
+    a.appendChild(img);
+
+    a.addEventListener("click", () => {
+      const adContainer = a.closest("div[id*='apvad']");
+      if (adContainer) {
+        adContainer.style.transition = "opacity .4s ease, height .4s ease";
+        adContainer.style.opacity = "0";
+        adContainer.style.height = "0";
+        setTimeout(() => adContainer.remove(), 450);
+      }
+    });
+
+    return a;
+  }
+
+  function injectCloseButton() {
+    // AppVadorが作る広告枠を探す
+    const adContainers = document.querySelectorAll("div[id*='apvad-']");
+    adContainers.forEach(container => {
+      if (!container.querySelector(".apv-btn-close")) {
+        const btn = createApvCloseBtn();
+        containe
+
+
+          
 </head>
 <body>
 
