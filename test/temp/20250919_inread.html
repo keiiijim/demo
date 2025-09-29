@@ -48,6 +48,15 @@
 
     <!-- インリード広告 -->
     <div id="adg-inread">
+      <!-- ★ ここでAppVadorに渡すパラメータを事前定義 -->
+      <script>
+        window.apvVideoAdParam = {
+          skipoffset: 3,          // 再生開始から3秒後にクローズボタン表示
+          showCloseButton: true,  // クローズボタン有効化
+          dismissTime: 5000,      // （任意）5秒後に自動で消す
+          logLevel: 7
+        };
+      </script>
       <!-- 商用テスト媒体 test_video_inread 226730 -->
       <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216379&targetID=adg_216379&displayid=3&adType=INREAD_GENERAL&async=true&tagver=2.0.0"></script>
     </div>
