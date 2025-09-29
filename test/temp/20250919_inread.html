@@ -41,36 +41,42 @@
 
 
  <script>
-function createApvCloseBtn() {
-  const btn = document.createElement("a");
-  btn.className = "apv-btn-close";
-  btn.style.cssText = `
-    margin:0;padding:0;border:none;background-color:transparent;
-    position:absolute;display:block;top:0;right:0;z-index:9999;
-    width:30px;height:30px;cursor:pointer;
-  `;
-  btn.innerHTML =
-    "<img src='https://cdn.apvdr.com/ui/3.1/close-button@2x.png' " +
-    "style='margin:0;padding:0;border:none;background-color:transparent;" +
-    "position:absolute;top:5px;right:5px;width:20px;height:20px;'>";
-  btn.onclick = () => {
-    const wrapper = btn.closest("div");
-    if (wrapper) wrapper.style.display = "none"; // 閉じる動作
+// startビーコンURLに含まれる "event=start" をフック
+(function() {
+  const origSend = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send = function(...args) {
+    this.addEventListener("load", function() {
+      if (this.responseURL && this.responseURL.includes("event=start")) {
+        console.log("[hack] 動画start検知:", this.responseURL);
+        // 再生開始から 5 秒後にクローズボタン挿入
+        setTimeout(() => {
+          const iframe = document.querySelector("iframe.apv-wrapper");
+          if (iframe && iframe.parentElement) {
+            if (!iframe.parentElement.querySelector(".apv-btn-close")) {
+              const btn = document.createElement("a");
+              btn.className = "apv-btn-close";
+              btn.style.cssText = `
+                position:absolute;top:0;right:0;z-index:9999;
+                width:30px;height:30px;cursor:pointer;
+              `;
+              btn.innerHTML =
+                "<img src='https://cdn.apvdr.com/ui/3.1/close-button@2x.png' " +
+                "style='position:absolute;top:5px;right:5px;width:20px;height:20px;'>";
+              btn.onclick = () => {
+                iframe.parentElement.style.display = "none";
+              };
+              iframe.parentElement.appendChild(btn);
+              console.log("[hack] クローズボタン追加！");
+            }
+          }
+        }, 5000);
+      }
+    });
+    return origSend.apply(this, args);
   };
-  return btn;
-}
-
-// AppVadorがiframeを作り終わった頃に監視してボタンを入れる
-setTimeout(() => {
-  document.querySelectorAll("iframe.apv-wrapper").forEach(w => {
-    const parent = w.parentElement;
-    if (parent && !parent.querySelector(".apv-btn-close")) {
-      parent.appendChild(createApvCloseBtn());
-      console.log("[hack] closeボタンを挿入しました:", parent);
-    }
-  });
-}, 3000); // ← ここで遅延時間を調整（3000ms=3秒）
+})();
 </script>
+
 
 
 
