@@ -64,27 +64,40 @@ position: sticky;
     viewableImpression: true
   };
 
-  const vast = `<?xml version="1.0" encoding="UTF-8"?>
-  <VAST version="3.0">
-    <Ad>
-      <InLine>
-        <AdSystem>SOADS</AdSystem>
-        <AdTitle>_clickable</AdTitle>
-        <Creatives>
-          <Creative AdID="2501508">
-            <Linear skipoffset="5">
-              <Duration>00:00:15</Duration>
-              <MediaFiles>
-                <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
-                  https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
-                </MediaFile>
-              </MediaFiles>
-            </Linear>
-          </Creative>
-        </Creatives>
-      </InLine>
-    </Ad>
-  </VAST>`;
+   const vast =`<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+  <VAST version="3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd">
+  <Ad>
+    <InLine>
+      <AdSystem>SOADS</AdSystem>
+      <AdTitle>_clickable</AdTitle>
+      <Description>clickable ad</Description>
+      <Impression><![CDATA[https://tg.socdm.com/bc/v3?b=Y2hzbT0yNjcsNzMzNDc4NmVpZD0yMTYzNzkmcG9zPVNTUExPQyZhZD0xNzI2OTMxLzE2NTc5LjIxMzIzLjE3MjY5MzEvMjUwMTUwOC8yMjY3MzAvMjE2Mzc5OlNTUExPQzoqL2lkeD0wO3ByPXlNcHc2ZztwcmI9eU1wdzZnO3Bybz15TXB3Nmc7cHJvYz1KUFk7Y3JkMnk9MTQ2LjkxOTk5OTk5OTk5OTk5O2NyeTJkPTAuMDA2ODA2NDI1MjY1NDUwNTg1NjtwcnY9aWp6QVZtWW9wbmJUV1B0cWhtZEN1ZWRXNDd0MjU1MEtmYjFWYmI3SzsmZXg9MTc1ODI4MjMzMyZjdD0xNzU4MjgyMzMzODEwJnNyPWh0dHA-&xuid=aJwnGAooIH8AAF.2A.0AAGkQ&ctsv=m-ad313&seqid=247bf666-6f4f-2cf7-c116-183dc0115e0c&seqtime=1758282333810&t=.gif]]></Impression>
+      <Creatives>
+        <Creative AdID="2501508">
+          <Linear skipoffset="5">
+            <Duration>00:00:15</Duration>
+            <TrackingEvents>
+              <Tracking event="start"><![CDATA[https://tg.socdm.com/aux/vast_event?page_id=216379&schedule_id=16579.21323.1726931&wo_schedule_id=1726931&creative_id=2501508&event=start&loglocation_id=226730&order_id=16579&lookupname=216379:SSPLOC:*&family_id=1726931&delivery_unit_id=21323&position=SSPLOC&multiad_index=0&seqid=247bf666-6f4f-2cf7-c116-183dc0115e0c]]></Tracking>
+              <Tracking event="firstQuartile"><![CDATA[https://tg.socdm.com/aux/vast_event?page_id=216379&schedule_id=16579.21323.1726931&wo_schedule_id=1726931&creative_id=2501508&event=firstQuartile&loglocation_id=226730&order_id=16579&lookupname=216379:SSPLOC:*&family_id=1726931&delivery_unit_id=21323&position=SSPLOC&multiad_index=0&seqid=247bf666-6f4f-2cf7-c116-183dc0115e0c]]></Tracking>
+              <Tracking event="midpoint"><![CDATA[https://tg.socdm.com/aux/vast_event?page_id=216379&schedule_id=16579.21323.1726931&wo_schedule_id=1726931&creative_id=2501508&event=midpoint&loglocation_id=226730&order_id=16579&lookupname=216379:SSPLOC:*&family_id=1726931&delivery_unit_id=21323&position=SSPLOC&multiad_index=0&seqid=247bf666-6f4f-2cf7-c116-183dc0115e0c]]></Tracking>
+              <Tracking event="thirdQuartile"><![CDATA[https://tg.socdm.com/aux/vast_event?page_id=216379&schedule_id=16579.21323.1726931&wo_schedule_id=1726931&creative_id=2501508&event=thirdQuartile&loglocation_id=226730&order_id=16579&lookupname=216379:SSPLOC:*&family_id=1726931&delivery_unit_id=21323&position=SSPLOC&multiad_index=0&seqid=247bf666-6f4f-2cf7-c116-183dc0115e0c]]></Tracking>
+              <Tracking event="complete"><![CDATA[https://tg.socdm.com/aux/vast_event?page_id=216379&schedule_id=16579.21323.1726931&wo_schedule_id=1726931&creative_id=2501508&event=complete&loglocation_id=226730&order_id=16579&lookupname=216379:SSPLOC:*&family_id=1726931&delivery_unit_id=21323&position=SSPLOC&multiad_index=0&seqid=247bf666-6f4f-2cf7-c116-183dc0115e0c]]></Tracking>
+            </TrackingEvents>
+            <VideoClicks>
+              <ClickThrough><![CDATA[https://tg.socdm.com/rd/v1/z/hKFj2gDZY2hzbT0yMDAsMWE5YmU1MDMvMjE2Mzc5L1NTUExPQy8xNzI2OTMxLzE2NTc5LjIxMzIzLjE3MjY5MzEvMjUwMTUwOC8yMjY3MzAvMjE2Mzc5OlNTUExPQzoqL2N0PTE3NTgyODIzMzM4MTA7c3I9aHR0cHM7cHI9eU1wdzZnO3ByYj15TXB3Nmc7cHJvPXlNcHc2Zztwcm9jPUpQWTtjcmQyeT0xNDYuOTE5OTk5OTk5OTk5OTk7Y3J5MmQ9MC4wMDY4MDY0MjUyNjU0NTA1ODU2O2lkeD0wO6VzZXFpZNoAJDI0N2JmNjY2LTZmNGYtMmNmNy1jMTE2LTE4M2RjMDExNWUwY6dzZXF0aW1lrTE3NTgyODIzMzM4MTCkeHVpZLhhSnduR0Fvb0lIOEFBRi4yQS4wQUFHa1E/p/ctsv=m-ad313;seqid=247bf666-6f4f-2cf7-c116-183dc0115e0c;/g/B:aHR0cDovL3N1cGVyc2hpcC5qcA]]></ClickThrough>
+            </VideoClicks>
+            <MediaFiles>
+              <MediaFile bitrate="600" delivery="progressive" height="360" type="video/mp4" width="640">https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4</MediaFile>
+              <MediaFile bitrate="900" delivery="progressive" height="480" type="video/mp4" width="854">https://i.socdm.com/a/2/2442/2699335/20250919070018-297613edf40847.mp4</MediaFile>
+              <MediaFile bitrate="2000" delivery="progressive" height="720" type="video/mp4" width="1280">https://i.socdm.com/a/2/2442/2699336/20250919070018-56389c1bd5038b.mp4</MediaFile>
+              <MediaFile bitrate="3500" delivery="progressive" height="1080" type="video/mp4" width="1920">https://i.socdm.com/a/2/2442/2699337/20250919070018-2c461e98f2f578.mp4</MediaFile>
+            </MediaFiles>
+          </Linear>
+        </Creative>
+      </Creatives>
+    </InLine>
+  </Ad>
+</VAST>  `;
 
   const vastXML = vast.replace(/[\n\r]/g, '');
 
