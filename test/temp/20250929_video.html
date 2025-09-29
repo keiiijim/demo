@@ -57,37 +57,50 @@
   // 仮で3秒後に強制クローズ（動作テスト用）
   setTimeout(closeAd, 30000); // 本番は VAST 完了イベントに置き換え
 </script>
-  <script>
-  window.addEventListener("load", () => {
-    const adBack = document.getElementById("ad-back");
-    const adWrapper = document.getElementById("apv-container");
-
-    function updateHeight() {
-      // 高さを取得
-      const h = adWrapper.offsetHeight;
-      if (h > 0) {
-        adBack.style.height = h + "px";
-        console.log("[ad-back] 高さを確保:", h);
-      } else {
-        // 広告ロード前なら繰り返す
-        requestAnimationFrame(updateHeight);
-      }
-    }
-
-    updateHeight();
-  });
-</script>
+ 
 
   
 </head>
 <body>
-  <div id="ad-back"></div>
+  <div id="ad-back" style="height:0;"></div>
   <div id="apv-container"></div>
   <div id="apvad-adg-locationidsample"></div>
   <div class="dummy">ダミーコンテンツ①</div>
   <div class="dummy">ダミーコンテンツ②</div>
   <div class="dummy">ダミーコンテンツ③</div>
   <div class="dummy">ダミーコンテンツ④</div>
+
+
+   <script>
+    function adjustAdBackHeight() {
+      const adBack = document.getElementById("ad-back");
+      const adContainer = document.getElementById("apv-container");
+
+      // 動画の高さを取得
+      const h = adContainer.offsetHeight;
+      if (h > 0) {
+        adBack.style.height = h + "px";
+        console.log("[ad-back] 高さ設定:", h);
+      } else {
+        // 高さがまだ取れない場合は繰り返す
+        requestAnimationFrame(adjustAdBackHeight);
+      }
+    }
+
+    // ページ読み込み時に調整
+    window.addEventListener("load", adjustAdBackHeight);
+
+    // ウィンドウリサイズでも調整
+    window.addEventListener("resize", adjustAdBackHeight);
+
+    // 広告クローズ時に #ad-back の高さもリセットする例
+    function closeAd() {
+      document.getElementById("apv-container").style.display = "none";
+      document.getElementById("ad-back").style.height = "0px";
+    }
+  </script>
+
+  
   <script>
 
 
