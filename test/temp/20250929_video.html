@@ -3,154 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（SP・オーバーレイ風 自動クローズ付き）</title>
+  <title>広告タグ確認ページ（オーバーレイ固定＋自動クローズ）</title>
   <style>
     body {
-      margin: 0;
-      background: #f9f9f9;
       font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      line-height: 1.6;
     }
     .dummy {
       height: 400px;
-      margin: 20px 0;
       background: linear-gradient(to bottom, #eee, #ddd);
+      margin: 20px 0;
+      text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #555;
     }
-    #apv-container {
+    /* 上部固定ラッパー */
+    #ad-wrapper {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
+      max-width: 480px;
       z-index: 9999;
-      transition: opacity 0.6s ease, height 0.4s ease, margin 0.4s ease;
+      background: transparent;
     }
-    #apv-container.hide {
-      opacity: 0;
-      height: 0 !important;
-      margin: 0;
+    /* プレースホルダ（高さ確保用） */
+    #ad-back {
+      width: 100%;
+      height: 0;
     }
   </style>
 </head>
 <body>
-  <!-- 高さ確保用ダミー -->
-  <div id="ad-back" style="height:0;"></div>
+  <!-- プレースホルダ（高さを動的に入れる） -->
+  <div id="ad-back"></div>
 
-  <!-- 広告表示用 -->
-  <div id="apv-container"></div>
-  <div id="apvad-adg-locationidsample"></div>
+  <!-- 広告を固定表示するラッパー -->
+  <div id="ad-wrapper">
+    <div id="apv-container"></div>
+    <div id="apvad-adg-locationidsample"></div>
+  </div>
 
-  <!-- ダミーコンテンツ -->
   <div class="dummy">ダミーコンテンツ①</div>
   <div class="dummy">ダミーコンテンツ②</div>
   <div class="dummy">ダミーコンテンツ③</div>
   <div class="dummy">ダミーコンテンツ④</div>
 
   <script>
-    const apvVideoAdParam = {
-      s: 'adg-locationidsample',
-      logLevel: 7,
-      skipoffset: 5,
-      showCloseButton: true,
-      dismissTime: 5000,
-      viewableImpression: true
-    };
+  const apvVideoAdParam = {
+    s: 'adg-locationidsample',
+    logLevel: 7,
+    skipoffset: 5,
+    showCloseButton: true,
+    dismissTime: 5000,
+    viewableImpression: true
+  };
 
-    const vast = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-    <VAST version="3.0">
-      <Ad>
-        <InLine>
-          <AdSystem>SOADS</AdSystem>
-          <AdTitle>_clickable</AdTitle>
-          <Description>clickable ad</Description>
-          <Impression><![CDATA[https://example.com/imp]]></Impression>
-          <Creatives>
-            <Creative AdID="2501508">
-              <Linear skipoffset="5">
-                <Duration>00:00:15</Duration>
-                <TrackingEvents>
-                  <!-- 完了イベントに JS フックを仕込む -->
-                  <Tracking event="complete"><![CDATA[javascript:window.dispatchEvent(new Event('apv-complete'))]]></Tracking>
-                </TrackingEvents>
-                <VideoClicks>
-                  <ClickThrough><![CDATA[https://example.com/click]]></ClickThrough>
-                </VideoClicks>
-                <MediaFiles>
-                  <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
-                    https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
-                  </MediaFile>
-                </MediaFiles>
-              </Linear>
-            </Creative>
-          </Creatives>
-        </InLine>
-      </Ad>
-    </VAST>`;
+  const vast = `<?xml version="1.0" encoding="UTF-8"?>
+  <VAST version="3.0">
+    <Ad>
+      <InLine>
+        <AdSystem>SOADS</AdSystem>
+        <AdTitle>_clickable</AdTitle>
+        <Creatives>
+          <Creative AdID="2501508">
+            <Linear skipoffset="5">
+              <Duration>00:00:15</Duration>
+              <MediaFiles>
+                <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
+                  https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
+                </MediaFile>
+              </MediaFiles>
+            </Linear>
+          </Creative>
+        </Creatives>
+      </InLine>
+    </Ad>
+  </VAST>`;
 
-    const vastXML = vast.replace(/[\n\r]/g, '');
+  const vastXML = vast.replace(/[\n\r]/g, '');
 
-    function loadFunction() {
-      var script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
-      document.getElementById('apv-container').appendChild(script);
-      return script;
-    }
+  function loadFunction() {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
+    document.getElementById('apv-container').appendChild(script);
+    return script;
+  }
 
-    function executeFunction() {
-      var script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.innerHTML =
-        '(function(){' +
-        '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load( \'' + vastXML + '\' );' +
-        '})();';
-      document.getElementById('apv-container').appendChild(script);
-    }
+  function executeFunction() {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.innerHTML = `
+      (function(){
+        var ad = new APV.VideoAd(${JSON.stringify(apvVideoAdParam)});
+        ad.load('${vastXML}');
+        // 再生終了時に自動クローズ
+        ad.on("complete", function(){
+          closeAd();
+        });
+      })();
+    `;
+    document.getElementById('apv-container').appendChild(script);
+  }
 
-    function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
-      var script = loadCallBack();
-      script.onload = function(){
-        executeCallBack();
-        adjustAdBackHeight();
-        watchCloseBtn();
-      };
-    }
-
-    function adjustAdBackHeight() {
-      const adBack = document.getElementById("ad-back");
-      const adContainer = document.getElementById("apv-container");
-      function update() {
-        const h = adContainer.offsetHeight;
-        if (h > 0) {
-          adBack.style.height = h + "px";
-        } else {
-          requestAnimationFrame(update);
+  function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
+    var script = loadCallBack();
+    script.onload = function(){
+      executeCallBack();
+      // 高さを拾ってプレースホルダに反映
+      setTimeout(()=>{
+        const wrapper = document.querySelector("#ad-wrapper");
+        if(wrapper){
+          document.getElementById("ad-back").style.height = wrapper.offsetHeight + "px";
         }
-      }
-      update();
-    }
+      }, 1500);
+    };
+  }
 
-    function closeAd() {
-      const adContainer = document.getElementById("apv-container");
-      const adBack = document.getElementById("ad-back");
-      adContainer.classList.add("hide");
-      adBack.style.height = "0px";
-    }
+  // 閉じる処理
+  function closeAd(){
+    const wrapper = document.getElementById("ad-wrapper");
+    wrapper.style.transition = "opacity 0.6s ease";
+    wrapper.style.opacity = "0";
+    setTimeout(()=>{
+      wrapper.remove();
+      document.getElementById("ad-back").style.height = "0px";
+    },700);
+  }
 
-    function watchCloseBtn() {
-      const btn = document.querySelector(".apv-btn-close");
-      if (btn) {
-        btn.addEventListener("click", closeAd, { once: true });
-      } else {
-        requestAnimationFrame(watchCloseBtn);
-      }
-    }
-
-    // VAST の complete イベントをフック
-    window.addEventListener("apv-complete", closeAd);
-
-    executeAfterScriptLoaded(loadFunction, executeFunction);
+  executeAfterScriptLoaded(loadFunction, executeFunction);
   </script>
 </body>
 </html>
