@@ -3,71 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（SP・インリード＋クローズボタン）</title>
+  <title>AppVador VideoAd テスト</title>
   <style>
     body {
       font-family: sans-serif;
       margin: 0;
       padding: 0;
       background: #f9f9f9;
-      line-height: 1.6;
-    }
-    section {
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
     }
     .dummy {
-      height: 400px;
-      background: linear-gradient(to bottom, #eee, #ddd);
+      height: 200px;
+      background: #eee;
       margin: 20px 0;
-      text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #555;
     }
-    #adg-inread {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      margin: 40px auto;
+    #apv-container {
+      width: 480px;
+      margin: 0 auto;
       background: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
   </style>
-  <!-- クローズボタン制御を外部JSにまとめる -->
-  <script src="./inspector.js"></script>
 </head>
 <body>
 
-  <section>
-    <div class="dummy">ダミーコンテンツ①</div>
-    <div class="dummy">ダミーコンテンツ②</div>
+  <div class="dummy">ダミーコンテンツ①</div>
+  <div id="apv-container"></div>
+  <div class="dummy">ダミーコンテンツ②</div>
 
-    <!-- インリード広告 -->
-    <div id="adg-inread">
-      <!-- ★ ここでAppVadorに渡すパラメータを事前定義 -->
-      <script>
+  <script>
+    // AppVador パラメータ
+    const apvVideoAdParam = {
+      id: "apv-container",   // 描画先のID
+      s: "adg-locationidsample",
+      skipoffset: 5,         // 5秒後にクローズボタン
+      showCloseButton: true, // 強制表示
+      dismissTime: 5000,
+      viewableImpression: true
+    };
 
-window.apvVideoAdParam = {
-  s: "adg-216379",        // locationid に紐付け
-  skipoffset: 5,          // 数値秒でOK
-  showCloseButton: true,  // 強制表示
-  dismissTime: 5000,
-  viewableImpression: true
-};
+    // VAST XML（ここはテスト用に差し替え）
+    const vastXML = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+      <VAST version="3.0">
+        <Ad>
+          <InLine>
+            <Creatives>
+              <Creative>
+                <Linear skipoffset="00:00:05">
+                  <Duration>00:00:15</Duration>
+                  <MediaFiles>
+                    <MediaFile type="video/mp4" width="640" height="360" delivery="progressive">
+                      https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
+                    </MediaFile>
+                  </MediaFiles>
+                </Linear>
+              </Creative>
+            </Creatives>
+          </InLine>
+        </Ad>
+      </VAST>`.replace(/\n/g, '');
 
-
-      </script>
-      <!-- 商用テスト媒体 test_video_inread 226730 -->
-      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216379&targetID=adg_216379&displayid=3&adType=INREAD_GENERAL&async=true&tagver=2.0.0"></script>
-    </div>
-
-    <div class="dummy">ダミーコンテンツ③</div>
-    <div class="dummy">ダミーコンテンツ④</div>
-  </section>
+    // SDKロード → 実行
+    const script = document.createElement("script");
+    script.src = "https://cdn.apvdr.com/js/VideoAd.min.js";
+    script.onload = () => {
+      new APV.VideoAd(apvVideoAdParam).load(vastXML);
+    };
+    document.body.appendChild(script);
+  </script>
 
 </body>
 </html>
