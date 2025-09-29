@@ -43,13 +43,13 @@
 
 
   <script>
-(function() {
+
+    (function() {
   console.log("[hack] Close button watcher active");
 
   function tryInsert() {
     const wrapper = document.querySelector("iframe.apv-wrapper");
     if (!wrapper) {
-      // まだ iframe が出てない → もう一度チェック
       requestAnimationFrame(tryInsert);
       return;
     }
@@ -57,7 +57,7 @@
     const parent = wrapper.parentElement;
     if (!parent || parent.querySelector(".apv-btn-close")) return;
 
-    // Closeボタン要素を作成
+    // Closeボタン作成
     const closeBtn = document.createElement("a");
     closeBtn.className = "apv-btn-close";
     closeBtn.style.cssText = `
@@ -70,13 +70,19 @@
         style="margin:0;padding:0;border:none;background:transparent;
                position:absolute;top:5px;right:5px;width:20px;height:20px;">`;
 
-    // クリック時にふわっと消す
+    // クリック時
     closeBtn.addEventListener("click", () => {
-      parent.style.transition = "opacity 0.6s ease, height 0.6s ease, margin 0.6s ease";
+      // ステップ1: opacityだけをふわっと
+      parent.style.transition = "opacity 0.6s ease";
       parent.style.opacity = "0";
-      parent.style.height = "0px";
-      parent.style.margin = "0px";
-      setTimeout(() => parent.remove(), 700);
+
+      // 完全に透明になったら高さ・余白を閉じる
+      setTimeout(() => {
+        parent.style.transition = "height 0.4s ease, margin 0.4s ease";
+        parent.style.height = "0px";
+        parent.style.margin = "0px";
+        setTimeout(() => parent.remove(), 500);
+      }, 650);
     });
 
     parent.style.position = "relative";
@@ -88,7 +94,7 @@
   setTimeout(tryInsert, 6000);
 })();
 
-
+  
     
 </script>
 
