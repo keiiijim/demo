@@ -17,6 +17,48 @@
       color: #555;
     }
   </style>
+
+  <script>
+  const adWrapper = document.getElementById("apv-container");
+  const target = document.getElementById("apvad-adg-locationidsample");
+  const dummy1 = document.querySelector(".dummy"); // ダミー①
+
+  let fixed = false;
+
+  // スクロール監視
+  window.addEventListener("scroll", () => {
+    const rect = target.getBoundingClientRect();
+
+    if (!fixed && rect.top <= 0) {
+      // 上に行ったので固定
+      adWrapper.style.position = "fixed";
+      adWrapper.style.top = "0";
+      adWrapper.style.left = "0";
+      adWrapper.style.width = "100%";
+      fixed = true;
+    }
+
+    if (fixed && window.scrollY <= dummy1.offsetTop - adWrapper.offsetHeight) {
+      // 元の位置まで戻ってきたら固定解除
+      adWrapper.style.position = "static";
+      fixed = false;
+    }
+  });
+
+  // 動画終了時やクローズ時に呼ばれる想定フック
+  function closeAd() {
+    adWrapper.style.transition = "opacity 0.5s ease";
+    adWrapper.style.opacity = "0";
+    setTimeout(() => {
+      adWrapper.remove(); // 完全にDOMごと削除
+    }, 600);
+  }
+
+  // 仮で3秒後に強制クローズ（動作テスト用）
+  setTimeout(closeAd, 30000); // 本番は VAST 完了イベントに置き換え
+</script>
+
+  
 </head>
 <body>
   <div id="apv-container"></div>
