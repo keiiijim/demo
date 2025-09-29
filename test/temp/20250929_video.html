@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（SP・オーバーレイ風）</title>
+  <title>広告タグ確認ページ（SP・オーバーレイ風 自動クローズ付き）</title>
   <style>
     body {
       margin: 0;
@@ -19,7 +19,6 @@
       justify-content: center;
       color: #555;
     }
-    /* オーバーレイ広告 */
     #apv-container {
       position: fixed;
       top: 0; left: 0;
@@ -52,8 +51,8 @@
     const apvVideoAdParam = {
       s: 'adg-locationidsample',
       logLevel: 7,
-      skipoffset: 5,          // 5秒後にcloseボタン表示
-      showCloseButton: true,  // closeボタンを強制表示
+      skipoffset: 5,
+      showCloseButton: true,
       dismissTime: 5000,
       viewableImpression: true
     };
@@ -71,7 +70,8 @@
               <Linear skipoffset="5">
                 <Duration>00:00:15</Duration>
                 <TrackingEvents>
-                  <Tracking event="complete"><![CDATA[https://example.com/complete]]></Tracking>
+                  <!-- 完了イベントに JS フックを仕込む -->
+                  <Tracking event="complete"><![CDATA[javascript:window.dispatchEvent(new Event('apv-complete'))]]></Tracking>
                 </TrackingEvents>
                 <VideoClicks>
                   <ClickThrough><![CDATA[https://example.com/click]]></ClickThrough>
@@ -90,7 +90,6 @@
 
     const vastXML = vast.replace(/[\n\r]/g, '');
 
-    // SDKロード
     function loadFunction() {
       var script = document.createElement('script');
       script.type = 'text/javascript';
@@ -99,7 +98,6 @@
       return script;
     }
 
-    // SDK呼び出し
     function executeFunction() {
       var script = document.createElement('script');
       script.type = 'text/javascript';
@@ -119,7 +117,6 @@
       };
     }
 
-    // 高さを ad-back に反映
     function adjustAdBackHeight() {
       const adBack = document.getElementById("ad-back");
       const adContainer = document.getElementById("apv-container");
@@ -134,7 +131,6 @@
       update();
     }
 
-    // クローズ処理
     function closeAd() {
       const adContainer = document.getElementById("apv-container");
       const adBack = document.getElementById("ad-back");
@@ -142,7 +138,6 @@
       adBack.style.height = "0px";
     }
 
-    // クローズボタンを監視
     function watchCloseBtn() {
       const btn = document.querySelector(".apv-btn-close");
       if (btn) {
@@ -151,6 +146,9 @@
         requestAnimationFrame(watchCloseBtn);
       }
     }
+
+    // VAST の complete イベントをフック
+    window.addEventListener("apv-complete", closeAd);
 
     executeAfterScriptLoaded(loadFunction, executeFunction);
   </script>
