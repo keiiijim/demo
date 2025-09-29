@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（SP・オーバーレイ直呼び）</title>
+  <title>広告タグ確認ページ（SP・オーバーレイ）</title>
   <style>
     body {
       font-family: sans-serif;
@@ -22,31 +22,29 @@
       justify-content: center;
       color: #555;
     }
-    /* オーバーレイ広告 */
+    /* 👇 オーバーレイ配置 */
     #overlay-container {
       position: fixed;
-      top: 0;         /* 上固定。下固定にしたい場合は bottom:0; に変更 */
+      top: 0;
       left: 0;
       width: 100%;
       max-width: 480px;
       z-index: 9999;
-      background: transparent;
     }
   </style>
 </head>
 <body>
 
-  <!-- オーバーレイ広告用コンテナ -->
-  <div id="overlay-container"></div>
-
   <div class="dummy">ダミーコンテンツ①</div>
   <div class="dummy">ダミーコンテンツ②</div>
+  <div id="overlay-container"></div>
   <div class="dummy">ダミーコンテンツ③</div>
   <div class="dummy">ダミーコンテンツ④</div>
 
   <script>
   const apvVideoAdParam = {
-    s: 'adg-locationidsample',
+    id: "overlay-container", // 👈 出力先を明示
+    s: "adg-locationidsample",
     logLevel: 7,
     skipoffset: 5,
     showCloseButton: true,
@@ -54,18 +52,18 @@
     viewableImpression: true
   };
 
-  const vast = `<?xml version="1.0" encoding="UTF-8"?>
+  const vast = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
   <VAST version="3.0">
     <Ad>
       <InLine>
         <AdSystem>SOADS</AdSystem>
-        <AdTitle>OverlayAd</AdTitle>
+        <AdTitle>Overlay Ad</AdTitle>
         <Creatives>
           <Creative AdID="2501508">
             <Linear skipoffset="5">
               <Duration>00:00:15</Duration>
               <MediaFiles>
-                <MediaFile bitrate="600" delivery="progressive" height="360" type="video/mp4" width="640">
+                <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
                   https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
                 </MediaFile>
               </MediaFiles>
@@ -75,34 +73,34 @@
       </InLine>
     </Ad>
   </VAST>`;
-  const vastXML = vast.replace(/[\n\r]/g, '');
+  const vastXML = vast.replace(/[\n\r]/g, "");
 
-  const loadFunction = function() {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
-    document.getElementById('overlay-container').appendChild(script);
+  function loadFunction() {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js";
+    document.body.appendChild(script);
     return script;
   }
 
-  const executeFunction = function() {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
+  function executeFunction() {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
     script.innerHTML =
       '(function(){' +
-      '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load( \'' + vastXML + '\' );' +
-      '})(); ';
-    document.getElementById('overlay-container').appendChild(script);
+      '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load(\'' + vastXML + '\');' +
+      '})();';
+    document.body.appendChild(script);
   }
 
   function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
     var script = loadCallBack();
-    script.onload = function(){
+    script.onload = function() {
       executeCallBack();
     };
   }
+
   executeAfterScriptLoaded(loadFunction, executeFunction);
   </script>
-
 </body>
 </html>
