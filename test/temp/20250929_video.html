@@ -18,7 +18,7 @@
       margin: auto;
     }
     .dummy {
-      height: 600px;
+      height: 400px;
       background: linear-gradient(to bottom, #eee, #ddd);
       margin: 20px 0;
       text-align: center;
@@ -27,7 +27,7 @@
       justify-content: center;
       color: #555;
     }
-    /* オーバーレイ広告エリア */
+    /* オーバーレイ広告 */
     #overlay-container {
       position: fixed;
       top: 0;
@@ -37,32 +37,12 @@
       z-index: 9999;
       background: transparent;
     }
-    /* クローズボタン */
-    #overlay-close {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      z-index: 10000;
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      font-size: 16px;
-      cursor: pointer;
-      line-height: 28px;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
 
-  <!-- オーバーレイ広告 -->
-  <div id="overlay-container">
-    <div id="apv-overlay"></div>
-    <button id="overlay-close">×</button>
-  </div>
+  <!-- オーバーレイ広告表示エリア -->
+  <div id="overlay-container"></div>
 
   <section>
     <div class="dummy" style="margin-top: 230px;">ダミーコンテンツ①</div>
@@ -107,7 +87,7 @@
     var script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
-    document.getElementById('apv-overlay').appendChild(script);
+    document.getElementById('overlay-container').appendChild(script);
     return script;
   }
 
@@ -118,26 +98,10 @@
       '(function(){' +
       '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load( \'' + vastXML + '\' );' +
       '})(); ';
-    document.getElementById('apv-overlay').appendChild(script);
+    document.getElementById('overlay-container').appendChild(script);
   }
 
   function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
     var script = loadCallBack();
     script.onload = function(){
-      executeCallBack();
-    };
-  }
-  executeAfterScriptLoaded(loadFunction, executeFunction);
-
-  // クローズボタン制御
-  const closeBtn = document.getElementById("overlay-close");
-  const overlay = document.getElementById("overlay-container");
-  closeBtn.addEventListener("click", () => {
-    overlay.style.transition = "opacity 0.5s ease";
-    overlay.style.opacity = "0";
-    setTimeout(() => overlay.remove(), 500);
-  });
-  </script>
-
-</body>
-</html>
+      executeCallB
