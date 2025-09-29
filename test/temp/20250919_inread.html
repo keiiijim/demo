@@ -49,33 +49,41 @@
     this.addEventListener("load", function() {
       if (this.responseURL && this.responseURL.includes("event=start")) {
         console.log("[hack] 動画start検知:", this.responseURL);
-        // 再生開始から5秒後にクローズボタン
-        setTimeout(() => {
+
+        let tries = 0;
+        const timer = setInterval(() => {
           const iframe = document.querySelector("iframe.apv-wrapper");
           if (iframe && iframe.parentElement) {
-            if (!iframe.parentElement.querySelector(".apv-btn-close")) {
-              const btn = document.createElement("a");
-              btn.className = "apv-btn-close";
-              btn.style.cssText = `
-                position:absolute;top:0;right:0;z-index:9999;
-                width:30px;height:30px;cursor:pointer;
-              `;
-              btn.innerHTML =
-                "<img src='https://cdn.apvdr.com/ui/3.1/close-button@2x.png' " +
-                "style='position:absolute;top:5px;right:5px;width:20px;height:20px;'>";
-              btn.onclick = () => {
-                const wrapper = iframe.parentElement;
-                wrapper.style.transition = "opacity 0.5s ease";
-                wrapper.style.opacity = "0";
-                setTimeout(() => {
-                  wrapper.style.display = "none";
-                }, 500);
-              };
-              iframe.parentElement.appendChild(btn);
-              console.log("[hack] クローズボタン追加（フェードアウト対応）！");
-            }
+            clearInterval(timer);
+            console.log("[hack] iframe発見、クローズボタン挿入準備");
+
+            // 5秒後にボタン差し込み
+            setTimeout(() => {
+              if (!iframe.parentElement.querySelector(".apv-btn-close")) {
+                const btn = document.createElement("a");
+                btn.className = "apv-btn-close";
+                btn.style.cssText = `
+                  position:absolute;top:0;right:0;z-index:9999;
+                  width:30px;height:30px;cursor:pointer;
+                `;
+                btn.innerHTML =
+                  "<img src='https://cdn.apvdr.com/ui/3.1/close-button@2x.png' " +
+                  "style='position:absolute;top:5px;right:5px;width:20px;height:20px;'>";
+                btn.onclick = () => {
+                  const wrapper = iframe.parentElement;
+                  wrapper.style.transition = "opacity 0.5s ease";
+                  wrapper.style.opacity = "0";
+                  setTimeout(() => {
+                    wrapper.style.display = "none";
+                  }, 500);
+                };
+                iframe.parentElement.appendChild(btn);
+                console.log("[hack] クローズボタン追加！");
+              }
+            }, 5000);
           }
-        }, 5000);
+          if (++tries > 20) clearInterval(timer); // 最大10秒で諦める
+        }, 500);
       }
     });
     return origSend.apply(this, args);
@@ -83,8 +91,7 @@
 })();
 </script>
 
-
-
+  
 
 
           
