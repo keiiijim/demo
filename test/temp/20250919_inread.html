@@ -50,13 +50,16 @@
     <div id="adg-inread">
       <!-- ★ ここでAppVadorに渡すパラメータを事前定義 -->
       <script>
-window.apvVideoAdParam = {
-  s: 'adg-locationidsample',
-  skipoffset: "00:00:05",  // 形式は文字列で
-  showCloseButton: true,
+
+        window.apvVideoAdParam = {
+  id: "apv-container",   // ★ 広告を描画するDOM要素ID
+  s: "adg-locationidsample",
+  skipoffset: 5,         // 秒数を数値で
+  showCloseButton: true, // クローズボタン強制表示
   dismissTime: 5000,
   viewableImpression: true
 };
+
 
       </script>
       <!-- 商用テスト媒体 test_video_inread 226730 -->
