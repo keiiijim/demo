@@ -6,9 +6,11 @@
   <title>広告タグ確認ページ（SP・オーバーレイ）</title>
   <style>
     body {
+      font-family: sans-serif;
       margin: 0;
       padding: 0;
       background: #f9f9f9;
+      line-height: 1.6;
     }
     .dummy {
       height: 400px;
@@ -20,51 +22,50 @@
       justify-content: center;
       color: #555;
     }
-    /* 👇 オーバーレイ広告用コンテナ */
-    #overlay-container {
+    /* オーバーレイ用の広告枠 */
+    #adg_overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       max-width: 480px;
       z-index: 9999;
-      background: transparent;
+      background: transparent; /* 背景を透過 */
     }
   </style>
 </head>
 <body>
 
-  <div class="dummy">ダミーコンテンツ①</div>
+  <!-- 上部固定のオーバーレイ広告 -->
+  <div id="adg_overlay"></div>
+
+  <div class="dummy" style="margin-top: 250px;">ダミーコンテンツ①</div>
   <div class="dummy">ダミーコンテンツ②</div>
-
-  <!-- ⭐ SDKが探すターゲット -->
-  <div id="overlay-container"></div>
-
   <div class="dummy">ダミーコンテンツ③</div>
-  <div class="dummy">ダミーコンテンツ④</div>
 
   <script>
   const apvVideoAdParam = {
-    id: "overlay-container",  // DOM上に存在するIDを指定
+    id: "adg_overlay",       // ← DOMに存在するIDと一致させる
     s: "adg-locationidsample",
-    skipoffset: 5,
-    showCloseButton: true,
+    skipoffset: 5,           // 秒数
+    showCloseButton: true,   // クローズボタン強制表示
     dismissTime: 5000,
     viewableImpression: true
   };
 
-  const vast = `<?xml version="1.0" encoding="UTF-8"?>
+  // VAST XML（インリードで使ったやつそのまま流用）
+  const vast = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
   <VAST version="3.0">
     <Ad>
       <InLine>
         <AdSystem>SOADS</AdSystem>
-        <AdTitle>Overlay Ad</AdTitle>
+        <AdTitle>_clickable</AdTitle>
         <Creatives>
           <Creative AdID="2501508">
             <Linear skipoffset="5">
               <Duration>00:00:15</Duration>
               <MediaFiles>
-                <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
+                <MediaFile bitrate="600" delivery="progressive" height="360" type="video/mp4" width="640">
                   https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
                 </MediaFile>
               </MediaFiles>
@@ -96,11 +97,12 @@
 
   function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
     var script = loadCallBack();
-    script.onload = function(){
+    script.onload = function() {
       executeCallBack();
     };
   }
 
+  // 実行
   executeAfterScriptLoaded(loadFunction, executeFunction);
   </script>
 </body>
