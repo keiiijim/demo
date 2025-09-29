@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>広告タグ確認ページ（オーバーレイ・VAST直書き）</title>
+  <title>広告タグ確認ページ（オーバーレイ風）</title>
   <style>
     body {
       font-family: sans-serif;
@@ -11,6 +11,11 @@
       padding: 0;
       background: #f9f9f9;
       line-height: 1.6;
+    }
+    section {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
     }
     .dummy {
       height: 400px;
@@ -22,66 +27,33 @@
       justify-content: center;
       color: #555;
     }
-    /* オーバーレイで上部固定 */
-    #apv-container {
+    /* インリードをオーバーレイ風に固定 */
+    #adg-inread {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       max-width: 480px;
+      margin: 0 auto;
       z-index: 9999;
-      background: transparent;
+      background: transparent; /* 白い枠が嫌なら透明 */
     }
   </style>
 </head>
 <body>
-  <div class="dummy">ダミーコンテンツ①</div>
-  <div class="dummy">ダミーコンテンツ②</div>
-  <div class="dummy">ダミーコンテンツ③</div>
 
-  <!-- AppVador プレイヤーを描画する入れ物 -->
-  <div id="apv-container"></div>
+  <!-- オーバーレイ風インリード広告 -->
+  <div id="adg-inread">
+    <!-- 商用テスト媒体 test_video_inread 226730 -->
+    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=216379&targetID=adg_216379&displayid=3&adType=INREAD_GENERAL&async=true&tagver=2.0.0"></script>
+  </div>
 
-  <script>
-    const apvVideoAdParam = {
-      id: "apv-container",  // ★ 描画先を指定
-      s: "adg-locationidsample",
-      skipoffset: 5,
-      showCloseButton: true,
-      dismissTime: 5000,
-      viewableImpression: true
-    };
+  <section>
+    <div class="dummy" style="margin-top: 250px;">ダミーコンテンツ①</div>
+    <div class="dummy">ダミーコンテンツ②</div>
+    <div class="dummy">ダミーコンテンツ③</div>
+    <div class="dummy">ダミーコンテンツ④</div>
+  </section>
 
-    const vastXML = `<?xml version="1.0" encoding="UTF-8"?>
-<VAST version="3.0">
-  <Ad>
-    <InLine>
-      <AdSystem>SOADS</AdSystem>
-      <AdTitle>テストオーバーレイ</AdTitle>
-      <Creatives>
-        <Creative>
-          <Linear skipoffset="5">
-            <Duration>00:00:15</Duration>
-            <MediaFiles>
-              <MediaFile type="video/mp4" width="640" height="360"
-                delivery="progressive" bitrate="600">
-                https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
-              </MediaFile>
-            </MediaFiles>
-          </Linear>
-        </Creative>
-      </Creatives>
-    </InLine>
-  </Ad>
-</VAST>`.replace(/[\n\r]/g, '');
-
-    // SDK読み込み
-    const script = document.createElement('script');
-    script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
-    script.onload = () => {
-      new APV.VideoAd(apvVideoAdParam).load(vastXML);
-    };
-    document.body.appendChild(script);
-  </script>
 </body>
 </html>
