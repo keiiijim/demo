@@ -12,6 +12,11 @@
       background: #f9f9f9;
       line-height: 1.6;
     }
+    section {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
     .dummy {
       height: 400px;
       background: linear-gradient(to bottom, #eee, #ddd);
@@ -22,38 +27,34 @@
       justify-content: center;
       color: #555;
     }
-    /* オーバーレイ用の広告枠 */
-    #adg_overlay {
+    /* オーバーレイ用広告コンテナ */
+    #apv-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       max-width: 480px;
       z-index: 9999;
-      background: transparent; /* 背景を透過 */
     }
   </style>
 </head>
 <body>
 
-  <!-- 上部固定のオーバーレイ広告 -->
-  <div id="adg_overlay"></div>
-
-  <div class="dummy" style="margin-top: 250px;">ダミーコンテンツ①</div>
+  <div class="dummy">ダミーコンテンツ①</div>
   <div class="dummy">ダミーコンテンツ②</div>
+  <div id="apv-container"></div>
   <div class="dummy">ダミーコンテンツ③</div>
+  <div class="dummy">ダミーコンテンツ④</div>
 
   <script>
   const apvVideoAdParam = {
-    id: "adg_overlay",       // ← DOMに存在するIDと一致させる
-    s: "adg-locationidsample",
-    skipoffset: 5,           // 秒数
-    showCloseButton: true,   // クローズボタン強制表示
+    s: 'adg-locationidsample',
+    skipoffset: 5,
+    showCloseButton: true,
     dismissTime: 5000,
     viewableImpression: true
   };
 
-  // VAST XML（インリードで使ったやつそのまま流用）
   const vast = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
   <VAST version="3.0">
     <Ad>
@@ -65,7 +66,7 @@
             <Linear skipoffset="5">
               <Duration>00:00:15</Duration>
               <MediaFiles>
-                <MediaFile bitrate="600" delivery="progressive" height="360" type="video/mp4" width="640">
+                <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
                   https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
                 </MediaFile>
               </MediaFiles>
@@ -75,35 +76,37 @@
       </InLine>
     </Ad>
   </VAST>`;
-  const vastXML = vast.replace(/[\n\r]/g, "");
 
-  function loadFunction() {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js";
-    document.body.appendChild(script);
+  const vastXML = vast.replace(/[\n\r]/g, '');
+
+  const loadFunction = function() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
+    const apvContainer = document.getElementById('apv-container');
+    apvContainer.appendChild(script);
     return script;
-  }
+  };
 
-  function executeFunction() {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
+  const executeFunction = function() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
     script.innerHTML =
       '(function(){' +
-      '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load(\'' + vastXML + '\');' +
-      '})();';
-    document.body.appendChild(script);
-  }
+      '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load( \'' + vastXML + '\' );' +
+      '})(); ';
+    const apvContainer = document.getElementById('apv-container');
+    apvContainer.appendChild(script);
+  };
 
   function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
     var script = loadCallBack();
-    script.onload = function() {
+    script.onload = function(){
       executeCallBack();
     };
   }
-
-  // 実行
   executeAfterScriptLoaded(loadFunction, executeFunction);
   </script>
+
 </body>
 </html>
