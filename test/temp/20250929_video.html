@@ -3,6 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>広告タグ確認ページ（SP・オーバーレイ風）</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      line-height: 1.6;
+    }
+    .dummy {
+      height: 400px;
+      background: linear-gradient(to bottom, #eee, #ddd);
+      margin: 20px 0;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+    }
+    /* オーバーレイ用の固定位置 */
+    #apv-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      z-index: 9999;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- オーバーレイ広告を出す枠 -->
+  <div id="apv-container"></div>
+
+  <div class="dummy" style="margin-top: 250px;">ダミーコンテンツ①</div>
+  <div class="dummy">ダミーコンテンツ②</div>
+  <div class="dummy">ダミーコンテンツ③</div>
+  <div class="dummy">ダミーコンテンツ④</div>
+
+  <script>
+    const apvVideoAdParam = {
+      s: 'adg-locationidsample',
+      logLevel: 7,
+      skipoffset: 5,
+      showCloseButton: true,
+      dismissTime: 5000,
+      viewableImpression: true
+    };
+
+    const vast = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <VAST version="3.0">
+      <Ad>
+        <InLine>
+          <AdSystem>SOADS</AdSystem>
+          <AdTitle>Overlay Test</AdTitle>
+          <Description>overlay ad</Description>
+          <Creatives>
+            <Creative AdID="2501508">
+              <Linear skipoffset="5">
+                <Duration>00:00:15</Duration>
+                <MediaFiles>
+                  <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
+                    https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
+                  </MediaFile>
+                </MediaFiles>
+              </Linear>
+            </Creative>
+          </Creatives>
+        </InLine>
+      </Ad>
+    </VAST>`;
+
+    const vastXML = vast.replace(/[\n\r]/g, '');
+
+    // AppVador SDKロード
+    function loadFunction() {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
+      const apvContainer = document.getElementById('apv-container');
+      apvContainer.appendChild(script);
+      return script;
+    }
+
+    // SDKロード後に呼び出し
+    function executeFunction() {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.innerHTML =
+        '(function(){' +
+        '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load(\'' + vastXML + '\');' +
+        '})();';
+      const apvContainer = document.getElementById('apv-container');
+      apvContainer.appendChild(script);
+    }
+
+    function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
+      var script = loadCallBack();
+      script.onload = function(){
+        executeCallBack();
+      };
+    }
+
+    executeAfterScriptLoaded(loadFunction, executeFunction);
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>広告タグ確認ページ（オーバーレイ風）</title>
   <style>
     body {
