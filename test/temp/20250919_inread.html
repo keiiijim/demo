@@ -43,52 +43,53 @@
 
 
   <script>
-(function() {
-  const origSend = XMLHttpRequest.prototype.send;
-  XMLHttpRequest.prototype.send = function(...args) {
-    this.addEventListener("load", function() {
-      if (this.responseURL && this.responseURL.includes("event=start")) {
-        console.log("[hack] 動画start検知:", this.responseURL);
 
-        let tries = 0;
-        const timer = setInterval(() => {
-          const iframe = document.querySelector("iframe.apv-wrapper");
-          if (iframe && iframe.parentElement) {
-            clearInterval(timer);
-            console.log("[hack] iframe発見、クローズボタン挿入準備");
+    (function() {
+  console.log("[hack] Close button inserter active");
 
-            // 5秒後にボタン差し込み
-            setTimeout(() => {
-              if (!iframe.parentElement.querySelector(".apv-btn-close")) {
-                const btn = document.createElement("a");
-                btn.className = "apv-btn-close";
-                btn.style.cssText = `
-                  position:absolute;top:0;right:0;z-index:9999;
-                  width:30px;height:30px;cursor:pointer;
-                `;
-                btn.innerHTML =
-                  "<img src='https://cdn.apvdr.com/ui/3.1/close-button@2x.png' " +
-                  "style='position:absolute;top:5px;right:5px;width:20px;height:20px;'>";
-                btn.onclick = () => {
-                  const wrapper = iframe.parentElement;
-                  wrapper.style.transition = "opacity 0.5s ease";
-                  wrapper.style.opacity = "0";
-                  setTimeout(() => {
-                    wrapper.style.display = "none";
-                  }, 500);
-                };
-                iframe.parentElement.appendChild(btn);
-                console.log("[hack] クローズボタン追加！");
-              }
-            }, 5000);
-          }
-          if (++tries > 20) clearInterval(timer); // 最大10秒で諦める
-        }, 500);
-      }
+  function insertCloseButton() {
+    const wrapper = document.querySelector("iframe.apv-wrapper");
+    if (!wrapper) {
+      requestAnimationFrame(insertCloseButton);
+      return;
+    }
+
+    // すでにボタンがある場合は二重追加を避ける
+    if (wrapper.parentElement.querySelector(".apv-btn-close")) return;
+
+    const closeBtn = document.createElement("a");
+    closeBtn.className = "apv-btn-close";
+    closeBtn.style.cssText = `
+      margin:0;padding:0;border:none;background:transparent;
+      position:absolute;display:block;top:0;right:0;z-index:10;
+      width:30px;height:30px;cursor:pointer;
+    `;
+    closeBtn.innerHTML =
+      `<img src="https://cdn.apvdr.com/ui/3.1/close-button@2x.png"
+        style="margin:0;padding:0;border:none;background:transparent;
+               position:absolute;top:5px;right:5px;width:20px;height:20px;">`;
+
+    // クリック時のふわっと消える処理
+    closeBtn.addEventListener("click", () => {
+      const container = wrapper.parentElement;
+      container.style.transition = "opacity 0.5s ease, height 0.5s ease, margin 0.5s ease";
+      container.style.opacity = "0";
+      container.style.height = "0px";
+      container.style.margin = "0px";
+      setTimeout(() => container.remove(), 600);
     });
-    return origSend.apply(this, args);
-  };
+
+    wrapper.parentElement.style.position = "relative";
+    wrapper.parentElement.appendChild(closeBtn);
+
+    console.log("[hack] Close button inserted");
+  }
+
+  // 遅延して監視
+  setTimeout(insertCloseButton, 6000);
 })();
+
+    
 </script>
 
   
