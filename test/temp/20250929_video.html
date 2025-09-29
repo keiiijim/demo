@@ -1,80 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>広告タグ確認ページ（SP・オーバーレイ風）</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f9f9f9;
+      font-family: sans-serif;
+    }
+    .dummy {
+      height: 400px;
+      margin: 20px 0;
+      background: linear-gradient(to bottom, #eee, #ddd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+    }
+    /* オーバーレイ広告 */
+    #apv-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 9999;
+      transition: opacity 0.6s ease, height 0.4s ease, margin 0.4s ease;
+    }
+    #apv-container.hide {
+      opacity: 0;
+      height: 0 !important;
+      margin: 0;
+    }
+  </style>
+</head>
 <body>
-  <!-- 高さを確保する透明のダミー領域 -->
+  <!-- 高さ確保用ダミー -->
   <div id="ad-back" style="height:0;"></div>
 
-  <!-- オーバーレイ用の広告コンテナ -->
-  <div id="apv-container" style="position:fixed;top:0;left:0;width:100%;z-index:9999;"></div>
+  <!-- 広告表示用 -->
+  <div id="apv-container"></div>
   <div id="apvad-adg-locationidsample"></div>
 
+  <!-- ダミーコンテンツ -->
   <div class="dummy">ダミーコンテンツ①</div>
   <div class="dummy">ダミーコンテンツ②</div>
   <div class="dummy">ダミーコンテンツ③</div>
   <div class="dummy">ダミーコンテンツ④</div>
 
   <script>
+    const apvVideoAdParam = {
+      s: 'adg-locationidsample',
+      logLevel: 7,
+      skipoffset: 5,          // 5秒後にcloseボタン表示
+      showCloseButton: true,  // closeボタンを強制表示
+      dismissTime: 5000,
+      viewableImpression: true
+    };
+
+    const vast = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+    <VAST version="3.0">
+      <Ad>
+        <InLine>
+          <AdSystem>SOADS</AdSystem>
+          <AdTitle>_clickable</AdTitle>
+          <Description>clickable ad</Description>
+          <Impression><![CDATA[https://example.com/imp]]></Impression>
+          <Creatives>
+            <Creative AdID="2501508">
+              <Linear skipoffset="5">
+                <Duration>00:00:15</Duration>
+                <TrackingEvents>
+                  <Tracking event="complete"><![CDATA[https://example.com/complete]]></Tracking>
+                </TrackingEvents>
+                <VideoClicks>
+                  <ClickThrough><![CDATA[https://example.com/click]]></ClickThrough>
+                </VideoClicks>
+                <MediaFiles>
+                  <MediaFile delivery="progressive" type="video/mp4" width="640" height="360">
+                    https://i.socdm.com/a/2/2442/2699334/20250919070018-23222a3278f18d.mp4
+                  </MediaFile>
+                </MediaFiles>
+              </Linear>
+            </Creative>
+          </Creatives>
+        </InLine>
+      </Ad>
+    </VAST>`;
+
+    const vastXML = vast.replace(/[\n\r]/g, '');
+
+    // SDKロード
+    function loadFunction() {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://pub-temp.s3.ap-northeast-1.amazonaws.com/AppVadorTest/VideoAd.js';
+      document.getElementById('apv-container').appendChild(script);
+      return script;
+    }
+
+    // SDK呼び出し
+    function executeFunction() {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.innerHTML =
+        '(function(){' +
+        '  new APV.VideoAd(' + JSON.stringify(apvVideoAdParam) + ').load( \'' + vastXML + '\' );' +
+        '})();';
+      document.getElementById('apv-container').appendChild(script);
+    }
+
+    function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
+      var script = loadCallBack();
+      script.onload = function(){
+        executeCallBack();
+        adjustAdBackHeight();
+        watchCloseBtn();
+      };
+    }
+
     // 高さを ad-back に反映
     function adjustAdBackHeight() {
       const adBack = document.getElementById("ad-back");
       const adContainer = document.getElementById("apv-container");
-
-      const h = adContainer.offsetHeight;
-      if (h > 0) {
-        adBack.style.height = h + "px";
-      } else {
-        requestAnimationFrame(adjustAdBackHeight);
+      function update() {
+        const h = adContainer.offsetHeight;
+        if (h > 0) {
+          adBack.style.height = h + "px";
+        } else {
+          requestAnimationFrame(update);
+        }
       }
+      update();
     }
 
-    // 広告を閉じる共通処理
+    // クローズ処理
     function closeAd() {
       const adContainer = document.getElementById("apv-container");
       const adBack = document.getElementById("ad-back");
-
-      adContainer.style.transition = "opacity 0.6s ease";
-      adContainer.style.opacity = "0";
-
-      setTimeout(() => {
-        adContainer.style.display = "none";
-        adBack.style.height = "0px";
-      }, 650);
+      adContainer.classList.add("hide");
+      adBack.style.height = "0px";
     }
 
-    // 監視：クローズボタンが出たら hook
+    // クローズボタンを監視
     function watchCloseBtn() {
       const btn = document.querySelector(".apv-btn-close");
       if (btn) {
         btn.addEventListener("click", closeAd, { once: true });
-        console.log("[hook] クローズボタン監視開始");
       } else {
         requestAnimationFrame(watchCloseBtn);
       }
     }
 
-    // 監視：動画終了を検知して自動クローズ
-    function watchVideoComplete() {
-      const iframe = document.querySelector("iframe.apv-wrapper");
-      if (!iframe) {
-        requestAnimationFrame(watchVideoComplete);
-        return;
-      }
-
-      // iframe内イベントまでは直接取れないので、complete用のbeaconをhookする例
-      const beaconChecker = setInterval(() => {
-        // Tracking beaconが飛んだタイミングで検知することを想定
-        // （ここは実運用で network log hook か、SDK APIがあればそれを利用）
-        if (window.__adComplete) {
-          clearInterval(beaconChecker);
-          closeAd();
-        }
-      }, 500);
-    }
-
-    window.addEventListener("load", () => {
-      adjustAdBackHeight();
-      watchCloseBtn();
-      watchVideoComplete();
-    });
-
-    window.addEventListener("resize", adjustAdBackHeight);
+    executeAfterScriptLoaded(loadFunction, executeFunction);
   </script>
 </body>
+</html>
