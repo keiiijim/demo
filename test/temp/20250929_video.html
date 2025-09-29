@@ -6,11 +6,9 @@
   <title>広告タグ確認ページ（SP・オーバーレイ）</title>
   <style>
     body {
-      font-family: sans-serif;
       margin: 0;
       padding: 0;
       background: #f9f9f9;
-      line-height: 1.6;
     }
     .dummy {
       height: 400px;
@@ -22,7 +20,7 @@
       justify-content: center;
       color: #555;
     }
-    /* 👇 オーバーレイ配置 */
+    /* 👇 オーバーレイ広告用コンテナ */
     #overlay-container {
       position: fixed;
       top: 0;
@@ -30,6 +28,7 @@
       width: 100%;
       max-width: 480px;
       z-index: 9999;
+      background: transparent;
     }
   </style>
 </head>
@@ -37,22 +36,24 @@
 
   <div class="dummy">ダミーコンテンツ①</div>
   <div class="dummy">ダミーコンテンツ②</div>
+
+  <!-- ⭐ SDKが探すターゲット -->
   <div id="overlay-container"></div>
+
   <div class="dummy">ダミーコンテンツ③</div>
   <div class="dummy">ダミーコンテンツ④</div>
 
   <script>
   const apvVideoAdParam = {
-    id: "overlay-container", // 👈 出力先を明示
+    id: "overlay-container",  // DOM上に存在するIDを指定
     s: "adg-locationidsample",
-    logLevel: 7,
     skipoffset: 5,
     showCloseButton: true,
     dismissTime: 5000,
     viewableImpression: true
   };
 
-  const vast = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+  const vast = `<?xml version="1.0" encoding="UTF-8"?>
   <VAST version="3.0">
     <Ad>
       <InLine>
@@ -95,7 +96,7 @@
 
   function executeAfterScriptLoaded(loadCallBack, executeCallBack) {
     var script = loadCallBack();
-    script.onload = function() {
+    script.onload = function(){
       executeCallBack();
     };
   }
