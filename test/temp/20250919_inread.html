@@ -43,8 +43,7 @@
 
 
   <script>
-
-    (function() {
+(function() {
   console.log("[hack] Close button watcher active");
 
   function tryInsert() {
@@ -72,9 +71,10 @@
 
     // クリック時
     closeBtn.addEventListener("click", () => {
-      // ステップ1: opacityだけをふわっと
-      parent.style.transition = "opacity 0.6s ease";
+      // ステップ1: opacity + 背景色も透明化
+      parent.style.transition = "opacity 0.6s ease, background-color 0.6s ease";
       parent.style.opacity = "0";
+      parent.style.backgroundColor = "transparent";
 
       // 完全に透明になったら高さ・余白を閉じる
       setTimeout(() => {
@@ -86,6 +86,9 @@
     });
 
     parent.style.position = "relative";
+    // ★ 広告背景を透明にしておく（白にならないように）
+    parent.style.backgroundColor = "transparent";
+
     parent.appendChild(closeBtn);
     console.log("[hack] Close button inserted");
   }
