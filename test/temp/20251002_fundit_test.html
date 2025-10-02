@@ -29,8 +29,10 @@
     }
     .ad-container {
       margin: 20px auto;
-      text-align: center;
-      max-width: 100%;
+      text-align: center; /* 中央寄せ */
+    }
+    .ad-inner {
+      display: inline-block; /* 広告ブロックを中央に固定 */
     }
   </style>
 </head>
@@ -43,9 +45,11 @@
   <div class="dummy">ダミーコンテンツ①</div>
 
   <div class="ad-container">
-    <!-- 商用テスト媒体 Fundit_test_v2 227354 -->
-    <div id="adg_217007"></div>
-    <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=217007&targetID=adg_217007&displayid=1&adType=RECT&async=true&tagver=2.0.0"></script>
+    <div class="ad-inner">
+      <!-- 商用テスト媒体 Fundit_test_v2 227354 -->
+      <div id="adg_217007"></div>
+      <script src="//i.socdm.com/sdk/js/adg-script-loader.js?id=217007&targetID=adg_217007&displayid=1&adType=RECT&async=true&tagver=2.0.0"></script>
+    </div>
   </div>
 
   <div class="dummy">ダミーコンテンツ②</div>
