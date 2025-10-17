@@ -54,24 +54,21 @@
         },
         ortb2: {
             user: {
-                ext: {
-                    data: [{
-                    name: "ad-generation.jp",
-                    ext: {
-                        segtax: 546
-                    },
-                    segment: [
-                        { name: "dep_station", value: "tokyo" },
-                        { name: "arr_station", value: "大宮（埼玉）" },
-                        { name: "search_type", value: "arr" },
-                        { name: "date", value: "20251017" },
-                        { name: "time", value: "2210" }
-                    ]
-                }]
-                },
-                
-
-            },
+        ext: {
+          data: {
+            "ad-generation.jp": {
+              segtax: 546,
+              segment: [
+                { name: "dep_station", value: "tokyo" },
+                { name: "arr_station", value: "大宮（埼玉）" },
+                { name: "search_type", value: "arr" },
+                { name: "date", value: "20251017" },
+                { name: "time", value: "2210" }
+              ]
+            }
+          }
+        }
+      },
             site: {
                 ext: {
                     data: {k_Category: "null", k_Pricemenu: "null", k_Top_Category: "top"}
