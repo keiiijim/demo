@@ -51,39 +51,23 @@
           waitForIt: true
         }
       ]
-    },ortb: {
-    site: {
-      content: {
-        data: [
-          {
-            name: "ad-generation.jp",
-            ext: { segtax: 546 },
-            segment: [
-              { name: "news_category", value: "sports" },
-              { name: "tabaco", value: "ok" }
-            ]
-          }
-        ]
-      },
-      keywords: "ボクシング,ダビド・クエジャル,中谷潤人,日刊スポーツ"
-    }
-  },
-    ortb2: {
+    },
+   ortb2: {
       site: {
         content: {
-          data: [
-            {
-              name: "ad-generation.jp",
-              ext: { segtax: 546 },
-              segment: [
-                { name: "dep_station", value: "tokyo" },
-                { name: "arr_station", value: "大宮（埼玉）" },
-                { name: "search_type", value: "arr" },
-                { name: "date", value: "20251017" },
-                { name: "time", value: "2210" }
-              ]
-            }
-          ]
+          data: [{
+            name: "ad-generation.jp",
+            ext: {
+              segtax: 546
+            },
+            segment: [
+              { name: "dep_station", value: "tokyo" },
+              { name: "arr_station", value: "大宮（埼玉）" },
+              { name: "search_type", value: "arr" },
+              { name: "date", value: "20251017" },
+              { name: "time", value: "2210" }
+            ]
+          }]
         }
       }
     },
