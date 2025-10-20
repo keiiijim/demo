@@ -42,31 +42,23 @@
             pbjs.que = pbjs.que || [];
 
             pbjs.que.push(function() {
-    pbjs.setConfig({
-        realTimeData: {
-            auctionDelay: 1000,
-            dataProviders: [
-                {
-                    name: "liveintent",
-                    waitForIt: true
-                }
-            ]
-        },
- ortb2: {
-     user: {
-    data: [{
-        name: "dataprovider.com", // who resolved the segments
-        ext: { segtax: 546 },       // taxonomy used to encode the segments
-            segment: [
-                { name: "date", value: "20251017" }
-            ]
-    }],
-}}
-    /*      user: {
-ext:{
-          data: {
-            "ad-generation.jp": {
-              segtax: 546,
+  pbjs.setConfig({
+    realTimeData: {
+      auctionDelay: 1000,
+      dataProviders: [
+        {
+          name: "liveintent",
+          waitForIt: true
+        }
+      ]
+    },
+    ortb2: {
+      site: {
+        content: {
+          data: [
+            {
+              name: "ad-generation.jp",
+              ext: { segtax: 546 },
               segment: [
                 { name: "dep_station", value: "tokyo" },
                 { name: "arr_station", value: "大宮（埼玉）" },
@@ -75,95 +67,23 @@ ext:{
                 { name: "time", value: "2210" }
               ]
             }
-          }
-                  }
-      }
-        }
-               
-        
-ortb2: {
-  site: {
-    content: {
-      data: [
-        {
-          name: "ad-generation.jp",
-          ext: {
-            segtax: 546
-          },
-          segment: [
-            { name: "dep_station", value: "tokyo" },
-            { name: "arr_station", value: "大宮（埼玉）" },
-            { name: "search_type", value: "arr" },
-            { name: "date", value: "20251017" },
-            { name: "time", value: "2210" }
           ]
         }
+      }
+    },
+    userSync: {
+      auctionDelay: 1000,
+      userIds: [
+        { name: 'justId', params: { mode: 'COMBINED', url: 'https://id.nsaudience.pl/getId.js' } },
+        { name: "utiqId" },
+        { name: 'criteo' },
+        { name: 'sharedId', storage: { name: "_sharedID", type: "cookie", expires: 90 } },
+        { name: 'id5Id', params: { partner: 1142 }, storage: { type: "html5", name: "id5id", expires: 90, refreshInSeconds: 28800 } },
+        { name: 'novatiq', params: { useSharedId: false, useCallbacks: true, urlParams: { novatiqId: "snowflake", useStandardUuid: true, useSspId: false, useSspHost: false } } },
+        { name: "intentIqId", params: { partner: 1485675855, timeoutInMillis: 500, browserBlackList: ["chrome"], gamObjectReference: googletag, domainName: "currentDomain.com", gamParameterName: "intent_iq_group" }, storage: { type: "html5", name: "intentIqId", expires: 0, refreshInSeconds: 0 } }
       ]
     }
-  }
-}*/
-        ,
-        userSync: {
-            auctionDelay: 1000,
-            userIds: [{
-                name: 'justId',
-                params: {
-                    mode: 'COMBINED',
-                    url: 'https://id.nsaudience.pl/getId.js'
-                }
-            },{
-                name: "utiqId"
-            },{
-                name: 'criteo'
-            }, {
-                name: 'sharedId',
-                storage: {
-                    name: "_sharedID",
-                    type: "cookie",
-                    expires: 90
-                }
-            }, {
-                name: 'id5Id',
-                params: {
-                    partner: 1142
-                },
-                storage: {
-                    type: "html5",
-                    name: "id5id",
-                    expires: 90,
-                    refreshInSeconds: 28800
-                }
-            },{
-                name: 'novatiq',
-                params: {
-                    useSharedId: false,
-                    useCallbacks: true,
-                    urlParams: {
-                        novatiqId: "snowflake",
-                        useStandardUuid: true,
-                        useSspId: false,
-                        useSspHost: false
-                    }
-                }
-            },{
-                name: "intentIqId",
-                params: {
-                    partner: 1485675855,
-                    timeoutInMillis: 500,
-                    browserBlackList: ["chrome"],
-                    gamObjectReference: googletag,
-                    domainName: "currentDomain.com",
-                    gamParameterName: "intent_iq_group"
-                },
-                storage: {
-                    type: "html5",
-                    name: "intentIqId",
-                    expires: 0,
-                    refreshInSeconds: 0
-                }
-            }]
-        }
-    });
+  });
 
     pbjs.enableAnalytics({
         provider: 'iiqAnalytics'
