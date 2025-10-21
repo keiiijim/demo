@@ -14,6 +14,15 @@
   text-align: center; 
   position: relative;
 }
+  .ad-wrapper2 {
+  background: #fff; 
+  border: 1px solid #ccc; 
+  box-shadow: 0 0 6px rgba(0,0,0,0.08);
+  text-align: center; 
+  position: relative;
+  width: 300px;
+  height: 250px;
+}
 
 /* 左上にラベル */
 .ad-wrapper .ad-label {
@@ -31,8 +40,18 @@
 .ad-section {
   width: 100%;
   background: #f9f9f9; /* 薄いグレー帯 */
-  padding: 40px 0; /* 上下の余白 */
+  padding: 40px 0;
   box-sizing: border-box;
+}
+
+/* 見出し（ADVERTISEMENT） */
+.ad-section .ad-heading {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 20px;
 }
 
 /* 横並び中央寄せ */
@@ -40,11 +59,10 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 40px; /* 広告間の隙間 */
-  max-width: 700px; /* 広告2つ分＋隙間 */
+  gap: 40px;
+  max-width: 700px;
   margin: 0 auto;
 }
-  
 </style>
 
 <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
@@ -131,18 +149,20 @@ googletag.cmd.push(function() {
    <br><br> 
 
 <div class="ad-section">
+  <div class="ad-heading">ADVERTISEMENT</div>
+
   <div class="ad-row">
-    <div class="ad-wrapper">
+    <div class="ad-wrapper2">
       <div class="ad-label">AD</div>
-      <div id="div-gpt-ad-1" style="min-width:300px; min-height:250px; background:#eee;">
-        <p style="line-height:250px;">広告枠 1</p>
+      <div id="div-gpt-ad-1" style="min-width:300px;min-height:250px;background:#eee;">
+        <p style="line-height:250px;">広告枠 1（300×250）</p>
       </div>
     </div>
 
-    <div class="ad-wrapper">
+    <div class="ad-wrapper2">
       <div class="ad-label">AD</div>
-      <div id="div-gpt-ad-2" style="min-width:300px; min-height:250px; background:#eee;">
-        <p style="line-height:250px;">広告枠 2</p>
+      <div id="div-gpt-ad-2" style="min-width:300px;min-height:250px;background:#eee;">
+        <p style="line-height:250px;">広告枠 2（300×250）</p>
       </div>
     </div>
   </div>
