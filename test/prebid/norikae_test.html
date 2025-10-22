@@ -38,6 +38,9 @@
 
             pbjs.que.push(function() {
   pbjs.setConfig({
+      firstPartyData: {
+          skipValidations: true    // defaults to false
+        },
     ortb2: {
         user: {
         ext: {
