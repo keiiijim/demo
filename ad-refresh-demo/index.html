@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>GPT Ad Refresh デモ集</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Helvetica Neue",Arial,sans-serif;background:#f5f5f5;color:#333}
+    header{background:#1a1a2e;color:#fff;padding:24px;text-align:center}
+    header h1{font-size:20px;font-weight:700;margin-bottom:6px}
+    header p{font-size:12px;color:#aaa}
+    .container{max-width:800px;margin:0 auto;padding:28px 16px}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+    .card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-decoration:none;color:#333;display:block;border-top:4px solid #ccc;transition:transform .2s}
+    .card:hover{transform:translateY(-3px)}
+    .card.t1{border-top-color:#1a73e8}.card.t2{border-top-color:#34a853}.card.t3{border-top-color:#ea4335}
+    .num{font-size:10px;font-weight:700;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+    .title{font-size:15px;font-weight:700;margin-bottom:8px}
+    .desc{font-size:11px;color:#666;line-height:1.7;margin-bottom:12px}
+    .tags{display:flex;flex-wrap:wrap;gap:5px}
+    .tag{font-size:10px;padding:2px 7px;border-radius:8px;background:#f0f0f0;color:#555}
+    .tag.g{background:#e6f4ea;color:#34a853}.tag.r{background:#fce8e6;color:#ea4335}.tag.y{background:#fff8e1;color:#f57c00}
+    table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    th{background:#f5f5f5;padding:10px 12px;text-align:left;font-weight:600;color:#555;border-bottom:2px solid #e0e0e0}
+    td{padding:9px 12px;border-bottom:1px solid #f0f0f0;vertical-align:top;line-height:1.6}
+    .yes{color:#34a853;font-weight:700}.no{color:#ea4335;font-weight:700}.warn{color:#f57c00;font-weight:700}
+    h3{font-size:13px;margin-bottom:12px;color:#444}
+  </style>
+</head>
+<body>
+<header>
+  <h1>GPT Ad Refresh — 3種類の実装デモ</h1>
+  <p>Google Ad Manager (GAM) の GPT refresh() API を使った広告リフレッシュ実装比較</p>
+</header>
+<div class="container">
+  <div class="cards">
+    <a class="card t1" href="time-based.html">
+      <div class="num">① TIME-BASED</div>
+      <div class="title">時間ベース</div>
+      <div class="desc">設定秒数が経過したら自動でrefresh()を呼ぶ。最もシンプルだが視認性は考慮されない。</div>
+      <div class="tags"><span class="tag">setTimeout</span><span class="tag y">視認性考慮なし</span><span class="tag r">ActiveView低下リスク</span></div>
+    </a>
+    <a class="card t2" href="user-action.html">
+      <div class="num">② USER-ACTION</div>
+      <div class="title">ユーザーアクション</div>
+      <div class="desc">スクロール・クリック・タブ切替などユーザー操作を検知してrefreshを発動。Googleが推奨。</div>
+      <div class="tags"><span class="tag">impressionViewable</span><span class="tag g">視認率向上</span><span class="tag">Googleが推奨</span></div>
+    </a>
+    <a class="card t3" href="event-based.html">
+      <div class="num">③ EVENT-BASED</div>
+      <div class="title">イベントベース</div>
+      <div class="desc">スコア更新など、コンテンツ変化に連動してrefreshを発動。ライブ系コンテンツに最適。</div>
+      <div class="tags"><span class="tag">content_update</span><span class="tag g">自然な体験</span><span class="tag">スポーツ/速報</span></div>
+    </a>
+  </div>
+  <h3>3種類の比較</h3>
+  <table>
+    <tr><th>方式</th><th>実装難易度</th><th>視認性</th><th>ActiveView</th><th>向いているコンテンツ</th></tr>
+    <tr><td>① 時間ベース</td><td>低</td><td class="no">考慮なし</td><td class="no">低下リスクあり</td><td>記事・長時間滞在ページ</td></tr>
+    <tr><td>② ユーザーアクション</td><td>中</td><td class="warn">部分的</td><td class="warn">改善傾向</td><td>インタラクティブ・記事</td></tr>
+    <tr><td>③ イベントベース</td><td>中〜高</td><td class="yes">高い</td><td class="yes">改善</td><td>スポーツ・速報・ライブ</td></tr>
+  </table>
+</div>
+</body>
+</html>

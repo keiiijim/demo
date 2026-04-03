@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>① 時間ベース Ad Refresh</title>
+  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" crossorigin="anonymous"></script>
+  <script>
+    window.googletag = window.googletag || {cmd: []};
+    googletag.cmd.push(function() {
+      var slot = googletag.defineSlot('/94253236/refresh_test', [300, 250], 'div-gpt-ad-1775183163830-0').addService(googletag.pubads());
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+      // 視認後30秒でRefreshをスケジュール
+      googletag.pubads().addEventListener('impressionViewable', function(event) {
+        if (event.slot === slot) {
+          setTimeout(function() {
+            googletag.pubads().refresh([slot]);
+            refreshCount++;
+            document.getElementById('cnt').textContent = refreshCount;
+            addLog('refresh()', '時間経過 → リフレッシュ実行');
+          }, REFRESH_INTERVAL * 1000);
+        }
+      });
+    });
+  </script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Helvetica Neue",Arial,sans-serif;background:#f5f5f5;padding:20px;color:#333}
+    h2{font-size:16px;margin-bottom:12px;color:#1a73e8}
+    .desc{background:#e8f0fe;border-left:4px solid #1a73e8;padding:10px 14px;border-radius:4px;font-size:12px;line-height:1.7;margin-bottom:16px}
+    code{background:#fff;padding:1px 5px;border-radius:3px;font-size:11px;border:1px solid #ddd}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+    .stat{background:#fff;border-radius:8px;padding:12px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .stat .v{font-size:26px;font-weight:700;color:#1a73e8}
+    .stat .l{font-size:10px;color:#888;margin-top:2px}
+    .timer-wrap{background:#fff;border-radius:8px;padding:12px 16px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .timer-label{font-size:11px;color:#555;margin-bottom:6px;display:flex;justify-content:space-between}
+    .timer-bg{background:#e8f0fe;border-radius:4px;height:8px;overflow:hidden}
+    .timer-bar{background:#1a73e8;height:100%;width:0%;transition:width .9s linear;border-radius:4px}
+    .ad-center{display:flex;justify-content:flex-start;margin-bottom:16px}
+    .controls{display:flex;gap:10px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+    select,button{padding:7px 12px;border-radius:6px;border:1px solid #ccc;font-size:12px;cursor:pointer}
+    button.start{background:#1a73e8;color:#fff;border-color:#1a73e8;font-weight:700}
+    button.stop{background:#ea4335;color:#fff;border-color:#ea4335;font-weight:700}
+    .note{font-size:10px;color:#ea4335;margin-bottom:14px}
+    .log{background:#fff;border-radius:8px;padding:12px;max-height:150px;overflow-y:auto;font-size:11px;font-family:monospace;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .log div{padding:3px 0;border-bottom:1px solid #f5f5f5}
+    .log .t{color:#1a73e8;margin-right:6px}
+    .log .e{color:#34a853}
+    .nav{margin-top:16px;display:flex;gap:16px}
+    .nav a{font-size:12px;color:#1a73e8;text-decoration:none}
+  </style>
+</head>
+<body>
+<h2>① 時間ベース Ad Refresh（GPT実装）</h2>
+<div class="desc">
+  <strong>仕組み：</strong> <code>impressionViewable</code> イベント発火後、設定秒数が経過したら <code>googletag.pubads().refresh([slot])</code> を呼び出す。<br>
+  ⚠️ タイマーは動いていても、広告が画面外にあっても発動する。視認率（ActiveView）が下がるリスクあり。
+</div>
+<div class="stats">
+  <div class="stat"><div class="v" id="cnt">0</div><div class="l">Refresh回数</div></div>
+  <div class="stat"><div class="v" id="cnt-imp">1</div><div class="l">総インプレッション</div></div>
+  <div class="stat"><div class="v" id="cnt-next">—</div><div class="l">次のRefreshまで</div></div>
+</div>
+<div class="timer-wrap">
+  <div class="timer-label"><span>タイマー</span><span id="timer-txt">待機中</span></div>
+  <div class="timer-bg"><div class="timer-bar" id="tbar"></div></div>
+</div>
+<div class="ad-center">
+  <div id='div-gpt-ad-1775183163830-0' style='min-width:300px;min-height:250px;'>
+    <script>googletag.cmd.push(function(){googletag.display('div-gpt-ad-1775183163830-0');});</script>
+  </div>
+</div>
+<div class="controls">
+  <label>Refresh間隔：</label>
+  <select id="sel">
+    <option value="10">10秒（デモ用）</option>
+    <option value="30" selected>30秒（最小値）</option>
+    <option value="60">60秒（推奨）</option>
+  </select>
+  <button class="start" id="btn-start" onclick="startTimer()">▶ タイマー開始</button>
+  <button class="stop" id="btn-stop" onclick="stopTimer()" style="display:none">■ 停止</button>
+</div>
+<p class="note">※ GPTのrefresh()はimpressionViewableイベント後に発火。実際のGAMレポートにはリフレッシュ分も合算で計上される。</p>
+<div class="log" id="log"><div><span class="t">--:--:--</span><span class="e">[load]</span> ページロード・初回インプレッション待機中</div></div>
+<div class="nav">
+  <a href="user-action.html">② ユーザーアクションベース →</a>
+  <a href="event-based.html">③ イベントベース →</a>
+</div>
+<script>
+var REFRESH_INTERVAL = 30;
+var refreshCount = 0;
+var impCount = 1;
+var timerRunning = false;
+var elapsed = 0;
+var barTimer, countTimer;
+
+function startTimer() {
+  REFRESH_INTERVAL = parseInt(document.getElementById('sel').value);
+  timerRunning = true;
+  elapsed = 0;
+  document.getElementById('btn-start').style.display = 'none';
+  document.getElementById('btn-stop').style.display = '';
+  document.getElementById('sel').disabled = true;
+  addLog('init', 'タイマー開始 — ' + REFRESH_INTERVAL + '秒間隔');
+  runBar();
+}
+
+function stopTimer() {
+  timerRunning = false;
+  clearInterval(barTimer); clearInterval(countTimer);
+  document.getElementById('tbar').style.width = '0%';
+  document.getElementById('timer-txt').textContent = '停止中';
+  document.getElementById('cnt-next').textContent = '—';
+  document.getElementById('btn-start').style.display = '';
+  document.getElementById('btn-stop').style.display = 'none';
+  document.getElementById('sel').disabled = false;
+  addLog('stop', 'タイマー停止');
+}
+
+function runBar() {
+  elapsed = 0;
+  clearInterval(barTimer);
+  barTimer = setInterval(function() {
+    elapsed++;
+    var pct = (elapsed / REFRESH_INTERVAL) * 100;
+    document.getElementById('tbar').style.width = pct + '%';
+    var rem = REFRESH_INTERVAL - elapsed;
+    document.getElementById('cnt-next').textContent = rem + '秒';
+    document.getElementById('timer-txt').textContent = elapsed + '秒経過 / ' + REFRESH_INTERVAL + '秒';
+    if (elapsed >= REFRESH_INTERVAL) {
+      clearInterval(barTimer);
+      // ← 実際のGPT refresh()はimpressionViewableリスナー内で実行
+      // ここではデモ用カウンター更新のみ
+      impCount++;
+      document.getElementById('cnt-imp').textContent = impCount;
+      addLog('refresh()', '時間経過 → googletag.pubads().refresh([slot]) 実行');
+      if (timerRunning) setTimeout(runBar, 500);
+    }
+  }, 1000);
+}
+
+function addLog(ev, msg) {
+  var ts = new Date().toLocaleTimeString('ja-JP');
+  var el = document.createElement('div');
+  el.innerHTML = '<span class="t">' + ts + '</span><span class="e">[' + ev + ']</span> ' + msg;
+  var box = document.getElementById('log');
+  box.insertBefore(el, box.firstChild);
+}
+</script>
+</body>
+</html>
