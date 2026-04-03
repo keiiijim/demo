@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta charset="UTF-8">
+        <title>Prebid.js 10.20.0 Test</title>
+        <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+        <script async src="prebid10.20.0.js"></script>
+        
+        <script>
+            var div_sizes = [[300, 250]];
+            
+            var PREBID_TIMEOUT = 3000;
+            var FAILSAFE_TIMEOUT = 3500;
+
+            var adUnits = [
+                {
+                    code: 'div-test',
+                    mediaTypes: {
+                        banner: {
+                            sizes: div_sizes
+                        }
+                    },
+                    bids: [{
+                        bidder: 'appnexus',
+                        params: {
+                            placementId: 13144370
+                        }
+                    }]
+                }
+            ];
+
+            var googletag = googletag || {};
+            googletag.cmd = googletag.cmd || [];
+            googletag.cmd.push(function() {
+                googletag.pubads().disableInitialLoad();
+            });
+
+            var pbjs = pbjs || {};
+            pbjs.que = pbjs.que || [];
+
+            pbjs.que.push(function() {
+                pbjs.addAdUnits(adUnits);
+                pbjs.requestBids({
+                    bidsBackHandler: initAdserver,
+                    timeout: PREBID_TIMEOUT
+                });
+            });
+
+            function initAdserver() {
+                if (pbjs.initAdserverSet) return;
+                pbjs.initAdserverSet = true;
+                googletag.cmd.push(function() {
+                    pbjs.que.push(function() {
+                        pbjs.setTargetingForGPTAsync();
+                        googletag.pubads().refresh();
+                    });
+                });
+            }
+            
+            setTimeout(function() {
+                initAdserver();
+            }, FAILSAFE_TIMEOUT);
+
+            googletag.cmd.push(function() {
+                googletag.defineSlot('/19968336/header-bid-tag-0', div_sizes, 'div-test').addService(googletag.pubads());
+                googletag.pubads().enableSingleRequest();
+                googletag.enableServices();
+            });
+
+            // Display Prebid version on page load
+            window.addEventListener('load', function() {
+                if (typeof pbjs !== 'undefined' && pbjs.version) {
+                    document.getElementById('version-info').innerHTML = 
+                        '<strong>Prebid.js Version:</strong> ' + pbjs.version;
+                }
+            });
+        </script>
+    </head>
+
+    <body>
+        <h1>Prebid.js 10.20.0 Test Page</h1>
+        <div id="version-info" style="padding: 10px; background-color: #f0f0f0; margin: 10px 0;">
+            Loading version information...
+        </div>
+        
+        <h3>Test Ad Unit (300x250)</h3>
+        <div id='div-test' style="border: 1px solid #ccc; min-height: 250px; width: 300px;">
+            <script>
+                googletag.cmd.push(function() {
+                    googletag.display('div-test');
+                });
+            </script>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <p><strong>Instructions:</strong></p>
+            <ol>
+                <li>This page tests Prebid.js version 10.20.0</li>
+                <li>Check the version information displayed above</li>
+                <li>Open browser console to see bidding activity</li>
+                <li>The ad unit should load within a few seconds</li>
+            </ol>
+        </div>
+    </body>
+</html>
