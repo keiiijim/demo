@@ -41,7 +41,6 @@ var DIV_ID = 'div-gpt-native-ortb';
 var MOCK_PRIVACY = 'https://example.com/optout/?a=1&b=2#x';
 
 // ORTB 形式。id はネイティブスタイルの ##hb_native_asset_id_N## の N になる
-var ASSET_LABELS = { 1: 'タイトル', 2: 'メイン画像', 3: 'アイコン', 4: '広告主', 5: '本文', 6: 'CTA' };
 var NATIVE_ORTB = {
   ortb: {
     ver: '1.2',
@@ -153,17 +152,12 @@ googletag.cmd.push(function () {
 <h2>落札と期待する値</h2>
 <table id="info"><tbody><tr><td>広告の描画を待っています…</td></tr></tbody></table>
 
-<h2>ADG が返した値（ORTB の assets）</h2>
+<h2>ADG が返した値</h2>
+<p>ORTB 形式のときは、ADG が返した値が、広告ユニットの <code>ortb.assets</code> のどの id に入るかも表示します（Prebid.js が描画のときに行う変換と同じ対応）。</p>
 <table id="assets"><tbody><tr><td>広告の描画を待っています…</td></tr></tbody></table>
 
 <script>
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-function assetValue(a) {
-  if (a.title) return a.title.text;
-  if (a.img) return a.img.url;
-  if (a.data) return a.data.value;
-  return '';
-}
 function rowsHtml(rows) {
   return rows.map(function (r) { return '<tr><th>' + esc(r[0]) + '</th><td' + (r[2] ? ' class="' + r[2] + '"' : '') + '>' + esc(r[1]) + '</td></tr>'; }).join('');
 }
@@ -203,17 +197,29 @@ function showInfo(gamEvent) {
   if (!adgBid) {
     arows.push(['ADG の入札', 'なし（noBid。読み込み直してください）', 'ng']);
   } else {
-    var ortb = adgBid.native && adgBid.native.ortb;
-    var got = {};
-    ((ortb && ortb.assets) || []).forEach(function (a) { got[a.id] = assetValue(a); });
-    var ids = FORMAT === 'ortb' ? [1, 2, 3, 4, 5, 6] : Object.keys(got);
-    ids.forEach(function (id) {
-      var v = got[id];
-      var label = FORMAT === 'ortb' ? 'id ' + id + '（' + ASSET_LABELS[id] + '）' : 'id ' + id;
+    // 入札の時点の bid.native は名前の形（title / image など）。ORTB の形は描画のときに作られるので、
+    // Prebid.js（toOrtbNativeResponse）と同じ対応で、名前の値を assets の id に当てはめて表示する
+    var n = adgBid.native || {};
+    var pick = function (v) { return v && typeof v === 'object' ? v.url : v; };
+    var LEGACY_KEYS = [
+      ['title', 'タイトル', function (a) { return a.title; }],
+      ['image', 'メイン画像', function (a) { return a.img && a.img.type === 3; }],
+      ['icon', 'アイコン', function (a) { return a.img && a.img.type === 1; }],
+      ['sponsoredBy', '広告主', function (a) { return a.data && a.data.type === 1; }],
+      ['body', '本文', function (a) { return a.data && a.data.type === 2; }],
+      ['cta', 'CTA', function (a) { return a.data && a.data.type === 12; }]
+    ];
+    LEGACY_KEYS.forEach(function (k) {
+      var v = pick(n[k[0]]);
+      var label = k[1] + '（' + k[0] + '）';
+      if (FORMAT === 'ortb') {
+        var asset = NATIVE_ORTB.ortb.assets.filter(k[2])[0];
+        label = asset ? 'id ' + asset.id + ' ← ' + label : label + '（assets に無いので使われない）';
+      }
       arows.push([label, v ? v : '（値なし）', v ? 'ok' : 'ng']);
     });
-    arows.push(['privacy', ortb && ortb.privacy ? ortb.privacy : '（値なし）']);
-    arows.push(['link.url', ortb && ortb.link ? ortb.link.url : '（値なし）', ortb && ortb.link ? 'ok' : 'ng']);
+    arows.push([FORMAT === 'ortb' ? 'privacy ← privacyLink' : 'privacyLink', n.privacyLink ? n.privacyLink : '（値なし。i アイコンは非表示になるはず）']);
+    arows.push([FORMAT === 'ortb' ? 'link.url ← clickUrl' : 'clickUrl', n.clickUrl ? n.clickUrl : '（値なし）', n.clickUrl ? 'ok' : 'ng']);
   }
   document.querySelector('#assets tbody').innerHTML = rowsHtml(arows);
 }
