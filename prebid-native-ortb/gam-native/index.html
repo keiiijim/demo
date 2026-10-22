@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>GAM 経由のネイティブ確認（ORTB 形式）</title>
+<style>
+body{font-family:sans-serif;font-size:14px;margin:16px;line-height:1.6;background:#fff;color:#111}
+h1{font-size:1.3rem}
+h2{font-size:1.05rem;margin:1.4em 0 .4em}
+.note{background:#f6f6f6;border-left:4px solid #999;padding:8px 12px;margin:8px 0}
+.slot{position:relative;max-width:600px;min-height:170px;border:1px solid #999;margin:0 0 6px}
+table{border-collapse:collapse;width:100%;max-width:1100px;margin-bottom:8px}
+th,td{border:1px solid #bbb;padding:4px 8px;vertical-align:top;text-align:left;word-break:break-all}
+th{background:#eee;white-space:nowrap}
+nav a{margin-right:12px}
+.ok{color:#060}
+.ng{color:#b00}
+</style>
+<script>
+// 書き方（どちらも同じ GAM の広告ユニット・ラインアイテム・ネイティブスタイルを使う）
+//   既定            : ORTB 形式（mediaTypes.native.ortb.assets）
+//   ?format=legacy : 名前で指定する書き方（マニュアル ver3.00 と同じ）
+// ケース
+//   既定            : G1。ADG だけが入札する
+//   ?case=g2       : G2。ADG とダミー bidder（mockssp、cpm 999 で必ず勝つ）が入札する
+var PARAMS = new URLSearchParams(location.search);
+var FORMAT = PARAMS.get('format') === 'legacy' ? 'legacy' : 'ortb';
+var CASE = PARAMS.get('case') === 'g2' ? 'g2' : 'g1';
+(function () {
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = new URL('../js/prebid.js', location.href).href;
+  document.head.appendChild(s);
+})();
+
+var AD_UNIT_PATH = '/18339668/test_demo/test_prebid_native_v10';
+var DIV_ID = 'div-gpt-native-ortb';
+// ダミー bidder が返す privacyLink（特殊文字がそのまま入るかを見る）
+var MOCK_PRIVACY = 'https://example.com/optout/?a=1&b=2#x';
+
+// ORTB 形式。id はネイティブスタイルの ##hb_native_asset_id_N## の N になる
+var ASSET_LABELS = { 1: 'タイトル', 2: 'メイン画像', 3: 'アイコン', 4: '広告主', 5: '本文', 6: 'CTA' };
+var NATIVE_ORTB = {
+  ortb: {
+    ver: '1.2',
+    privacy: 1,
+    assets: [
+      { id: 1, required: 1, title: { len: 80 } },
+      { id: 2, required: 1, img: { type: 3 } },
+      { id: 3, required: 0, img: { type: 1 } },
+      { id: 4, required: 1, data: { type: 1 } },
+      { id: 5, required: 0, data: { type: 2 } },
+      { id: 6, required: 0, data: { type: 12 } }
+    ]
+  }
+};
+// マニュアル ver3.00 と同じ書き方
+var NATIVE_LEGACY = {
+  clickUrl: { required: true }, privacyLink: { required: false }, image: { required: true },
+  icon: { required: false }, title: { required: true }, body: { required: false }, sponsoredBy: { required: true }
+};
+
+var bids = [{ bidder: 'adg', params: { id: '110569' } }];
+if (CASE === 'g2') bids.push({ bidder: 'mockssp', params: {} });
+var adUnits = [{ code: AD_UNIT_PATH, mediaTypes: { native: FORMAT === 'ortb' ? NATIVE_ORTB : NATIVE_LEGACY }, bids: bids }];
+
+var PREBID_TIMEOUT = 4000;
+var FAILSAFE_TIMEOUT = 8000;
+
+var pbjs = pbjs || {};
+pbjs.que = pbjs.que || [];
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+googletag.cmd.push(function () { googletag.pubads().disableInitialLoad(); });
+
+pbjs.que.push(function () {
+  pbjs.registerBidAdapter(null, 'mockssp', {
+    code: 'mockssp', supportedMediaTypes: ['native'],
+    isBidRequestValid: function () { return true; },
+    buildRequests: function (reqs) { return [{ method: 'GET', url: new URL('../native-check/mock.json', location.href).href, data: '', bidRequests: reqs }]; },
+    interpretResponse: function (res, req) {
+      return req.bidRequests.map(function (b) {
+        return { requestId: b.bidId, cpm: 999, currency: 'JPY', width: 1, height: 1, ttl: 300, creativeId: 'mock-gam', netRevenue: true, mediaType: 'native', meta: {},
+          native: {
+            title: 'MOCK title (G2)', body: 'MOCK body', sponsoredBy: 'MOCK brand', cta: 'MOCK cta',
+            image: { url: 'https://placehold.jp/120x100.png', width: 120, height: 100 },
+            icon: { url: 'https://placehold.jp/50x50.png', width: 50, height: 50 },
+            clickUrl: 'https://example.com/landing',
+            privacyLink: MOCK_PRIVACY,
+            impressionTrackers: [], clickTrackers: []
+          } };
+      });
+    }
+  });
+  pbjs.addAdUnits(adUnits);
+  // GAM のラインアイテムは hb_pb = 10.00 でターゲティングしているので、hb_pb を固定する
+  pbjs.bidderSettings = {
+    standard: {
+      adserverTargeting: [
+        { key: 'hb_bidder', val: function (r) { return r.bidderCode; } },
+        { key: 'hb_adid', val: function (r) { return r.adId; } },
+        { key: 'hb_pb', val: function () { return '10.00'; } },
+        { key: 'hb_size', val: function (r) { return r.size; } }
+      ]
+    }
+  };
+  pbjs.requestBids({ timeout: PREBID_TIMEOUT, bidsBackHandler: sendAdserverRequest });
+});
+
+function sendAdserverRequest() {
+  if (pbjs.adserverRequestSent) return;
+  pbjs.adserverRequestSent = true;
+  googletag.cmd.push(function () {
+    pbjs.que.push(function () {
+      pbjs.setTargetingForGPTAsync();
+      googletag.pubads().refresh();
+    });
+  });
+}
+setTimeout(sendAdserverRequest, FAILSAFE_TIMEOUT);
+
+googletag.cmd.push(function () {
+  googletag.defineSlot(AD_UNIT_PATH, 'fluid', DIV_ID).addService(googletag.pubads());
+  googletag.pubads().enableSingleRequest();
+  googletag.pubads().addEventListener('slotRenderEnded', function (e) { showInfo(e); });
+  googletag.enableServices();
+});
+</script>
+<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+</head>
+<body>
+<h1>GAM 経由のネイティブ確認（ORTB 形式）</h1>
+<nav>
+<a href="?">ORTB 形式・G1</a>
+<a href="?case=g2">ORTB 形式・G2</a>
+<a href="?format=legacy">名前の書き方（ver3.00）・G1</a>
+<a href="?format=legacy&amp;case=g2">名前の書き方（ver3.00）・G2</a>
+</nav>
+<p>広告ユニットを ORTB 形式（<code>mediaTypes.native.ortb.assets</code>）で書いたとき、ADG のネイティブ広告が GAM 経由で表示されるかを確かめるページです。GAM の広告ユニット <code>/18339668/test_demo/test_prebid_native_v10</code> には、マニュアル ver3.00 のネイティブスタイル（<code>##hb_native_title##</code> などの名前のマクロ）を入稿しています。比べるために、ver3.00 と同じ書き方にも切り替えられます。</p>
+<div class="note">
+<ul>
+<li>このページを開くと、<strong>本番の広告枠（110569）と GAM に実際にリクエストが飛びます</strong>。確認に必要な回数だけ開いてください。</li>
+<li>ADG のテスト配信は一定の割合で noBid を返します。G1 で枠が空のときは、2〜3 回読み込み直してください。</li>
+<li>広告は GAM の safeframe（別オリジンの iframe）の中に描画されます。i アイコンのリンクは、DevTools の Elements で広告の iframe（<code>google_ads_iframe_…</code>）の中の <code>#prlinkurl</code> の <code>href</code> を、下の「期待する href」と見比べてください。</li>
+</ul>
+</div>
+
+<h2>広告</h2>
+<div class="slot"><div id="div-gpt-native-ortb"><script>googletag.cmd.push(function () { googletag.display('div-gpt-native-ortb'); });</script></div></div>
+
+<h2>落札と期待する値</h2>
+<table id="info"><tbody><tr><td>広告の描画を待っています…</td></tr></tbody></table>
+
+<h2>ADG が返した値（ORTB の assets）</h2>
+<table id="assets"><tbody><tr><td>広告の描画を待っています…</td></tr></tbody></table>
+
+<script>
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function assetValue(a) {
+  if (a.title) return a.title.text;
+  if (a.img) return a.img.url;
+  if (a.data) return a.data.value;
+  return '';
+}
+function rowsHtml(rows) {
+  return rows.map(function (r) { return '<tr><th>' + esc(r[0]) + '</th><td' + (r[2] ? ' class="' + r[2] + '"' : '') + '>' + esc(r[1]) + '</td></tr>'; }).join('');
+}
+function showInfo(gamEvent) {
+  var rows = [];
+  rows.push(['書き方', FORMAT === 'ortb' ? 'ORTB 形式（ortb.assets）' : '名前の書き方（ver3.00）']);
+  rows.push(['ケース', CASE === 'g2' ? 'G2（ADG + ダミー bidder mockssp）' : 'G1（ADG だけ）']);
+  rows.push(['prebid.js', window.pbjs && pbjs.version ? pbjs.version : '（未読み込み）']);
+  var resp = [], adgBid = null;
+  try {
+    pbjs.getEvents().forEach(function (e) {
+      if (!e.args || e.args.adUnitCode !== AD_UNIT_PATH) return;
+      if (e.eventType === 'bidResponse') {
+        resp.push(e.args.bidderCode + ':' + e.args.cpm);
+        if (e.args.bidderCode === 'adg') adgBid = e.args;
+      }
+    });
+  } catch (err) {}
+  rows.push(['入札', resp.length ? resp.join(', ') : 'なし（noBid。読み込み直してください）']);
+  var target = {};
+  try { target = pbjs.getAdserverTargetingForAdUnitCode(AD_UNIT_PATH) || {}; } catch (err) {}
+  rows.push(['GAM に送った key-value', 'hb_bidder=' + (target.hb_bidder || '') + ' / hb_pb=' + (target.hb_pb || '') + ' / hb_adid=' + (target.hb_adid || '')]);
+  rows.push(['GAM の描画', gamEvent.isEmpty ? '空（ラインアイテムが選ばれていない）' : 'line item ' + gamEvent.lineItemId + ' / creative ' + gamEvent.creativeId]);
+  var bid = null;
+  try { bid = (pbjs.getBidResponsesForAdUnitCode(AD_UNIT_PATH).bids || []).filter(function (b) { return b.adId === target.hb_adid; })[0]; } catch (err) {}
+  if (bid) {
+    var priv = bid.native && ((bid.native.ortb && bid.native.ortb.privacy) || bid.native.privacyLink);
+    rows.push(['落札した bidder', bid.bidderCode]);
+    rows.push(['期待する href（#prlinkurl）', priv ? priv : '（空。i アイコンは display: none になるはず）']);
+    rows.push(['エンコードの有無', priv && /%3A|%2F/i.test(priv) ? 'エンコードされている' : 'エンコードなし', priv && /%3A|%2F/i.test(priv) ? 'ng' : 'ok']);
+  } else {
+    rows.push(['落札した bidder', 'なし']);
+  }
+  document.querySelector('#info tbody').innerHTML = rowsHtml(rows);
+
+  var arows = [];
+  if (!adgBid) {
+    arows.push(['ADG の入札', 'なし（noBid。読み込み直してください）', 'ng']);
+  } else {
+    var ortb = adgBid.native && adgBid.native.ortb;
+    var got = {};
+    ((ortb && ortb.assets) || []).forEach(function (a) { got[a.id] = assetValue(a); });
+    var ids = FORMAT === 'ortb' ? [1, 2, 3, 4, 5, 6] : Object.keys(got);
+    ids.forEach(function (id) {
+      var v = got[id];
+      var label = FORMAT === 'ortb' ? 'id ' + id + '（' + ASSET_LABELS[id] + '）' : 'id ' + id;
+      arows.push([label, v ? v : '（値なし）', v ? 'ok' : 'ng']);
+    });
+    arows.push(['privacy', ortb && ortb.privacy ? ortb.privacy : '（値なし）']);
+    arows.push(['link.url', ortb && ortb.link ? ortb.link.url : '（値なし）', ortb && ortb.link ? 'ok' : 'ng']);
+  }
+  document.querySelector('#assets tbody').innerHTML = rowsHtml(arows);
+}
+</script>
+</body>
+</html>
