@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADG Prebid Native ORTB request check</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; margin: 16px; color: #222; background: #fff; }
+  h1 { font-size: 18px; }
+  h2 { font-size: 15px; margin-top: 24px; }
+  pre { background: #f5f5f5; padding: 12px; overflow-x: auto; font-size: 12px; white-space: pre-wrap; word-break: break-all; }
+  form { margin: 8px 0; }
+  input { font-size: 14px; padding: 4px; width: 120px; }
+  .note { font-size: 13px; color: #555; }
+</style>
+<script>
+  // Prebid読み込み前に fetch / XHR をラップして、socdm.com 宛てのリクエストを記録する
+  window.__cap = [];
+  (function () {
+    var of = window.fetch;
+    window.fetch = function (u, init) {
+      var url = typeof u === 'string' ? u : u.url;
+      if (String(url).indexOf('socdm') >= 0) {
+        var e = { url: url, body: init && init.body };
+        window.__cap.push(e);
+        if (!e.body && typeof u !== 'string') { u.clone().text().then(function (t) { e.body = t; render(); }); }
+        return of.apply(this, arguments).then(function (r) {
+          e.status = r.status;
+          r.clone().text().then(function (t) { e.resp = t; render(); });
+          return r;
+        });
+      }
+      return of.apply(this, arguments);
+    };
+    var o = XMLHttpRequest.prototype.open, s = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.open = function (m, u) { this.__u = u; return o.apply(this, arguments); };
+    XMLHttpRequest.prototype.send = function (b) {
+      var x = this;
+      if (String(x.__u).indexOf('socdm') >= 0) {
+        var e = { url: x.__u, body: b };
+        window.__cap.push(e);
+        x.addEventListener('loadend', function () { e.status = x.status; e.resp = x.responseText; render(); });
+      }
+      return s.apply(this, arguments);
+    };
+  })();
+
+  function pretty(s) {
+    try { return JSON.stringify(JSON.parse(s), null, 2); } catch (e) { return s || ''; }
+  }
+
+  function render() {
+    var c = window.__cap[0];
+    if (!c || !document.getElementById('url')) return;
+    document.getElementById('url').textContent = c.url + '\nstatus: ' + (c.status || 'pending');
+    var body = {};
+    try { body = JSON.parse(c.body); } catch (e) {}
+    var imp = body.ortb && body.ortb.imp && body.ortb.imp[0];
+    var nreq = imp && imp.native && imp.native.request;
+    document.getElementById('native').textContent = nreq ? pretty(nreq) : '(imp[0].native.request なし)';
+    document.getElementById('body').textContent = pretty(c.body);
+    document.getElementById('resp').textContent = pretty(c.resp);
+  }
+
+  var params = new URLSearchParams(location.search);
+  var adgId = params.get('id') || '58278';
+</script>
+<script async src="../js/prebid.js"></script>
+<script>
+  var pbjs = pbjs || {}; pbjs.que = pbjs.que || [];
+  var adUnits = [{
+    code: 'native-slot',
+    mediaTypes: {
+      native: {
+        sizes: [1, 1],
+        ortb: {
+          ver: '1.2',
+          privacy: 1,
+          assets: [
+            { id: 1, required: 1, title: { len: 80 } },
+            { id: 2, required: 1, img: { type: 3, wmin: 1, hmin: 1 } },
+            { id: 3, required: 0, img: { type: 1, wmin: 1, hmin: 1 } },
+            { id: 4, required: 1, data: { type: 1 } },
+            { id: 5, required: 0, data: { type: 2 } },
+            { id: 6, required: 0, data: { type: 12 } }
+          ]
+        }
+      }
+    },
+    bids: [{ bidder: 'adgeneration', params: { id: adgId } }]
+  }];
+  pbjs.que.push(function () {
+    document.getElementById('pbver').textContent = pbjs.version;
+    pbjs.setConfig({ debug: true });
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({ bidsBackHandler: render });
+  });
+</script>
+</head>
+<body>
+  <h1>ADG Prebid Native（ORTB形式）リクエスト確認</h1>
+  <p class="note">
+    ヘルプ（<a href="https://docs.sdk.ad-generation.jp/help/implementation-guide/prebid-native">Prebid.js ネイティブ広告</a>）のORTB形式の
+    <code>mediaTypes.native.ortb</code> で入札リクエストを送り、d.socdm.com に送られた内容を表示します。<br>
+    Prebid.js <span id="pbver">-</span> / adgenerationBidAdapter
+  </p>
+  <form>
+    広告枠ID: <input name="id" id="idInput"> <button type="submit">送信</button>
+  </form>
+  <script>document.getElementById('idInput').value = adgId;</script>
+
+  <h2>リクエスト先</h2>
+  <pre id="url">待機中…</pre>
+
+  <h2>imp[0].native.request（JSON文字列を展開）</h2>
+  <pre id="native"></pre>
+
+  <h2>リクエストボディ全体</h2>
+  <pre id="body"></pre>
+
+  <h2>レスポンス</h2>
+  <pre id="resp"></pre>
+
+  <div id="native-slot"></div>
+</body>
+</html>
